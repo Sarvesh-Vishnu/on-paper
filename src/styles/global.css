@@ -13,7 +13,10 @@
   --paper-edge: oklch(0.90 0.013 80);
   --ink: oklch(0.235 0.012 250);
   --ink-soft: oklch(0.40 0.014 250);
-  --ink-faint: oklch(0.56 0.012 250);
+  /* 0.50 (was 0.56 in the handoff): the minimum darkening that lifts the small
+     mono labels past WCAG AA 4.5:1 on both --paper (5.5:1) and --paper-2 (5.1:1).
+     Still the lightest ink tier, above --ink-soft (0.40). */
+  --ink-faint: oklch(0.50 0.012 250);
   --rule: oklch(0.235 0.012 250 / 0.14);
   --water: oklch(0.55 0.12 235);
   --water-deep: oklch(0.36 0.085 240);

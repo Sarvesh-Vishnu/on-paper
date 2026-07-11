@@ -70,6 +70,23 @@ primary accent and a clay secondary accent. Type: Instrument Serif (display),
 Spline Sans (body), Spline Sans Mono (labels). Full token table is in the design
 handoff and encoded in `src/styles/global.css`.
 
+**Deliberate deviations from the handoff** (WCAG AA small-text contrast):
+`--ink-faint` is `0.50` lightness (handoff: `0.56`; was 3.96:1 on `--paper-2`,
+now 5.1:1); the "Live" pill background is `--water-deep` (handoff: `--water`;
+4.36:1 → 9.9:1); the drop-caption numerals use the deep accents. Prose uses
+typographic apostrophes (’) where the handoff export used straight (').
+
+### Share cards / SEO
+
+`npm run og` regenerates the 1200×630 Open Graph images in `public/og/` from
+the design tokens ([scripts/generate-og.mjs](scripts/generate-og.mjs); uses the
+`sharp` that ships with Astro, Georgia standing in for Instrument Serif). The
+PNGs are committed, so CI never runs this. The hub carries JSON-LD
+(`CreativeWorkSeries`, built from `src/data/volume.ts` — live essays join it
+automatically), and `public/sitemap.xml` + `robots.txt` cover the three URLs.
+The two prototype pages carry static `<title>`/OG tags in their raw heads since
+their content renders client-side.
+
 ## Deploy
 
 Pushing to `main` triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
@@ -84,6 +101,7 @@ stripping Astro's `_astro/` asset directory.
 
 1. **Port the Water essay and Source to Tap** to native Astro routes
    (`/water`, `/tools/source-to-tap`) so they drop the client-side prototype
-   runtime, gain real `<head>`/SEO, and share the tokens.
-2. Add per-page OG images and a `sitemap` + `robots.txt`.
-3. Model essays as an Astro **content collection** as the series grows.
+   runtime, render their evidence as static crawlable HTML, and share the tokens.
+2. Self-host the three font families (drops the Google Fonts round-trip).
+3. Model essays as an Astro **content collection** as the series grows; switch
+   the hand-written sitemap to `@astrojs/sitemap` at the same time.

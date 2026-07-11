@@ -11,7 +11,9 @@ interface Props {
 
 const {
   title = 'On Paper — an essay series',
-  description = 'On Paper — an essay series about the distance between what is promised on paper and what actually reaches you, with India as the centrepiece.',
+  // Starts at the substance rather than repeating the <title> wordmark, so the
+  // ~160 SERP characters aren't spent on text already shown in the title line.
+  description = 'Essays on the distance between what is promised on paper and what actually reaches you, with India as the centrepiece.',
   ogImage = 'og/hub.png',
   ogImageAlt = 'On Paper — an essay series. The world’s water as 100 drops: 3 fresh, 1 within reach.',
 } = Astro.props;

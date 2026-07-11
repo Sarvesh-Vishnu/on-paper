@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Spline+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:oklch(0.972 0.008 85); --paper-2:oklch(0.945 0.011 82); --paper-edge:oklch(0.90 0.013 80);
+  --ink:oklch(0.235 0.012 250); --ink-soft:oklch(0.40 0.014 250); --ink-faint:oklch(0.56 0.012 250);
+  --rule:oklch(0.235 0.012 250 / 0.14);
+  --water:oklch(0.55 0.12 235); --water-deep:oklch(0.36 0.085 240); --water-ink:oklch(0.24 0.045 246);
+  --water-mist:oklch(0.55 0.12 235 / 0.14); --water-light:oklch(0.80 0.09 230);
+  --clay:oklch(0.58 0.13 45); --clay-deep:oklch(0.44 0.10 42); --clay-mist:oklch(0.58 0.13 45 / 0.13);
+  --s0:oklch(0.74 0.07 200); --s1:oklch(0.78 0.09 150); --s2:oklch(0.80 0.11 95); --s3:oklch(0.66 0.14 55); --s4:oklch(0.53 0.15 35);
+  --maxw:1200px; --col:680px; --gut:clamp(20px,5vw,64px);
+  --serif:"Instrument Serif",Georgia,serif; --sans:"Spline Sans",ui-sans-serif,system-ui,sans-serif; --mono:"Spline Sans Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;font-size:clamp(16px,1.05vw,18px);line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+::selection{background:var(--water);color:var(--paper)}
+a{color:var(--water-deep);text-decoration:none}
+a:hover{color:var(--water)}
+body.wop-grain::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")}
+@keyframes wopSink{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(7px);opacity:1}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</helmet>
+
+<div id="wop_prog" style="position:fixed;top:0;left:0;height:2px;background:var(--water);z-index:60;width:0"></div>
+
+<header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px var(--gut);pointer-events:none">
+  <a id="wop_brand" href="#wop-top" style="pointer-events:auto;display:flex;align-items:baseline;gap:.55em;font-family:var(--serif);font-size:1.5rem;letter-spacing:-.01em;color:var(--ink);line-height:1">
+    <span>Water<span style="font-style:italic"> on </span>Paper</span>
+    <span style="font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);align-self:center">the essay</span>
+  </a>
+  <button id="wop_menu" onClick="{{ toggleDrawer }}" style="pointer-events:auto;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px 14px;border-radius:2px;cursor:pointer">Chapters</button>
+</header>
+
+<div style="position:fixed;inset:0;z-index:70;pointer-events:{{ drawerEvents }};opacity:{{ drawerOpacity }};transition:opacity .3s ease">
+  <div onClick="{{ closeDrawer }}" style="position:absolute;inset:0;background:oklch(0.2 0.02 250 / 0.4)"></div>
+  <nav style="position:absolute;top:0;right:0;bottom:0;width:min(360px,86vw);background:var(--paper);box-shadow:-30px 0 80px oklch(0.2 0.02 250 /0.18);transform:translateX({{ drawerX }});transition:transform .4s cubic-bezier(.7,0,.2,1);padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;gap:2px;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <span style="font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)">Contents</span>
+      <button onClick="{{ closeDrawer }}" style="border:0;background:transparent;font-size:1.6rem;line-height:1;color:var(--ink-faint);cursor:pointer">&times;</button>
+    </div>
+    <a onClick="{{ closeDrawer }}" href="#ch01" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">01</span><span style="font-family:var(--serif);font-size:1.25rem">The scale</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch02" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">02</span><span style="font-family:var(--serif);font-size:1.25rem">On paper</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch03" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">03</span><span style="font-family:var(--serif);font-size:1.25rem">The wrong side</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch04" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">04</span><span style="font-family:var(--serif);font-size:1.25rem">India</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch05" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">05</span><span style="font-family:var(--serif);font-size:1.25rem">The wound</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch06" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">06</span><span style="font-family:var(--serif);font-size:1.25rem">Neer — the tool</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch07" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">07</span><span style="font-family:var(--serif);font-size:1.25rem">The reckoning</span></a>
+    <a onClick="{{ closeDrawer }}" href="#ch08" style="display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);color:var(--ink)"><span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">08</span><span style="font-family:var(--serif);font-size:1.25rem">The levers</span></a>
+  </nav>
+</div>
+
+<main id="wop-top" style="position:relative;z-index:1">
+
+  <!-- ================= HERO ================= -->
+  <section data-screen-label="Hero" style="min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 60%,var(--paper-2) 100%);padding:clamp(90px,12vh,150px) var(--gut)">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;opacity:.5">
+      <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:19%"></i>
+      <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:37%"></i>
+      <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:54%"></i>
+      <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:71%"></i>
+      <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:88%"></i>
+    </div>
+    <div style="max-width:var(--maxw);margin:0 auto;width:100%;position:relative">
+      <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--water-deep);margin:0 0 10px">On Paper · essay one of the series</p>
+      <h1 data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;font-family:var(--serif);font-weight:400;font-size:clamp(4rem,15vw,14rem);line-height:.82;letter-spacing:-.02em;margin:0">Water<span style="font-style:italic;color:var(--water-deep)"> on </span>Paper</h1>
+      <div style="display:flex;flex-wrap:wrap;gap:1.6em;align-items:baseline;margin-top:clamp(26px,4vh,52px)">
+        <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .16s,transform .9s cubic-bezier(.2,.6,.2,1) .16s;max-width:52ch;font-size:clamp(1.05rem,1.5vw,1.32rem);color:var(--ink-soft);margin:0">Every country has promised its people water. The promise is written down — in constitutions, missions, and master plans. This essay is about the <em style="font-family:var(--serif);font-style:italic;font-size:1.1em;color:var(--ink)">distance</em> between what the paper says and what comes out of the tap: from the whole planet, to India, to the screen you're reading this on.</p>
+        <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .24s,transform .9s cubic-bezier(.2,.6,.2,1) .24s;align-self:flex-end;font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);line-height:1.5">Global → India<br>↓ scroll to begin</p>
+      </div>
+    </div>
+    <div style="position:absolute;left:var(--gut);bottom:34px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:10px">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--water);animation:wopSink 2.4s ease-in-out infinite"></span> begin
+    </div>
+  </section>
+
+  <!-- ================= 01 · THE SCALE ================= -->
+  <section id="ch01" data-screen-label="01 The scale" style="padding:clamp(80px,12vh,150px) var(--gut)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,72px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>01 — The scale</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch">Almost none of Earth's water is ours to drink.</h2>
+        <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">Picture all the water on Earth as <em style="font-family:var(--serif);font-style:italic;color:var(--water-deep)">a thousand drops</em>. Here is where every one of them sits.</p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)">
+        <div id="wop_earth" aria-hidden="true" style="display:grid;grid-template-columns:repeat(40,1fr);gap:clamp(2px,0.5vw,5px);max-width:720px"></div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px 26px;margin-top:26px;font-family:var(--mono);font-size:.74rem;color:var(--ink-soft)">
+          <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--paper-edge)"></i> Saltwater — 975 drops</span>
+          <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--water-light)"></i> Ice &amp; glaciers — ~17</span>
+          <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--water)"></i> Fresh groundwater — ~7</span>
+          <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--clay)"></i> Surface water we can reach — under&nbsp;1</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,64px);margin-top:clamp(48px,7vh,88px);align-items:start">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+          <p style="font-size:1.12rem;margin:0 0 1.1em">Of every thousand drops, about <strong>975</strong> are salt. Another <strong>17</strong> are frozen into ice caps and glaciers; roughly <strong>7</strong> more sit underground, much of it too deep or too old to lift. That leaves <strong style="color:var(--clay)">less than a single drop</strong> — the rivers and lakes we can actually reach — to carry almost all of human life.<span data-src="U.S. Geological Survey — Earth's water: ~97.5% is saline. Of the 2.5% that is fresh, ~68.7% is ice &amp; glaciers, ~30% is groundwater, and under 1% is liquid surface water." data-url="https://www.usgs.gov/water-science-school/science/where-earths-water" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+          <p style="font-size:1.12rem;margin:0">Scarcity isn't the surprising part. The surprising part is how good we've gotten at <em style="font-family:var(--serif);font-style:italic;font-size:1.08em">writing</em> as if that one drop were poured out evenly — one promise per person, signed and filed. It is not. Where you are born decides how much reaches you, and whether it's safe when it arrives.</p>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .1s,transform .9s cubic-bezier(.2,.6,.2,1) .1s;border-left:1px solid var(--rule);padding-left:clamp(20px,2.4vw,34px)">
+          <div style="margin-bottom:30px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.4rem);line-height:.85;color:var(--water-deep)">1 in 4<span data-src="WHO / UNICEF Joint Monitoring Programme (JMP), 2023 — 2.2 billion people lack safely managed drinking water." data-url="https://washdata.org" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:5px;line-height:1">i</span></div><p style="margin:.4em 0 0;font-size:.95rem;color:var(--ink-soft);max-width:26ch">people alive today have no safely managed drinking water at home.</p></div>
+          <div><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.4rem);line-height:.85;color:var(--clay)">1 in 2<span data-src="UN-Water; Mekonnen &amp; Hoekstra (2016), Science Advances — around half the world's population faces severe water scarcity at least one month a year." data-url="https://www.unwater.org/water-facts/water-scarcity" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--clay);cursor:help;vertical-align:super;margin-left:5px;line-height:1">i</span></div><p style="margin:.4em 0 0;font-size:.95rem;color:var(--ink-soft);max-width:28ch">of humanity faces severe water scarcity at least one month every year.</p></div>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(48px,7vh,88px);max-width:920px">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.05;margin:0 0 .3em;max-width:22ch">And the little that's usable isn't evenly shared.</h3>
+        <p style="font-size:1.05rem;line-height:1.55;color:var(--ink-soft);max-width:62ch;margin:0 0 24px">Ten countries hold more than half of the world's renewable freshwater. Every other nation — some 190 of them — splits the rest. Each bar is a country and the volume it holds, per year.</p>
+        <div>{{ freshwater }}</div>
+        <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin-top:14px">Total renewable freshwater, cubic kilometres per year.<span data-src="World Bank / FAO AQUASTAT — renewable internal freshwater resources by country (2020)." data-url="https://data.worldbank.org/indicator/ER.H2O.INTR.K3" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 02 · ON PAPER ================= -->
+  <section id="ch02" data-screen-label="02 On paper" style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--paper-2)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,72px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>02 — On paper</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch">On paper, everyone already has water.</h2>
+        <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">In 2010 the UN General Assembly recognised water as a <em style="font-family:var(--serif);font-style:italic;color:var(--water-deep)">human right</em> — 122 countries voted yes. The plans are real, ambitious, and beautifully written. The gap between them and a glass you'd let a child drink is the subject of everything that follows.</p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-bottom:clamp(28px,4vh,44px)">
+        <div style="background:var(--paper);padding:26px 24px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:.85;color:var(--water-deep)">122</div><p style="margin:.5em 0 0;font-size:.95rem;color:var(--ink-soft)">countries voted to recognise the human right to water in 2010.<span data-src="UN General Assembly Resolution 64/292, 28 July 2010 — adopted 122 in favour, 0 against, 41 abstentions." data-url="https://digitallibrary.un.org/record/687002" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p></div>
+        <div style="background:var(--paper);padding:26px 24px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:.85;color:var(--ink)">31</div><p style="margin:.5em 0 0;font-size:.95rem;color:var(--ink-soft)">actually name water as a right in their own <strong>constitution</strong> — under 16% of nations.<span data-src="Human Right 2 Water, 'Constitutional Review of the Human Right to Water' (16 Dec 2024) — 31 countries (15.65% of 198 reviewed) explicitly recognise the right to water in their constitutions." data-url="https://humanright2water.org/wp-content/uploads/2025/02/241216-Constitutional-Review.pdf" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p></div>
+        <div style="background:var(--paper);padding:26px 24px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:.85;color:var(--clay)">41</div><p style="margin:.5em 0 0;font-size:.95rem;color:var(--ink-soft)">abstained from the 2010 vote — none voted against.<span data-src="{{ abstainNote }}" data-url="https://press.un.org/en/2010/ga10967.doc.htm" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--clay);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p></div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(44px,6vh,76px)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.05;margin:0 0 .3em;max-width:28ch">A vote is not a constitution. Here is who wrote it down — and who wouldn't.</h3>
+        <p style="font-size:1.02rem;line-height:1.55;color:var(--ink-soft);max-width:68ch;margin:0 0 clamp(24px,3.5vh,36px)">Two lists, both checked against the record. On one side, every country whose constitution explicitly names a right to water, with the year it did so. On the other, the 41 who abstained in 2010 — overwhelmingly the wealthy, and not one of them opposed.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(18px,2.6vw,32px);align-items:start">
+          <div style="border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:clamp(22px,2.6vw,32px)">
+            <div style="display:flex;align-items:baseline;gap:11px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+              <span style="font-family:var(--serif);font-size:clamp(2.2rem,4vw,2.9rem);line-height:.9;color:var(--water-deep)">31</span>
+              <span style="font-size:.96rem;color:var(--ink-soft);line-height:1.35">name a right to water in their <strong style="color:var(--ink)">constitution</strong><span data-src="{{ constitutionNote }}" data-url="https://humanright2water.org/wp-content/uploads/2025/02/241216-Constitutional-Review.pdf" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></span>
+            </div>
+            {{ constitution }}
+          </div>
+          <div style="border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:clamp(22px,2.6vw,32px)">
+            <div style="display:flex;align-items:baseline;gap:11px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+              <span style="font-family:var(--serif);font-size:clamp(2.2rem,4vw,2.9rem);line-height:.9;color:var(--clay)">41</span>
+              <span style="font-size:.96rem;color:var(--ink-soft);line-height:1.35"><strong style="color:var(--ink)">abstained</strong> from the 2010 UN vote — none against<span data-src="{{ abstainNote }}" data-url="https://press.un.org/en/2010/ga10967.doc.htm" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--clay);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></span>
+            </div>
+            {{ abstain }}
+          </div>
+        </div>
+        <p style="font-size:1rem;line-height:1.6;color:var(--ink-soft);max-width:74ch;border-left:3px solid var(--clay);padding-left:16px;margin:clamp(26px,3.5vh,40px) 0 0">The pattern is hard to miss: the states that abstained were, on the whole, the ones least likely to run dry. Water was easiest to call “premature” for those who never had to walk for it.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(20px,3vw,40px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:clamp(26px,3vw,40px)">
+          <span style="font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-deep)">What the page says</span>
+          <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,2.6vw,2.2rem);margin:.3em 0 .8em;line-height:1">The right to water</h3>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+            <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>A safe, sufficient, accessible supply for every household.</span></li>
+            <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>50–100 litres per person per day, piped to the home.<span data-src="WHO / OHCHR — The Right to Water (Fact Sheet 35): ~50–100 litres per person per day meets full domestic needs; a minimum of ~20 L/day is needed for basic survival." data-url="https://www.ohchr.org/en/water-and-sanitation" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></span></li>
+            <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>Tested water, published quality, a number to call.</span></li>
+            <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>Plans, budgets, dashboards, deadlines — all filed.</span></li>
+          </ul>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .1s,transform .9s cubic-bezier(.2,.6,.2,1) .1s;background:var(--ink);color:var(--paper);border-radius:8px;padding:clamp(26px,3vw,40px)">
+          <span style="font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light)">What the tap does</span>
+          <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,2.6vw,2.2rem);margin:.3em 0 .8em;line-height:1;color:var(--paper)">The reach of it</h3>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+            <sc-for list="{{ reach }}" as="r" hint-placeholder-count="4">
+              <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:15px 0;border-top:1px solid oklch(1 0 0 /0.14);font-size:.96rem;line-height:1.5;color:oklch(0.88 0.015 250)"><span style="font-family:var(--mono);color:var(--water-light)">→</span><span><strong style="color:var(--paper);font-weight:600">{{ r.place }}</strong> — {{ r.what }}<span data-src="{{ r.src }}" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></span></li>
+            </sc-for>
+          </ul>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(48px,7vh,80px)">
+        <p style="font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.08;letter-spacing:-.01em;margin:0">The work isn't to mock the paper. It's to <span style="font-style:italic;color:var(--water-deep)">close the distance</span> between the paper and the pipe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 03 · THE WRONG SIDE (dark) ================= -->
+  <section id="ch03" data-screen-label="03 The wrong side" data-wopdark style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--water-ink);color:oklch(0.92 0.015 240)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,68px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--water-light);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>03 — The wrong side of the line</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:20ch;color:var(--paper)">The line runs through every continent.</h2>
+        <p style="font-size:clamp(1.2rem,1.9vw,1.5rem);line-height:1.45;color:oklch(0.86 0.02 240)">Not one region — everywhere the paper outran the plumbing. This is who lives on the wrong side of it.</p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:22px">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.2vw,2.6rem);line-height:1.05;margin:0 0 .3em;color:var(--paper);max-width:20ch">Ten countries on the wrong side of the line.</h3>
+        <p style="font-size:1rem;color:oklch(0.82 0.02 240);max-width:62ch;margin:0">A deliberate spread — Middle-Eastern aquifers run dry, Asian giants outgrow their rivers, and across sub-Saharan Africa the barrier is distance, not scarcity. India sits in company, not isolation. Choose a country.<span data-src="Country water-stress ratings: WRI Aqueduct Water Risk Atlas. Individual cases — Cape Town 2018 'Day Zero', Chennai 2019, the over-allocated Colorado River, Mexico City subsidence — from national agencies and contemporaneous reporting." data-url="https://www.wri.org/aqueduct" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,3.5vw,52px);align-items:start;margin-bottom:clamp(64px,9vh,110px)">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)">{{ countryList }}</div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;position:sticky;top:88px;border:1px solid oklch(1 0 0 /0.12);border-radius:10px;background:oklch(1 0 0 /0.03);padding:clamp(24px,2.8vw,36px)">
+          <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.4vw,2.6rem);line-height:1;margin:0 0 2px;color:var(--paper)">{{ selCName }}</h3>
+          <p style="font-family:var(--mono);font-size:.74rem;color:var(--water-light);letter-spacing:.04em;margin:0 0 20px">{{ selCRegion }}</p>
+          <div style="display:flex;gap:16px;align-items:baseline;margin-bottom:22px;padding-bottom:22px;border-bottom:1px solid oklch(1 0 0 /0.12)">
+            <span style="font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.4rem);line-height:.85;color:{{ selCStatColor }}">{{ selCStat }}</span>
+            <span style="font-size:.96rem;line-height:1.4;color:oklch(0.86 0.02 240)">{{ selCStatLbl }}</span>
+          </div>
+          <div style="margin-bottom:18px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:oklch(0.7 0.02 240);margin-bottom:6px">The challenge</div><div style="font-size:.98rem;line-height:1.5;color:oklch(0.9 0.015 240)">{{ selCChallenge }}</div></div>
+          <div style="margin-bottom:18px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:oklch(0.7 0.02 240);margin-bottom:6px">Where the water comes from</div><div style="font-size:.98rem;line-height:1.5;color:oklch(0.9 0.015 240)">{{ selCSource }}</div></div>
+          <div><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:oklch(0.7 0.02 240);margin-bottom:8px">Groups working on it</div>
+            <sc-for list="{{ selCOrgs }}" as="org" hint-placeholder-count="2">
+              <div style="padding:9px 0;border-top:1px solid oklch(1 0 0 /0.1)"><div style="font-size:.92rem;color:var(--paper)">{{ org.name }}</div><div style="font-family:var(--mono);font-size:.72rem;color:oklch(0.72 0.02 240)">{{ org.what }}</div></div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ selCDeep }}" hint-placeholder-val="{{ false }}">
+            <a href="#ch04" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;font-family:var(--sans);font-weight:600;font-size:.92rem;color:var(--water-ink);background:var(--water-light);padding:11px 18px;border-radius:5px">Open the India deep dive ↓</a>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- Bottled water: when did water become a business -->
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,60px)">
+        <span style="font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--water-light)">An aside · the business of thirst</span>
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.05;margin:.3em 0 .4em;color:var(--paper);max-width:22ch">When did water stop being free and start being a brand?</h3>
+        <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.86 0.02 240)">The same century that began writing water down as a right also learned to sell it back by the bottle. It took about two hundred years to turn a spring into a $300-billion market.</p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(30px,4vh,48px)">
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ bottled }}" as="ev" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:clamp(64px,10vw,120px) 1fr;gap:clamp(16px,3vw,36px);padding:20px 0;border-top:1px solid oklch(1 0 0 /0.12);align-items:baseline">
+              <div style="font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.4rem);line-height:1;color:var(--water-light)">{{ ev.yr }}</div>
+              <div><div style="font-family:var(--sans);font-weight:600;font-size:1.05rem;color:var(--paper);margin-bottom:4px">{{ ev.t }}</div><div style="font-size:.96rem;line-height:1.5;color:oklch(0.84 0.02 240);max-width:64ch">{{ ev.d }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);border-left:3px solid var(--clay);background:oklch(1 0 0 /0.03);padding:clamp(20px,2.6vw,30px) clamp(22px,3vw,34px);border-radius:0 8px 8px 0;max-width:80ch;margin-bottom:clamp(64px,9vh,110px)">
+        <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:oklch(0.82 0.06 60);margin-bottom:10px">The ethics of it</div>
+        <p style="font-size:1.05rem;line-height:1.55;margin:0;color:oklch(0.9 0.015 240)">A litre of premium bottled water can cost a thousand times what the tap charges — and much of it is drawn from springs and aquifers, sometimes in water-stressed ground, wrapped in plastic and shipped across the world. The purified brands are quieter still: <em style="font-family:var(--serif);font-style:italic">Dasani and Aquafina are essentially filtered municipal tap water</em>, sold back to the public that already owns it. Convenience is real. So is the question of who gets to fence off a human right.<span data-src="Bottled vs tap: premium bottled water can cost hundreds to a thousand times municipal tap water per litre; Coca-Cola's Dasani and PepsiCo's Aquafina are purified public/municipal water supplies (company disclosures; contemporaneous reporting)." onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+      </div>
+
+      <!-- Who pollutes water most -->
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(30px,4vh,48px)">
+        <span style="font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--water-light)">Follow the poison upstream</span>
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.05;margin:.3em 0 .4em;color:var(--paper);max-width:20ch">Who pollutes the water — and who is responsible?</h3>
+        <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.86 0.02 240)">Scarcity is only half the story. Plenty of water is poisoned before it ever reaches a tap. Three sources do most of the damage — and none of them is the person drinking it.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(16px,2.4vw,28px);margin-bottom:clamp(56px,8vh,90px)">
+        <sc-for list="{{ polluters }}" as="p" hint-placeholder-count="3">
+          <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(22px,2.6vw,32px);background:oklch(1 0 0 /0.03)">
+            <div style="font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);line-height:.85;color:{{ p.color }}">{{ p.big }}</div>
+            <div style="font-family:var(--sans);font-weight:600;font-size:1.12rem;color:var(--paper);margin:.5em 0 .2em">{{ p.name }}</div>
+            <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--water-light);margin-bottom:10px">{{ p.who }}</div>
+            <p style="font-size:.94rem;line-height:1.5;color:oklch(0.84 0.02 240);margin:0">{{ p.detail }}<span data-src="{{ p.src }}" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+          </div>
+        </sc-for>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+        <p style="font-size:1.15rem;line-height:1.55;color:oklch(0.9 0.015 240)">The global numbers are the wide shot. To see how the gap actually behaves — how a country can pour billions into pipes and still bury people who drank from them — we go to the place with the most people, the least margin, and the most water written down. <em style="font-family:var(--serif);font-style:italic;color:var(--water-light)">India.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 04 · INDIA ================= -->
+  <section id="ch04" data-screen-label="04 India" style="padding:clamp(80px,12vh,150px) var(--gut)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,64px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>04 — India, drawn by its water</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:16ch">18% of the world's people. 4% of its fresh water.</h2>
+        <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">India promises a tap in every rural home, and is the planet's largest user of groundwater — spending the savings faster than the rain replaces them.<span data-src="FAO AQUASTAT / World Bank — India has ~18% of the world's people and ~4% of global freshwater resources, and is the world's largest extractor of groundwater." data-url="https://www.fao.org/aquastat/en/" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(20px,3vw,44px);margin-bottom:clamp(24px,4vh,44px)">
+        <div><span data-count="600" data-suf="M" data-dur="1800" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6.5rem);line-height:.82;color:var(--water-deep)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:var(--ink-soft);max-width:24ch">people under high-to-extreme water stress.<span data-src="NITI Aayog, Composite Water Management Index (2018) — nearly 600 million Indians face high-to-extreme water stress." data-url="https://www.niti.gov.in/sites/default/files/2023-03/CompositeWaterManagementIndex-CWMI.pdf" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p></div>
+        <div><span data-count="30" data-suf="M" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6.5rem);line-height:.82;color:var(--clay)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:var(--ink-soft);max-width:24ch">waterborne-disease cases a year.<span data-src="Widely cited estimate — waterborne diseases affect tens of millions of Indians a year (MoHFW / NCDC-IDSP; WaterAid). Treat as indicative, not a precise count." onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p></div>
+        <div><span data-count="200000" data-dur="2000" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6.5rem);line-height:.82;color:var(--clay)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:var(--ink-soft);max-width:26ch">deaths a year linked to unsafe water &amp; sanitation.<span data-src="NITI Aayog, Composite Water Management Index (2018) — about 200,000 people die each year from inadequate access to safe water." data-url="https://www.niti.gov.in/sites/default/files/2023-03/CompositeWaterManagementIndex-CWMI.pdf" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--clay);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p></div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin:clamp(40px,6vh,72px) 0 26px;max-width:var(--col)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.05;margin:0 0 .3em">Hover a state. The colour is how hard its water is being pushed.</h3>
+        <p style="font-family:var(--mono);font-size:.76rem;color:var(--ink-faint);margin:0">A schematic cartogram in the silhouette of India — tile positions are stylised, not survey-accurate. Stress levels and contaminants are drawn from CGWB data.<span data-src="Stress from CGWB Dynamic Groundwater Resources of India (stage of extraction); contaminants from CGWB Annual Groundwater Quality Report 2024 (15,259 samples) — nitrate, fluoride, arsenic (Ganga–Brahmaputra plains), uranium (Rajasthan, Punjab, Haryana, Delhi), iron, salinity. Tile layout is illustrative." data-url="https://cgwb.gov.in" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span> Each tile is a "periodic element": stress number, state symbol, a dot per known contaminant.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,60px);align-items:start">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)">
+          <div style="min-height:340px">{{ cartogram }}</div>
+          <div style="display:flex;gap:0;margin:24px 0 6px;border-radius:2px;overflow:hidden;height:12px;max-width:520px">
+            <i style="flex:1;background:var(--s0)"></i><i style="flex:1;background:var(--s1)"></i><i style="flex:1;background:var(--s2)"></i><i style="flex:1;background:var(--s3)"></i><i style="flex:1;background:var(--s4)"></i>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.66rem;color:var(--ink-faint);max-width:520px"><span>safe / surplus</span><span>severe stress</span></div>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;position:sticky;top:88px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);padding:clamp(24px,2.8vw,36px);box-shadow:0 30px 80px oklch(0.2 0.02 250 /0.08)">
+          <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.4vw,2.5rem);line-height:1;margin:0 0 3px">{{ selSName }}</h3>
+          <p style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);letter-spacing:.04em;margin:0 0 20px">{{ selSRegion }}</p>
+          <div style="padding:14px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Main source</div><div style="font-size:1.02rem">{{ selSSource }}</div></div>
+          <div style="padding:14px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Known contaminants</div><div style="font-size:1.02rem">{{ selSCont }}</div></div>
+          <div style="padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">Stress level</div><span style="display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.82rem;padding:6px 13px;border-radius:30px;color:var(--paper);background:{{ selSStressColor }}"><span style="width:9px;height:9px;border-radius:50%;background:var(--paper);opacity:.85"></span>{{ selSStressLbl }}</span></div>
+          <p style="font-size:.95rem;line-height:1.55;color:var(--ink-soft);margin:16px 0 0">{{ selSNote }}</p>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(48px,7vh,80px)">
+        <p style="font-size:1.12rem;line-height:1.55">Read the north-west: Punjab, Haryana, Rajasthan, Delhi — the breadbasket, drawn in the deepest red. The Green Revolution that fed the country was paid for in groundwater, and the bill is now overdue. Read the east: Bengal, Bihar, Assam sit on plenty of water quietly poisoned by arsenic. <em style="font-family:var(--serif);font-style:italic">Too little</em> and <em style="font-family:var(--serif);font-style:italic">unsafe</em> are different failures wearing the same colour.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 · THE WOUND (clay) ================= -->
+  <section id="ch05" data-screen-label="05 The wound" data-wopdark style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--clay-deep);color:oklch(0.94 0.03 60)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,60px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:oklch(0.88 0.06 60);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>05 — When the pipe betrays you</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch;color:var(--paper)">Indore is India's cleanest city. In December, its water killed.</h2>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+        <p style="font-size:clamp(1.2rem,1.9vw,1.5rem);line-height:1.45">For eight years running, Indore won the title of cleanest city in India.<span data-src="Swachh Survekshan (Ministry of Housing & Urban Affairs) — Indore ranked India's cleanest city for eight consecutive years." onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:8px;color:oklch(0.88 0.06 60);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span> In late December 2025, residents of Bhagirathpura noticed their tap water had turned bitter and foul. With no real alternative, many kept drinking it.</p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:clamp(20px,3vw,44px);margin:clamp(36px,5vh,56px) 0">
+        <div><span data-count="15" data-pre="≥" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6rem);line-height:.82;color:var(--paper)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:oklch(0.9 0.03 60);max-width:24ch">people dead — including a six-month-old infant.</p></div>
+        <div><span data-count="2000" data-pre="~" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6rem);line-height:.82;color:var(--paper)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:oklch(0.9 0.03 60);max-width:24ch">fell ill across one locality.</p></div>
+        <div><span data-count="40000" data-pre="~" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6rem);line-height:.82;color:var(--paper)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:oklch(0.9 0.03 60);max-width:26ch">residents screened, door to door, after the fact.</p></div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+        <p style="font-size:1.08rem;line-height:1.55;color:oklch(0.93 0.03 60)">The cause was almost banal: a public toilet had been built directly over a drinking-water pipeline, with no septic tank. Sewage seeped into the supply, which tested positive for bacteria found in human waste.<span data-src="Indore (Bhagirathpura) drinking-water contamination, Dec 2025 — sewage ingress into a supply line; ≥15 deaths, ~2,000 ill, ~40,000 residents screened (district administration; contemporaneous reporting)." onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:8px;color:oklch(0.88 0.06 60);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(40px,6vh,68px)">
+        <p style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4vw,3rem);line-height:1.1;margin:0;color:var(--paper)">A city can win every award for cleanliness <span style="font-style:italic;opacity:.8">and still lay a pipe beside a sewer.</span></p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(44px,6vh,72px)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.06;margin:0 0 .4em;color:var(--paper);max-width:22ch">Indore made the news because it was fast. The larger wound is slow.</h3>
+        <p style="font-size:1.08rem;line-height:1.55;color:oklch(0.93 0.03 60)">Fifteen deaths on one street is the version that reaches television. Across the Ganga–Brahmaputra delta — West Bengal, Bihar, Assam and neighbouring Bangladesh — tens of millions draw water from shallow wells laced with naturally occurring <strong style="color:var(--paper)">arsenic</strong>. It is colourless and tasteless, and it poisons over years, not days — what the WHO called the largest mass poisoning of a population in history.<span data-src="Smith, Lingas &amp; Rahman (2000), 'Contamination of drinking-water by arsenic in Bangladesh: a public health emergency,' Bulletin of the World Health Organization 78(9):1093–1103 — an estimated 35–77 million people at risk; described as the largest mass poisoning of a population in history." data-url="https://pmc.ncbi.nlm.nih.gov/articles/PMC2560840/" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:9px;color:oklch(0.88 0.06 60);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+        <p style="font-size:1.08rem;line-height:1.55;color:oklch(0.93 0.03 60);margin-top:1em">No award, no headline, no single funeral — just a map drawn decades ago that safe piped water still hasn't caught up to. Indore is the wound you can see. This is the one you can't.</p>
+      </div>
+
+      <!-- where are we heading -->
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(64px,9vh,104px)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.4vw,2.7rem);line-height:1.05;margin:0 0 .3em;color:var(--paper);max-width:20ch">Indore isn't the outlier. It's the preview. Where are we heading?</h3>
+        <p style="font-size:1.02rem;color:oklch(0.9 0.03 60);max-width:60ch;margin:0 0 clamp(28px,4vh,40px)">The same forces — over-drawn aquifers, unmaintained pipes, cities growing past their supply — are queuing up elsewhere.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(16px,2.4vw,26px)">
+          <sc-for list="{{ heading }}" as="h" hint-placeholder-count="4">
+            <div style="border-top:2px solid oklch(1 0 0 /0.5);padding-top:14px">
+              <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.86 0.06 60);margin-bottom:8px">{{ h.tag }}</div>
+              <div style="font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,1.7rem);line-height:1.05;color:var(--paper);margin-bottom:8px">{{ h.place }}</div>
+              <p style="font-size:.92rem;line-height:1.5;color:oklch(0.9 0.03 60);margin:0">{{ h.detail }}<span data-src="{{ h.src }}" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:8px;color:oklch(0.88 0.06 60);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 06 · NEER ================= -->
+  <section id="ch06" data-screen-label="06 Neer" style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--paper-2)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,60px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>06 — From reading to knowing</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em">Neer — know your water.</h2>
+        <p style="font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.45;color:var(--ink)">Awareness has to land somewhere local. <em style="font-family:var(--serif);font-style:italic;color:var(--water-deep)">Neer</em> — नीर, the word for water that carries across the languages where it's scarcest — lets you pick a state and see what's actually in the water, how stressed the source is, and what to do about it. <strong>That's the point:</strong> it turns a national statistic into your street.</p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);border:1px solid var(--rule);border-radius:12px;background:var(--paper);overflow:hidden;box-shadow:0 40px 90px oklch(0.2 0.02 250 /0.10)">
+        <div style="display:flex;align-items:center;gap:12px;padding:14px clamp(18px,2.4vw,28px);border-bottom:1px solid var(--rule);background:var(--paper-2);flex-wrap:wrap">
+          <span style="width:9px;height:9px;border-radius:50%;background:var(--s1)"></span>
+          <span style="font-family:var(--serif);font-size:1.3rem">Neer<span style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint)"> · नीर</span></span>
+          <span style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);letter-spacing:.04em">know your water · India</span>
+          <span style="flex:1"></span>
+          <label for="wop_neer" style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint)">State</label>
+          <select id="wop_neer" value="{{ selNeer }}" onChange="{{ onNeer }}" aria-label="Choose a state" style="font-family:var(--sans);font-size:.9rem;padding:8px 12px;border:1px solid var(--paper-edge);border-radius:5px;background:var(--paper);color:var(--ink);cursor:pointer">
+            <sc-for list="{{ stateOptions }}" as="opt" hint-placeholder-count="25">
+              <option value="{{ opt.ab }}">{{ opt.name }}</option>
+            </sc-for>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(20px,3vw,40px);padding:clamp(22px,3vw,40px)">
+          <div>
+            <div style="min-height:300px">{{ neerMini }}</div>
+            <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin:16px 0 0">Tap a state on the map or use the dropdown. Colour = water-security stress.</p>
+          </div>
+          <div>
+            <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.2vw,2.4rem);line-height:1;margin:0 0 3px">{{ selNName }}</h3>
+            <p style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin:0 0 18px">{{ selNRegion }}</p>
+            <div style="padding:13px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px">Main water source</div><div style="font-size:1.02rem">{{ selNSource }}</div></div>
+            <div style="padding:13px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px">Known contaminants</div><div style="display:flex;flex-wrap:wrap;gap:7px">
+              <sc-for list="{{ selNContChips }}" as="c" hint-placeholder-count="3">
+                <span style="font-family:var(--mono);font-size:.74rem;background:var(--paper-2);border:1px solid var(--paper-edge);color:var(--ink-soft);padding:4px 10px;border-radius:20px">{{ c.label }}</span>
+              </sc-for>
+            </div></div>
+            <div style="padding:13px 0;border-top:1px solid var(--rule);display:flex;align-items:center;gap:12px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">Stress</div><span style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.8rem;padding:5px 12px;border-radius:30px;color:var(--paper);background:{{ selNStressColor }}"><span style="width:8px;height:8px;border-radius:50%;background:var(--paper);opacity:.85"></span>{{ selNStressLbl }}</span></div>
+            <div style="margin-top:16px;background:var(--paper-2);border-radius:8px;padding:16px 18px"><span style="font-family:var(--sans);font-weight:600;color:var(--water-deep)">On the ground → </span><span style="font-size:.96rem;line-height:1.5;color:var(--ink-soft)">{{ selNNote }}</span></div>
+          </div>
+        </div>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(28px,4vh,44px)">
+        <div style="font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-deep);margin-bottom:14px">You now know what's likely in your water. Here's how to act on it — in about 15 minutes.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden">
+          <div style="background:var(--paper);padding:22px 22px;display:flex;flex-direction:column;gap:9px">
+            <span style="font-family:var(--serif);font-size:1.9rem;color:var(--water-deep);line-height:1">1</span>
+            <div style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink)">Test your water</div>
+            <p style="margin:0;font-size:.94rem;line-height:1.5;color:var(--ink-soft)">Government labs test drinking-water samples for a nominal fee — a network of ~2,000 across India. Start at the Jal Jeevan Mission <a href="https://ejalshakti.gov.in/jjm/citizen_corner/villageinformation.aspx" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">Citizen Corner</a>, or ask your Gram Panchayat for a free field-test kit.</p>
+          </div>
+          <div style="background:var(--paper);padding:22px 22px;display:flex;flex-direction:column;gap:9px">
+            <span style="font-family:var(--serif);font-size:1.9rem;color:var(--water-deep);line-height:1">2</span>
+            <div style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink)">Check what's already known</div>
+            <p style="margin:0;font-size:.94rem;line-height:1.5;color:var(--ink-soft)">See tested results for your area on the JJM <a href="https://ejalshakti.gov.in/WQMIS" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">water-quality dashboard</a>, and your block's groundwater map at <a href="https://cgwb.gov.in" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">CGWB</a>.</p>
+          </div>
+          <div style="background:var(--paper);padding:22px 22px;display:flex;flex-direction:column;gap:9px">
+            <span style="font-family:var(--serif);font-size:1.9rem;color:var(--water-deep);line-height:1">3</span>
+            <div style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink)">Report a problem</div>
+            <p style="margin:0;font-size:.94rem;line-height:1.5;color:var(--ink-soft)">Flag foul or unsafe supply to your Gram Panchayat / Village Water &amp; Sanitation Committee first; escalate anything unresolved on <a href="https://pgportal.gov.in" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">CPGRAMS</a>, the national grievance portal.</p>
+          </div>
+        </div>
+      </div>
+      <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:18px;max-width:80ch">An indicative public-data summary for orientation — not a substitute for a local NABL-accredited water test.</p>
+    </div>
+  </section>
+
+  <!-- ================= 07 · THE RECKONING (dark) ================= -->
+  <section id="ch07" data-screen-label="07 The reckoning" data-wopdark style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--water-ink);color:oklch(0.92 0.015 240)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,68px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--water-light);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>07 — The reckoning</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:20ch;color:var(--paper)">Everything drinks water. This essay did too.</h2>
+        <p style="font-size:clamp(1.2rem,1.9vw,1.5rem);line-height:1.45;color:oklch(0.86 0.02 240)">A web search. An AI prompt. A beer. A can of Diet Coke. Even the reverse-osmosis unit purifying your drinking water pours several litres down the drain for each clean one. So does every burger on the grill. The guilt is real — but guilt is a bad accountant, and <em style="font-family:var(--serif);font-style:italic;color:var(--water-light)">not all water use is equal.</em></p>
+      </div>
+
+      <!-- The data centre is the unit -->
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(48px,7vh,80px)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.04;margin:0 0 .3em;color:var(--paper);max-width:22ch">The real unit isn't the prompt. It's the building it runs in.</h3>
+        <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.86 0.02 240);max-width:66ch;margin:0 0 clamp(28px,3.5vh,42px)">A single question is a few drops. But questions don't run alone — they run inside data centres that never switch off, and it's the building that drinks. Here is what one of them pulls in a single day, for cooling alone.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2.4vw,26px)">
+          <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(24px,2.8vw,34px);background:oklch(1 0 0 /0.03)">
+            <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-light);margin-bottom:12px">A typical data centre</div>
+            <div style="font-family:var(--serif);font-size:clamp(2.8rem,6vw,4rem);line-height:.82;color:var(--paper)">~1.1M<span style="font-size:.36em;color:oklch(0.8 0.02 240)"> litres / day</span></div>
+            <p style="font-size:.98rem;line-height:1.5;color:oklch(0.84 0.02 240);margin:.7em 0 0">The everyday water of about <strong style="color:var(--paper)">1,000 households</strong> — drawn by one building, every single day.</p>
+          </div>
+          <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(24px,2.8vw,34px);background:oklch(1 0 0 /0.03)">
+            <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:oklch(0.82 0.08 60);margin-bottom:12px">A large one</div>
+            <div style="font-family:var(--serif);font-size:clamp(2.8rem,6vw,4rem);line-height:.82;color:var(--paper)">~19M<span style="font-size:.36em;color:oklch(0.8 0.02 240)"> litres / day</span></div>
+            <p style="font-size:.98rem;line-height:1.5;color:oklch(0.84 0.02 240);margin:.7em 0 0">A whole <strong style="color:var(--paper)">town of up to 50,000 people</strong> — the thirst of one hyperscale campus.<span data-src="Brookings (2024), 'AI, data centers, and water' — a typical data centre uses ~300,000 US gal/day (~1.1 million L), about 1,000 households; large data centres up to ~5 million US gal/day (~19 million L), the needs of a town of up to 50,000. Consistent figures: EESI (2025); Lincoln Institute of Land Policy (2026)." data-url="https://www.brookings.edu/articles/ai-data-centers-and-water/" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+          </div>
+        </div>
+        <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.9 0.015 240);max-width:68ch;margin:clamp(24px,3vh,36px) 0 0">Now multiply one building across thousands of sites, running around the clock — often on drinking-quality water, increasingly built in already-stressed basins. Globally, data centres consumed an estimated <strong style="color:var(--paper)">560 billion litres in 2023</strong>, heading past <strong style="color:var(--paper)">1,200 billion by 2030</strong> — more than the entire city of London drinks in a year.<span data-src="IEA, 'Energy and AI' (2025) — global data-centre water ≈ 560 bn L (2023), rising toward ~1,200 bn L by 2030. London's ~9 million residents use roughly 949 bn L/yr (Thames Water / reporting)." data-url="https://www.iea.org/reports/energy-and-ai" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(20px,3vh,32px)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.05;margin:0 0 .2em;color:var(--paper)">Your own share, though, is a rounding error.</h3>
+        <p style="font-size:1rem;color:oklch(0.82 0.02 240);margin:0 0 clamp(24px,3.5vh,36px);max-width:60ch">The building is the story — not you. Put a whole year of one person's daily AI prompts next to an ordinary day, in litres, and it barely clears the axis.</p>
+        <div id="wop_footbars" style="min-height:280px">{{ footBars }}</div>
+        <p style="font-family:var(--mono);font-size:.74rem;color:oklch(0.72 0.02 240);margin-top:20px;max-width:72ch">A whole year of one person's daily AI prompts costs less water than a single ten-minute shower.<span data-src="Google (Aug 2025), 'Measuring the environmental impact of AI inference' — median Gemini text prompt ≈ 0.26 mL (about five drops). ~50 prompts a day for a year ≈ 4.7 L." data-url="https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span> Heavier models and full-lifecycle counts run 10–50× higher, so the honest range is wide — not all AI is equal. Either way, what's on the plate dwarfs what's in the chatbot.<span data-src="Water Footprint Network / Mekonnen &amp; Hoekstra — per-serving footprints: hamburger ≈ 2,400 L, coffee ≈ 140 L, beer ≈ 75 L. UC Riverside (2023) put a session of 10–50 prompts near 500 mL including electricity." data-url="https://www.waterfootprint.org" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2.4vw,26px);margin-top:clamp(48px,7vh,80px)">
+        <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(22px,2.6vw,32px);background:oklch(1 0 0 /0.03)">
+          <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-light);margin-bottom:12px">Withdrawn</div>
+          <div style="font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);line-height:.85;color:var(--paper)"><span data-count="29">0</span> bn L</div>
+          <p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:.6em 0 0">borrowed from a source, much of it returned. One tech firm's own data centres, 2023.</p>
+        </div>
+        <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(22px,2.6vw,32px);background:oklch(1 0 0 /0.03)">
+          <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:oklch(0.82 0.08 60);margin-bottom:12px">Consumed / evaporated</div>
+          <div style="font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);line-height:.85;color:var(--paper)"><span data-count="23">0</span> bn L</div>
+          <p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:.6em 0 0">gone to the sky as vapour — and ~80% of it was drinking-quality water.<span data-src="Li, Yang, Islam &amp; Ren (2023), 'Making AI Less Thirsty' (UC Riverside) — one firm's self-owned data centres withdrew ~29 bn L and evaporated ~23 bn L in 2023, roughly 80% of it potable." data-url="https://arxiv.org/abs/2304.03271" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(28px,4vh,44px)">
+        <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.9 0.015 240)">A 100-megawatt AI facility can draw around <strong style="color:var(--paper)">2 million litres a day</strong> while pulling more electricity than <strong style="color:var(--paper)">75,000 homes</strong>, and its cooling towers evaporate roughly <strong style="color:var(--paper)">80% of what they take</strong> — gone from the local basin until it falls again as rain, somewhere else. Even cleaning water costs water: a traditional home reverse-osmosis unit sends <strong style="color:var(--paper)">3–4 litres to the drain</strong> for every clean litre it makes.<span data-src="IEA, 'Energy and AI' (2025) — a 100-MW data centre ≈ 2 million L/day; global data-centre water ≈ 560 bn L, rising toward ~1,200 bn L by 2030. De Vries (2025), Patterns, estimates 2025 AI water at 312–764 bn L. Home RO waste ratios run ~3–4:1 (industry technical sources)." data-url="https://www.iea.org/reports/energy-and-ai" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);cursor:help;vertical-align:super;margin-left:3px;line-height:1">i</span></p>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(48px,7vh,80px)">
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.05;margin:0 0 .5em;color:var(--paper)">A litre is not a litre — four things decide if it matters.</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:oklch(1 0 0 /0.12);border:1px solid oklch(1 0 0 /0.12);border-radius:10px;overflow:hidden">
+          <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Quality</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Potable vs. recycled</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">Evaporating treated drinking water in a thirsty city is worlds apart from a closed loop on grey water.</p></div>
+          <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Place</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Where it's drawn</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">A litre in rain-soaked Kerala isn't a litre in arid Rajasthan. Stressed ground can't spare it.</p></div>
+          <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Fate</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Returned vs. gone</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">Withdrawn-and-returned water re-enters the system. Evaporated water leaves the basin entirely.</p></div>
+          <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Honesty</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Measured vs. guessed</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">"One prompt = a bottle" is a shortcut. Real intensity varies up to 10,000× by site.</p></div>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(48px,7vh,80px)">
+        <p style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4vw,3rem);line-height:1.1;margin:0 0 .7em;color:var(--paper)">AI isn't the whole picture. But we need <span style="font-style:italic;color:var(--water-light)">water, policy and regulation</span> before we need more data centres.</p>
+        <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.9 0.015 240)">The point isn't to stop searching, or building, or drinking a beer. It's the order of priorities. Before a stressed basin is opened up for one more thirsty industry — before more of a resource that already isn't reaching people is spent — the paper has to become the pipe. Measure honestly, build where the rain is, and provide before you expand. The fix for AI's thirst turns out to be the fix for everything in this story.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 08 · THE LEVERS ================= -->
+  <section id="ch08" data-screen-label="08 The levers" style="padding:clamp(80px,12vh,150px) var(--gut)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(44px,6vh,72px)">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>08 — Closing the gap</span>
+        <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:16ch">Make the paper truer. Then make it real.</h2>
+        <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">The solutions aren't mysteries. They're measured, proven, and already running — the work is to back the ones that hold up. Four that do, with the evidence behind each —</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(16px,2.4vw,28px)">
+        <sc-for list="{{ solutions }}" as="s" hint-placeholder-count="4">
+          <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);border:1px solid var(--rule);border-radius:10px;padding:clamp(24px,2.8vw,34px);background:var(--paper);display:flex;flex-direction:column">
+            <span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">{{ s.n }}</span>
+            <h4 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.45rem,2.3vw,1.85rem);line-height:1.05;margin:.35em 0 .45em">{{ s.title }}</h4>
+            <p style="font-size:.96rem;line-height:1.55;color:var(--ink-soft);margin:0 0 1.1em">{{ s.body }}</p>
+            <div style="margin-top:auto;padding-top:15px;border-top:1px solid var(--rule)">
+              <div style="font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px">Proven by</div>
+              <div style="font-size:.9rem;line-height:1.4;color:var(--ink);margin-bottom:11px">{{ s.proofShort }}<span data-src="{{ s.proof }}" data-url="{{ s.proofUrl }}" onMouseEnter="{{ showCite }}" onMouseLeave="{{ hideCite }}" tabindex="0" role="button" aria-label="source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);cursor:help;vertical-align:super;margin-left:4px;line-height:1">i</span></div>
+              <a href="{{ s.orgUrl }}" target="_blank" rel="noopener" style="font-family:var(--sans);font-weight:600;font-size:.9rem;color:var(--water-deep);display:inline-flex;gap:.35em;align-items:baseline">{{ s.org }} ↗</a>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-top:clamp(30px,4.5vh,52px)">
+        <div style="background:var(--paper-2);padding:clamp(24px,2.6vw,32px)">
+          <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:15px">Get aware — the honest scoreboards</div>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ awareLearn }}" as="a" hint-placeholder-count="4">
+              <li><a href="{{ a.u }}" target="_blank" rel="noopener" style="font-size:.96rem;line-height:1.4;color:var(--ink);border-bottom:1px solid var(--rule);padding-bottom:2px">{{ a.t }}</a></li>
+            </sc-for>
+          </ul>
+        </div>
+        <div style="background:var(--paper-2);padding:clamp(24px,2.6vw,32px)">
+          <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:15px">Contribute — where a dollar goes furthest</div>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px">
+            <sc-for list="{{ awareGive }}" as="g" hint-placeholder-count="3">
+              <li><a href="{{ g.u }}" target="_blank" rel="noopener" style="font-size:.96rem;line-height:1.4;color:var(--ink);border-bottom:1px solid var(--rule);padding-bottom:2px">{{ g.t }}</a></li>
+            </sc-for>
+          </ul>
+          <p style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);margin:16px 0 0;line-height:1.5">Verify any charity before giving — starting points, not endorsements.</p>
+        </div>
+      </div>
+
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);text-align:center;max-width:30ch;margin:clamp(64px,9vh,110px) auto 0">
+        <p style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.14;margin:0">Water on paper is a promise. <span style="font-style:italic;color:var(--water-deep)">Water that is clean and within reach of everyone — regardless of wealth, caste, creed, religion, or where they were born — is the proof.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer data-screen-label="Footer" data-wopdark style="background:var(--water-ink);color:oklch(0.88 0.02 240);padding:clamp(72px,10vh,120px) var(--gut) clamp(40px,6vh,64px)">
+    <div style="max-width:var(--maxw);margin:0 auto">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--water-light)">On Paper · the series</span>
+      <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.02;margin:14px 0 34px;max-width:18ch;color:var(--paper)">Water was the first. Oil is next.</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(24px,4vw,56px);border-top:1px solid oklch(1 0 0 /0.14);padding-top:36px">
+        <div>
+          <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 12px">About this essay</h5>
+          <p style="font-size:.94rem;line-height:1.6;color:oklch(0.84 0.02 240);margin:0">A data-driven essay on the distance between the right to water and the reach of it — from the whole planet to India, and an honest reckoning with the water cost of the tools that built it, AI included.</p>
+          <p style="font-size:.94rem;line-height:1.6;color:oklch(0.84 0.02 240);margin:12px 0 0">Tool: <strong style="color:var(--paper)">Neer · नीर</strong>.</p>
+        </div>
+        <div>
+          <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 12px">Jump to</h5>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <a href="#ch01" style="color:oklch(0.86 0.02 240);font-size:.95rem">The scale</a>
+            <a href="#ch03" style="color:oklch(0.86 0.02 240);font-size:.95rem">The wrong side</a>
+            <a href="#ch04" style="color:oklch(0.86 0.02 240);font-size:.95rem">India, drawn by water</a>
+            <a href="#ch06" style="color:oklch(0.86 0.02 240);font-size:.95rem">Neer — know your water</a>
+            <a href="#ch07" style="color:oklch(0.86 0.02 240);font-size:.95rem">The reckoning</a>
+          </div>
+        </div>
+        <div>
+          <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 12px">Get water tested / report</h5>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:.92rem">
+            <a href="https://ejalshakti.gov.in/jjm/citizen_corner/villageinformation.aspx" target="_blank" rel="noopener" style="color:oklch(0.86 0.02 240)">Jal Jeevan Mission — Citizen Corner &amp; testing ↗</a>
+            <a href="https://pgportal.gov.in" target="_blank" rel="noopener" style="color:oklch(0.86 0.02 240)">CPGRAMS — public grievance redressal ↗</a>
+            <a href="https://cgwb.gov.in" target="_blank" rel="noopener" style="color:oklch(0.86 0.02 240)">Central Ground Water Board — atlases ↗</a>
+            <a href="https://www.wri.org/aqueduct" target="_blank" rel="noopener" style="color:oklch(0.86 0.02 240)">WRI Aqueduct — global water-risk atlas ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:44px;border-top:1px solid oklch(1 0 0 /0.14);padding-top:28px">
+        <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:oklch(0.7 0.02 240);margin:0 0 16px">Sources &amp; notes</h5>
+        <ol style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px 28px">
+          <sc-for list="{{ sources }}" as="s" hint-placeholder-count="10">
+            <li style="display:grid;grid-template-columns:2em 1fr;gap:.4em;font-family:var(--mono);font-size:.72rem;line-height:1.5;color:oklch(0.72 0.02 240)"><span style="color:var(--water-light)">{{ s.n }}</span><span>{{ s.t }}</span></li>
+          </sc-for>
+        </ol>
+      </div>
+
+      <p style="font-family:var(--mono);font-size:.7rem;line-height:1.6;color:oklch(0.62 0.02 240);margin:36px 0 0;max-width:90ch">Water on Paper — essay one of the On Paper series. Figures are drawn from public reporting and research and are indicative; verify before citing. Schematic maps are illustrative, not survey-accurate. Built, candidly, with AI — see the reckoning, Chapter 07.</p>
+    </div>
+  </footer>
+
+</main>
+
+{{ citeTip }}
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;paperGrain&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;section&quot;: &quot;Style&quot;, &quot;tsType&quot;: &quot;boolean&quot;},
+  &quot;reveals&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;section&quot;: &quot;Motion&quot;, &quot;tsType&quot;: &quot;boolean&quot;}
+}">
+class Component extends DCLogic {
+  STRESS = ["Safe / surplus","Semi-critical","Critical","Over-exploited","Severe stress"];
+
+  GLOBAL_REMOVED = true;
+
+  COUNTRIES = [
+    { key:"YE", name:"Yemen", region:"Middle East", stress:4, stat:"first", statLbl:"Sana'a is projected to be one of the first capital cities on Earth to run out of water.", source:"Fossil groundwater & trucked water", challenge:"Aquifers drained faster than they can ever refill — for farming and through years of conflict that shattered the supply network.", orgs:[{name:"UNICEF Yemen — WASH", what:"emergency water & sanitation"},{name:"Oxfam", what:"clean-water response"}] },
+    { key:"IN", name:"India", region:"South Asia", stress:4, deepdive:true, stat:"600M", statLbl:"people under high-to-extreme water stress — and the world's largest user of groundwater.", source:"Groundwater, rivers & reservoirs", challenge:"18% of the world's people living on 4% of its fresh water, spending the savings faster than the rain returns them.", orgs:[{name:"WaterAid India", what:"safe water & hygiene, nationwide"},{name:"Water.org", what:"water credit & access"}] },
+    { key:"PK", name:"Pakistan", region:"South Asia", stress:4, stat:"1 river", statLbl:"A booming population leans almost entirely on the Indus — and is sliding toward absolute scarcity.", source:"Indus basin & groundwater", challenge:"Silting reservoirs, leaky canals and little storage leave the country dangerously exposed to a single river system.", orgs:[{name:"WaterAid Pakistan", what:"rural & urban water"},{name:"Indus Earth Trust", what:"coastal water harvesting"}] },
+    { key:"IR", name:"Iran", region:"Middle East", stress:4, stat:"sinking", statLbl:"Plains across Iran are dropping as the aquifers beneath them are pumped dry.", source:"Dams & deep groundwater", challenge:"Decades of dam-building and over-extraction have drained reserves; land subsidence and dust storms now follow the falling water table.", orgs:[{name:"Local WASH & NGO efforts", what:"community water programmes"}] },
+    { key:"SA", name:"Saudi Arabia", region:"Gulf", stress:4, stat:"~0", statLbl:"Almost no renewable fresh water — among the most water-scarce nations on the planet.", source:"Desalination & fossil aquifers", challenge:"Drinking the sea at enormous energy cost while ancient, non-renewable aquifers are spent on agriculture.", orgs:[{name:"Regional water charities", what:"WASH across the Gulf & MENA"}] },
+    { key:"CN", name:"China", region:"East Asia", stress:3, stat:"north/south", statLbl:"Most people live in the south; much of the water sits in the north — so China pipes rivers across the country.", source:"Rivers, mega-transfers & groundwater", challenge:"The North China Plain aquifer is among the most depleted on Earth, propping up farms and megacities.", orgs:[{name:"charity: water — partners", what:"rural water projects"}] },
+    { key:"ZA", name:"South Africa", region:"Southern Africa", stress:3, stat:"Day Zero", statLbl:"In 2018, Cape Town counted publicly toward the day its taps would be switched off.", source:"Reservoirs & rivers", challenge:"Drought plus rapid growth nearly emptied a major city's dams — a dress rehearsal the whole world watched.", orgs:[{name:"Gift of the Givers", what:"drought & water relief"},{name:"WaterAid", what:"WASH, Southern Africa"}] },
+    { key:"MX", name:"Mexico", region:"Latin America", stress:3, stat:"50 cm/yr", statLbl:"Mexico City sinks up to half a metre a year as it pumps the aquifer beneath a drained lakebed.", source:"Aquifers & distant reservoirs", challenge:"A megacity loses roughly 40% of its water to leaks while drawing more than the ground can give.", orgs:[{name:"Isla Urbana", what:"rainwater harvesting"},{name:"Cántaro Azul", what:"rural safe water"}] },
+    { key:"US", name:"United States", region:"North America", stress:3, stat:"Colorado", statLbl:"The over-allocated Colorado River often no longer reaches the sea — and AI data centres are arriving in its driest basins.", source:"Rivers, reservoirs & groundwater", challenge:"Southwest mega-drought collides with booming, thirsty computing — wealth is no immunity from scarcity.", orgs:[{name:"DigDeep", what:"water access in the US"},{name:"Water.org", what:"global & US access"}] },
+    { key:"ET", name:"Ethiopia", region:"East Africa", stress:3, stat:"distance", statLbl:"For millions, the barrier isn't scarcity but distance — hours walked for water that may not be safe.", source:"Rivers, springs & boreholes", challenge:"Real progress meets vast rural distances and swinging rains; the access frontier is the last mile.", orgs:[{name:"charity: water", what:"wells & springs"},{name:"WaterAid", what:"rural WASH"}] }
+  ];
+
+  STATES = [
+    { ab:"LA", name:"Ladakh", c:5, r:1, region:"Trans-Himalaya", stress:1, source:"Glacial melt & springs", cont:["Sediment","Seasonal scarcity"], note:"Springsheds and glacier melt feed most villages — recharge is climate-fragile." },
+    { ab:"JK", name:"Jammu & Kashmir", c:4, r:1, region:"North", stress:1, source:"Rivers & springs", cont:["Turbidity","Bacterial"], note:"Surface-water rich, but treatment gaps drive monsoon contamination spikes." },
+    { ab:"HP", name:"Himachal Pradesh", c:4, r:2, region:"Hills", stress:0, source:"Himalayan rivers & springs", cont:["Turbidity"], note:"Among India's most water-secure states; gravity schemes serve hill hamlets." },
+    { ab:"PB", name:"Punjab", c:3, r:2, region:"North-west", stress:4, source:"Groundwater (tubewells)", cont:["Uranium","Nitrate","Pesticides"], note:"Paddy-wheat farming has crashed the water table; CGWB 2024 found ~62% of post-monsoon samples with dangerously high uranium — the worst in India — alongside nitrate." },
+    { ab:"UK", name:"Uttarakhand", c:5, r:2, region:"Hills", stress:1, source:"Himalayan rivers & springs", cont:["Turbidity","Drying springs"], note:"Thousands of springs are drying — the source for most mountain villages." },
+    { ab:"HR", name:"Haryana", c:3, r:3, region:"North-west", stress:4, source:"Groundwater & canals", cont:["Uranium","Nitrate","Fluoride","Salinity"], note:"Severely over-exploited blocks ring Delhi; CGWB 2024 flags 40–50% of samples with high uranium. Rainwater harvesting is mandated on paper, not enforced." },
+    { ab:"DL", name:"Delhi", c:4, r:3, region:"Capital", stress:4, source:"Yamuna, Ganga canal, groundwater", cont:["Ammonia","Sewage","Uranium","Lead"], note:"Demand far outruns the Yamuna's safe yield; ammonia spikes shut treatment plants, and CGWB 2024 records Delhi's highest lead levels and rising uranium." },
+    { ab:"RJ", name:"Rajasthan", c:3, r:4, region:"West (arid)", stress:4, source:"Groundwater & tankers", cont:["Fluoride","Uranium","Salinity","Nitrate"], note:"India's driest large state; high fluoride causes skeletal fluorosis and CGWB 2024 ranks it India's top uranium hotspot — test before drinking any new borewell." },
+    { ab:"UP", name:"Uttar Pradesh", c:5, r:3, region:"Gangetic plain", stress:3, source:"Ganga basin & groundwater", cont:["Arsenic","Fluoride","Nitrate"], note:"Arsenic belts along the Ganga affect millions; demand piped surface water in mapped blocks." },
+    { ab:"BR", name:"Bihar", c:6, r:3, region:"Gangetic plain", stress:3, source:"Groundwater & rivers", cont:["Arsenic","Iron","Fluoride"], note:"Among the worst arsenic exposure in India; shallow hand-pumps are the risk." },
+    { ab:"AR", name:"Arunachal", c:9, r:2, region:"North-east", stress:0, source:"Rain-fed rivers & springs", cont:["Turbidity"], note:"Abundant rainfall; the challenge is reaching remote hamlets, not supply." },
+    { ab:"GJ", name:"Gujarat", c:2, r:5, region:"West", stress:3, source:"Narmada canal & groundwater", cont:["Salinity","Fluoride","Nitrate"], note:"Coastal aquifers are turning saline as the sea intrudes over-pumped wells." },
+    { ab:"MP", name:"Madhya Pradesh", c:4, r:4, region:"Central", stress:2, source:"Rivers, reservoirs & groundwater", cont:["Fluoride","Nitrate","Sewage (urban)"], note:"Indore — India's 'cleanest city' — saw sewage seep into a drinking line in Dec 2025, killing at least 15. Clean ≠ safe water." },
+    { ab:"JH", name:"Jharkhand", c:6, r:4, region:"East", stress:1, source:"Rivers & groundwater", cont:["Iron","Fluoride"], note:"Water is available but iron and fluoride are common; source treatment is patchy." },
+    { ab:"WB", name:"West Bengal", c:7, r:4, region:"East", stress:3, source:"Groundwater & rivers", cont:["Arsenic","Iron","Salinity"], note:"The world's most-studied arsenic crisis sits here — mapped for decades, safe piped water still lags." },
+    { ab:"AS", name:"Assam", c:8, r:3, region:"North-east", stress:1, source:"Brahmaputra basin & groundwater", cont:["Arsenic","Iron","Fluoride"], note:"Water-abundant yet chemically contaminated — arsenic and iron in shallow tubewells." },
+    { ab:"MH", name:"Maharashtra", c:3, r:5, region:"West", stress:3, source:"Dams & reservoirs", cont:["Nitrate","Fluoride","Turbidity"], note:"Marathwada's recurring drought drives tanker dependence while cane farming drinks the dams." },
+    { ab:"CG", name:"Chhattisgarh", c:5, r:4, region:"Central", stress:1, source:"Rivers & groundwater", cont:["Iron","Fluoride"], note:"Relatively water-secure; fluoride pockets need point-of-use removal." },
+    { ab:"OD", name:"Odisha", c:5, r:5, region:"East coast", stress:1, source:"Rivers & groundwater", cont:["Iron","Salinity (coastal)","Fluoride"], note:"Cyclone surge salts coastal wells; iron is the everyday issue." },
+    { ab:"TG", name:"Telangana", c:4, r:5, region:"South (Deccan)", stress:3, source:"Reservoirs & groundwater", cont:["Fluoride","Nitrate"], note:"Hard Deccan rock means deep, fast-falling borewells and high fluoride." },
+    { ab:"GA", name:"Goa", c:3, r:6, region:"West coast", stress:1, source:"Rivers & reservoirs", cont:["Salinity (coastal)","Bacterial"], note:"Surface-water rich; tourism load and saline intrusion stress coastal supply in summer." },
+    { ab:"KA", name:"Karnataka", c:4, r:6, region:"South", stress:3, source:"Reservoirs & groundwater", cont:["Nitrate","Fluoride","Hardness"], note:"Bengaluru's borewells run deep and dry while it pumps Cauvery water uphill." },
+    { ab:"AP", name:"Andhra Pradesh", c:5, r:6, region:"South-east coast", stress:2, source:"Rivers & groundwater", cont:["Fluoride","Salinity","Nitrate"], note:"Fluoride belts (the Nalgonda legacy) and coastal salinity; defluoridation at source is the promise." },
+    { ab:"KL", name:"Kerala", c:3, r:7, region:"South-west coast", stress:1, source:"Rivers & high rainfall", cont:["Bacterial","Iron","Salinity (coastal)"], note:"India's wettest state still faces summer scarcity and bacterial contamination — storage and treatment, not rainfall, are the gap." },
+    { ab:"TN", name:"Tamil Nadu", c:4, r:7, region:"South", stress:3, source:"Reservoirs & groundwater", cont:["Salinity","Fluoride","Nitrate"], note:"Chennai hit 'Day Zero' in 2019 when its reservoirs ran dry; rainwater harvesting has been law here since 2003." }
+  ];
+
+  FOOTPRINTS = [
+    { label:"A year of daily AI prompts", sub:"~50 a day · Google's 0.26 mL/prompt", val:5, disp:"~5 L", tone:"deep" },
+    { label:"A ten-minute shower", sub:"one shower", val:100, disp:"100 L", tone:"deep" },
+    { label:"A glass of beer", sub:"250 ml", val:75, disp:"75 L", tone:"water" },
+    { label:"A cup of coffee", sub:"one cup", val:140, disp:"140 L", tone:"water" },
+    { label:"A glass of wine", sub:"250 ml", val:240, disp:"240 L", tone:"water" },
+    { label:"One hamburger", sub:"150 g of beef", val:2400, disp:"2,400 L", tone:"clay" },
+    { label:"A cotton t-shirt", sub:"one garment", val:2700, disp:"2,700 L", tone:"clay" }
+  ];
+
+  SOLUTIONS = [
+    { n:"01", title:"Treat the water at the source", body:"Dilute chlorine added where people collect water cuts child deaths by roughly a quarter to a third \u2014 and at about $27\u201366 per healthy year of life saved, it is one of the most cost-effective health interventions known.", proofShort:"Kremer, Luby et al. (2023) \u00b7 52-RCT meta-analysis", proof:"Kremer, Luby, Maertens, Tan & Wi\u0119cek (2023), 'Water Treatment and Child Mortality: A Meta-analysis and Cost-effectiveness Analysis' (Univ. of Chicago / NBER w30835): chlorination reduces under-5 mortality ~25\u201330%; ~$27\u201366 per DALY averted.", proofUrl:"https://www.nber.org/papers/w30835", org:"Evidence Action \u2014 Dispensers for Safe Water", orgUrl:"https://www.evidenceaction.org/dispensers-for-safe-water/" },
+    { n:"02", title:"Put back what we pump out", body:"Managed aquifer recharge and rainwater harvesting return water to over-drawn ground. In Rajasthan, reviving traditional johads brought dry wells \u2014 and whole rivers \u2014 back to life.", proofShort:"IWMI recharge reviews \u00b7 Tarun Bharat Sangh", proof:"International Water Management Institute \u2014 managed aquifer recharge evidence; Central Ground Water Board (India). Tarun Bharat Sangh's johad revival recharged aquifers across Alwar, Rajasthan, reviving seasonal rivers.", proofUrl:"https://www.iwmi.cgiar.org/", org:"Tarun Bharat Sangh \u2014 johad revival", orgUrl:"https://www.tarunbharatsangh.in/" },
+    { n:"03", title:"Grow less thirsty", body:"Farming takes about 70% of the fresh water humans withdraw. Drip irrigation and shifting off water-hungry crops \u2014 paddy in Punjab, cane in Maharashtra \u2014 can cut farm water use by a third or more.", proofShort:"FAO / UN-Water \u00b7 NITI Aayog", proof:"FAO AQUASTAT / UN-Water \u2014 agriculture is ~70% of global freshwater withdrawals; NITI Aayog and state studies on crop diversification and micro-irrigation.", proofUrl:"https://www.fao.org/aquastat/en/", org:"WOTR \u2014 watershed & drip programmes", orgUrl:"https://wotr.org/" },
+    { n:"04", title:"Make the paper enforceable", body:"Rights work when they are written down and audited. South Africa's courts enforce a daily minimum; the EU now makes large data centres report their water. Demand that bottlers and data centres disclose where \u2014 and what \u2014 they draw.", proofShort:"S. Africa Water Services Act \u00b7 EU Dir. 2023/1791", proof:"South Africa Water Services Act (1997) & Constitution s.27; EU Energy Efficiency Directive 2023/1791 \u2014 mandatory water reporting for data centres from 500 kW.", proofUrl:"https://eur-lex.europa.eu/eli/dir/2023/1791/oj", org:"Sanitation and Water for All", orgUrl:"https://www.sanitationandwaterforall.org/" }
+  ];
+  AWARE = {
+    learn:[
+      { t:"WHO / UNICEF JMP \u2014 the global scoreboard", u:"https://washdata.org" },
+      { t:"WRI Aqueduct \u2014 water-risk atlas", u:"https://www.wri.org/aqueduct" },
+      { t:"Water Footprint Network \u2014 your own litres", u:"https://www.waterfootprint.org" },
+      { t:"CGWB \u2014 your block's groundwater map", u:"https://cgwb.gov.in" }
+    ],
+    give:[
+      { t:"Evidence Action \u2014 Dispensers for Safe Water (GiveWell top charity)", u:"https://www.evidenceaction.org/dispensers-for-safe-water/" },
+      { t:"WaterAid India", u:"https://www.wateraidindia.in" },
+      { t:"Water.org \u2014 WaterCredit", u:"https://water.org" }
+    ]
+  };
+
+  BOTTLED = [
+    { yr:"1789", t:"A nobleman's cure", d:"A French marquis drinks from the Sainte-Catherine spring at Évian and finds it soothes his kidney stones. Water becomes a remedy for the rich." },
+    { yr:"1826", t:"The first bottling", d:"Évian opens a bottling house; spring water is sold in earthenware jugs. Water quietly becomes a product." },
+    { yr:"1863", t:"Perrier is born", d:"The Vergèze spring is commercialised; Dr Louis Perrier runs the spa there, and in 1903 the Englishman St-John Harmsworth buys it, gives it the doctor's name, and designs the little green bottle that becomes an icon." },
+    { yr:"1970s", t:"Water becomes a lifestyle", d:"Perrier's US campaign sells water as status — 'Earth's First Soft Drink.' A $500-million market for bottled water appears almost overnight." },
+    { yr:"1992", t:"The giants move in", d:"Nestlé buys Perrier; Coca-Cola (Dasani) and Pepsi (Aquafina) soon bottle filtered tap water. A human right, resold." },
+    { yr:"Today", t:"A $300-billion thirst", d:"Bottled water now outsells soda in the US and is a ~$300-billion global market — much of it drawn from springs and aquifers, some in water-stressed ground." }
+  ];
+
+  POLLUTERS = [
+    { big:"#1", color:"var(--s3)", name:"Agriculture", who:"Fertiliser & manure runoff", detail:"The single largest source of water pollution worldwide. Nitrate and phosphorus wash off fields into rivers and groundwater, feeding algal blooms and dead zones that choke the oxygen out of the water.", src:"FAO / UNEP — agriculture is the leading source of water pollution globally; nutrient runoff is the primary driver of eutrophication and aquatic dead zones." },
+    { big:"metals", color:"var(--s2)", name:"Industry", who:"Chemicals, dyes, mining", detail:"Tanneries, textiles, mining and manufacturing discharge heavy metals and chemicals — often untreated where enforcement is weak or absent.", src:"UN World Water Development Report; Central Pollution Control Board (India) — untreated industrial effluent as a major contamination pathway." },
+    { big:"80%+", color:"var(--s4)", name:"Sewage", who:"Untreated human waste", detail:"Globally, more than 80% of all wastewater flows back into the environment untreated — the exact failure that killed people in Indore.", src:"UN World Water Development Report (UNESCO / UN-Water) — over 80% of the world's wastewater is released without treatment." }
+  ];
+
+  HEADING = [
+    { tag:"2019 · India", place:"Chennai's Day Zero", detail:"Four reservoirs ran dry; a megacity of millions queued behind water tankers.", src:"Contemporaneous reporting; Tamil Nadu Water Resources Dept — Chennai's 2019 reservoir crisis." },
+    { tag:"2018 · South Africa", place:"Cape Town's countdown", detail:"A global city publicly counted down to the day the taps would be switched off.", src:"City of Cape Town — 2018 'Day Zero' drought response and public countdown." },
+    { tag:"Now · sinking cities", place:"Jakarta · Mexico City · Tehran", detail:"Whole cities are sinking as the aquifers beneath them are pumped dry.", src:"Peer-reviewed subsidence studies and reporting on groundwater over-extraction (Jakarta, Mexico City, Tehran)." },
+    { tag:"2030 · projection", place:"A 40% shortfall", detail:"Global water demand is projected to outstrip reliable supply by roughly 40%.", src:"2030 Water Resources Group / UN — global water demand projected ~40% above reliable supply by 2030." }
+  ];
+
+  SOURCES = [
+    "WHO / UNICEF Joint Monitoring Programme (JMP), Drinking Water 2023 — 2.2 billion lack safely managed drinking water.",
+    "UN General Assembly Resolution 64/292 (28 July 2010) — human right to water and sanitation, adopted 122 in favour, 0 against, 41 abstentions (incl. the United States, United Kingdom, Canada, Australia, Japan); UN press release GA/10967.",
+    "Human Right 2 Water, 'Constitutional Review of the Human Right to Water' (16 Dec 2024) — 31 countries (15.65% of 198 reviewed) explicitly name the right to water in their constitutions, listed with the year each first did so.",
+    "World Resources Institute, Aqueduct Water Risk Atlas — country-level baseline water stress; ~half of humanity faces severe scarcity at least one month a year.",
+    "NITI Aayog, Composite Water Management Index (2018) — 600 million Indians under high-to-extreme water stress.",
+    "Central Ground Water Board (CGWB) — Dynamic Groundwater Resources of India, and Annual Groundwater Quality Report 2024 (15,259 samples, May 2023): nitrate above limit in ~20% of samples / 440 districts, fluoride 9.0%, arsenic 3.6% (Ganga–Brahmaputra plains), uranium 6.6% (Rajasthan, Punjab, Haryana, Delhi hotspots), iron 13.2%.",
+    "NITI Aayog, Composite Water Management Index (2018) — ~200,000 deaths a year from inadequate access to safe water. Waterborne diseases affect tens of millions of Indians annually (MoHFW / NCDC-IDSP; WaterAid) — the 30M figure is an oft-cited estimate.",
+    "2025 Indore drinking-water contamination — municipal sewage ingress, Bhagirathpura; ≥15 deaths, ~2,000 ill (district administration; reporting, Dec 2025–Jan 2026).",
+    "Bottled-water history — Évian (bottling from 1826), Perrier (brand from 1863; sold by Dr Louis Perrier, 1894); Nestlé acquired Perrier 1992; global market ≈ US$300 bn (industry histories; BCC Research; Fast Company, 2023).",
+    "Water pollution — agriculture is the leading source and uses ~70% of withdrawals (FAO/UN Water); >80% of the world's wastewater returns untreated (UN WWDR).",
+    "Per-serving water footprints — Water Footprint Network; Mekonnen & Hoekstra — beer ≈ 75 L/glass, coffee ≈ 140 L/cup, wine ≈ 240 L/glass, one hamburger ≈ 2,400 L (150 g beef), a cotton t-shirt ≈ 2,700 L. A year of daily AI prompts ≈ ~5 L (Google, 2025, 0.26 mL/prompt).",
+    "Data-centre water — Brookings (2024): a typical data centre uses ~300,000 US gal/day (~1.1 million L), about 1,000 households; a large one up to ~5 million US gal/day (~19 million L), a town of up to 50,000. IEA, Energy & AI (2025): a 100-MW facility ~2 million L/day and more power than ~75,000 homes; global DC water ~560 bn L (2023) → ~1,200 bn L by 2030 (more than London drinks in a year).",
+    "Li, Yang, Islam & Ren, 'Making AI Less Thirsty' (UC Riverside) — withdrawal vs consumption; one firm's DCs withdrew 29 bn L, evaporated 23 bn L (≈80% potable) in 2023.",
+    "Home reverse-osmosis systems discharge ~3–4 L to drain per 1 L purified (traditional units; 1:1–2:1 on newer models).",
+    "Organisation links are starting points for your own research — please verify each before donating."
+  ];
+
+  /* Renewable freshwater by country, km³/yr — World Bank / FAO AQUASTAT (2020). */
+  FRESHWATER = [
+    { name:"Brazil", v:8233 }, { name:"Russia", v:4508 }, { name:"United States", v:3069 },
+    { name:"Canada", v:2902 }, { name:"China", v:2840 }, { name:"Colombia", v:2132 },
+    { name:"Indonesia", v:2019 }, { name:"India", v:1911 }, { name:"Peru", v:1880 }, { name:"DR Congo", v:1283 }
+  ];
+  /* The 31 countries that EXPLICITLY name a right to water in their constitution — Human Right 2 Water, 'Constitutional Review' policy brief (16 Dec 2024), Table 1, with year first recognised. */
+  CONSTITUTION31 = [
+    { region:"Africa", n:15, list:[["Ethiopia",1994],["Uganda",1995],["Gambia",1996],["DR Congo",2006],["Kenya",2010],["Niger",2010],["Morocco",2011],["Somalia",2012],["Zimbabwe",2013],["Egypt",2014],["Burkina Faso",2015],["Libya",2016],["Algeria",2020],["Tunisia",2022],["Mali",2023]] },
+    { region:"The Americas", n:11, list:[["Guatemala",1985],["Peru",1993],["Costa Rica",1994],["Venezuela",1999],["Uruguay",2004],["Ecuador",2008],["Bolivia",2008],["Dominican Republic",2010],["Mexico",2012],["Honduras",2013],["Cuba",2019]] },
+    { region:"Asia-Pacific", n:4, list:[["Maldives",2008],["Fiji",2013],["Nepal",2015],["Thailand",2017]] },
+    { region:"Europe", n:1, list:[["Slovenia",2016]] }
+  ];
+  CONSTITUTION_NOTE = "Explicit constitutional recognition per Human Right 2 Water, 'Constitutional Review' (16 Dec 2024), which reviewed 198 states and counts 31 (15.65%), with the year each first recognised it. Methodologies differ: South Africa's 1996 Constitution (s.27) is the landmark case most reviews cite first, and Amnesty International counts 50+ states that recognise the right implicitly or through their courts.";
+  /* The 41 who abstained on UNGA Res 64/292 (28 July 2010) — none voted against. UN recorded vote, press release GA/10967. Grouped for readability. */
+  ABSTAIN41 = [
+    { group:"Wealthy democracies who called it 'premature'", list:["United States","United Kingdom","Canada","Australia","New Zealand","Japan","Israel","South Korea","Austria","Netherlands","Sweden","Denmark","Ireland","Greece","Iceland","Luxembourg"] },
+    { group:"Central & Eastern Europe · Eurasia", list:["Poland","Czech Republic","Slovakia","Bulgaria","Romania","Lithuania","Latvia","Estonia","Cyprus","Malta","Croatia","Bosnia & Herzegovina","Ukraine","Armenia","Moldova","Turkey","Kazakhstan"] },
+    { group:"Others", list:["Botswana","Lesotho","Zambia","Kenya","Ethiopia","Tanzania","Trinidad & Tobago","Guyana"] }
+  ];
+  ABSTAIN_NOTE = "Recorded vote on UN General Assembly Resolution 64/292, 28 July 2010: 122 in favour, 0 against, 41 abstentions (UN press release GA/10967). The abstainers were overwhelmingly high-income states arguing the right was legally 'premature' or undefined — the United States among them — and all later accepted it. A telling detail: Kenya and Ethiopia abstained here yet already named water in their own constitutions.";
+  /* Real, named failures of 'the reach of it' — connect the numbers to people. */
+  REACH = [
+    { place:"Flint, Michigan · 2014", what:"a cost-cutting source switch let lead leach into the taps of ~100,000 residents — up to 9,000 of them children — while officials insisted it was safe.", src:"NRDC; U.S. EPA — Flint lead crisis (2014–)." },
+    { place:"Jackson, Mississippi · 2022", what:"the main treatment plant failed and 150,000 people lost safe running water for weeks.", src:"Food & Water Watch; contemporaneous reporting, 2022." },
+    { place:"Detroit · 2014", what:"mass shut-offs cut water to thousands who couldn't pay; a UN Special Rapporteur called it a human-rights violation.", src:"UN OHCHR Special Rapporteur; NRDC, 2014." },
+    { place:"Every day, everywhere", what:"women and girls spend a combined ~200 million hours walking to collect water — time subtracted from school, work and rest.", src:"UNICEF, 2016." }
+  ];
+
+  state = { selCountry:"IN", selState:"PB", selNeer:"MP", drawer:false, barsFoot:false, cite:null };
+
+  stressLabel(k){ return this.STRESS[k] || ""; }
+  ct(k){ return this.COUNTRIES.find(c=>c.key===k) || this.COUNTRIES[0]; }
+  st(ab){ return this.STATES.find(s=>s.ab===ab) || this.STATES[0]; }
+
+  selectCountry = (k)=>{ if(k!==this.state.selCountry) this.setState({ selCountry:k }); };
+  selectState = (ab)=>{ if(ab!==this.state.selState) this.setState({ selState:ab }); };
+  selectNeer = (ab)=>{ if(ab!==this.state.selNeer) this.setState({ selNeer:ab }); };
+  onNeer = (e)=>{ this.selectNeer(e.target.value); };
+  toggleDrawer = ()=>{ this.setState(s=>({ drawer:!s.drawer })); };
+  closeDrawer = ()=>{ this.setState({ drawer:false }); };
+
+  /* ---- source-on-hover citation engine ---- */
+  showCite = (e)=>{ clearTimeout(this._hideT); const t=e.currentTarget; const r=t.getBoundingClientRect(); this.setState({ cite:{ txt:t.dataset.src||"", url:t.dataset.url||"", x:r.left+r.width/2, y:r.top } }); };
+  hideCite = ()=>{ clearTimeout(this._hideT); this._hideT=setTimeout(()=>{ if(!this._overTip) this.setState({ cite:null }); }, 160); };
+  citeTipEl(){
+    const c = this.state.cite; if(!c) return null; const R = React;
+    return R.createElement("div",{ onMouseEnter:()=>{ this._overTip=true; clearTimeout(this._hideT); }, onMouseLeave:()=>{ this._overTip=false; this.hideCite(); },
+      style:{ position:"fixed", left:c.x+"px", top:(c.y-10)+"px", transform:"translate(-50%,-100%)", zIndex:90, width:"min(300px,82vw)",
+        background:"var(--ink)", color:"var(--paper)", borderRadius:"8px", padding:"12px 14px", boxShadow:"0 20px 50px oklch(0.2 0.02 250 /0.45)", pointerEvents:"auto" } },
+      R.createElement("div",{ style:{ fontFamily:"var(--mono)", fontSize:"0.72rem", lineHeight:1.55, color:"oklch(0.93 0.01 250)" } }, c.txt),
+      c.url? R.createElement("a",{ href:c.url, target:"_blank", rel:"noopener", style:{ display:"inline-block", marginTop:"9px", fontFamily:"var(--mono)", fontSize:"0.7rem", color:"var(--water-light)" } }, "View source ↗") : null
+    );
+  }
+
+  freshwaterEl(){
+    const R = React, max = this.FRESHWATER[0].v;
+    return R.createElement("div",{ style:{ display:"flex", flexDirection:"column" } }, this.FRESHWATER.map((d,i)=>{
+      const pct = Math.max(3, d.v/max*100);
+      return R.createElement("div",{ key:i, style:{ display:"grid", gridTemplateColumns:"minmax(92px,140px) 1fr auto", gap:"clamp(10px,2vw,20px)", alignItems:"center", padding:"9px 0", borderTop:"1px solid var(--rule)" } },
+        R.createElement("div",{ style:{ fontFamily:"var(--serif)", fontSize:"1.08rem", color:"var(--ink)" } }, d.name),
+        R.createElement("div",{ style:{ height:"14px", background:"var(--paper-edge)", borderRadius:"3px", overflow:"hidden" } },
+          R.createElement("div",{ style:{ height:"100%", width:pct+"%", background:i===0? "var(--water-deep)":"var(--water)", borderRadius:"3px" } })),
+        R.createElement("div",{ style:{ fontFamily:"var(--mono)", fontSize:"0.78rem", color:"var(--ink-soft)", whiteSpace:"nowrap", minWidth:"8ch", textAlign:"right" } }, d.v.toLocaleString("en-US")+" km³")
+      );
+    }));
+  }
+
+  constitutionEl(){
+    const R = React;
+    const groups = this.CONSTITUTION31.map((g,gi)=>{
+      const chips = g.list.map((c,i)=> R.createElement("span",{ key:i, style:{ display:"inline-flex", alignItems:"baseline", gap:"5px", fontFamily:"var(--sans)", fontSize:"0.88rem", color:"var(--ink)", background:"var(--paper)", border:"1px solid var(--water-deep)", borderRadius:"20px", padding:"5px 11px" } },
+        c[0], R.createElement("span",{ style:{ fontFamily:"var(--mono)", fontSize:"0.62rem", color:"var(--water-deep)", opacity:0.85 } }, "\u2019"+String(c[1]).slice(2))));
+      return R.createElement("div",{ key:gi, style:{ marginBottom:"15px" } },
+        R.createElement("div",{ style:{ fontFamily:"var(--mono)", fontSize:"0.66rem", letterSpacing:"0.1em", textTransform:"uppercase", color:"var(--ink-faint)", marginBottom:"9px" } }, g.region+" · "+g.n),
+        R.createElement("div",{ style:{ display:"flex", flexWrap:"wrap", gap:"7px" } }, chips));
+    });
+    return R.createElement("div",{}, groups);
+  }
+
+  abstainEl(){
+    const R = React;
+    const groups = this.ABSTAIN41.map((g,gi)=>{
+      const chips = g.list.map((c,i)=> R.createElement("span",{ key:i, style:{ fontFamily:"var(--sans)", fontSize:"0.88rem", color:"var(--ink-soft)", background:"var(--paper)", border:"1px solid var(--rule)", borderRadius:"20px", padding:"5px 11px" } }, c));
+      return R.createElement("div",{ key:gi, style:{ marginBottom:"15px" } },
+        R.createElement("div",{ style:{ fontFamily:"var(--mono)", fontSize:"0.66rem", letterSpacing:"0.06em", textTransform:"uppercase", color:"var(--clay-deep)", marginBottom:"9px" } }, g.group+" · "+g.list.length),
+        R.createElement("div",{ style:{ display:"flex", flexWrap:"wrap", gap:"7px" } }, chips));
+    });
+    return R.createElement("div",{}, groups);
+  }
+
+  componentDidMount(){
+    if(this.props.paperGrain !== false) document.body.classList.add("wop-grain");
+    this.buildEarth();
+    this._scroll = ()=>{ if(this._t) return; this._t = true; requestAnimationFrame(()=>{ this._t=false; try{ this.checkScroll(); }catch(e){} }); };
+    window.addEventListener("scroll", this._scroll, { passive:true });
+    document.addEventListener("scroll", this._scroll, { passive:true, capture:true });
+    window.addEventListener("resize", this._scroll, { passive:true });
+    // rAF loop drives reveals every frame in the foreground (smooth, un-throttled).
+    this._tick = (ts)=>{
+      if(!this._lastTick || ts-this._lastTick > 110){ this._lastTick = ts; try{ this.checkScroll(); }catch(e){} }
+      const earth = document.getElementById("wop_earth");
+      const done = document.querySelectorAll("[data-reveal]:not([data-shown])").length===0 && (!earth || earth.dataset.filled) && this.state.barsFoot;
+      if(!done) this._rafId = requestAnimationFrame(this._tick);
+    };
+    this._rafId = requestAnimationFrame(this._tick);
+    // safety net: never leave content permanently hidden if timers/rAF are throttled.
+    this._safety = setTimeout(()=>{
+      document.querySelectorAll("[data-reveal]:not([data-shown])").forEach(e=>{ e.dataset.shown="1"; e.style.opacity=1; e.style.transform="none"; });
+      document.querySelectorAll("[data-count]").forEach(c=>{ try{ this.countUp(c); }catch(_){} });
+      try{ this.fillEarth(); }catch(_){}
+      this.setState({ barsFoot:true });
+    }, 8000);
+    try{ this.initReveal(); }catch(e){}
+    try{ this.checkScroll(); }catch(e){}
+  }
+  componentDidUpdate(){ if(!this._noReveal){ try{ this.revealInView(); }catch(e){} } }
+  componentWillUnmount(){
+    window.removeEventListener("scroll", this._scroll);
+    document.removeEventListener("scroll", this._scroll, true);
+    window.removeEventListener("resize", this._scroll);
+    if(this._rafId) cancelAnimationFrame(this._rafId);
+    if(this._safety) clearTimeout(this._safety);
+    document.body.classList.remove("wop-grain");
+  }
+
+  buildEarth(){
+    const host = document.getElementById("wop_earth");
+    if(!host || host.dataset.built) return;
+    host.dataset.built = "1";
+    const total = 1000, frag = document.createDocumentFragment();
+    for(let i=0;i<total;i++){
+      const d = document.createElement("span");
+      d.style.cssText = "aspect-ratio:1;border-radius:50%;background:var(--paper-edge);transition:background .6s ease,transform .6s ease;transition-delay:"+(Math.random()*0.6).toFixed(2)+"s";
+      frag.appendChild(d);
+    }
+    host.appendChild(frag);
+  }
+  fillEarth(){
+    const host = document.getElementById("wop_earth");
+    if(!host || host.dataset.filled) return;
+    host.dataset.filled = "1";
+    const dots = host.children, total = dots.length;
+    const paint = (from, count, bg, scale)=>{ for(let i=0;i<count;i++){ const d=dots[total-1-from-i]; if(d){ d.style.background=bg; if(scale) d.style.transform="scale("+scale+")"; } } };
+    setTimeout(()=>{
+      paint(0, 1, "var(--clay)", 1.35);         // 1 drop  — accessible surface freshwater (rivers, lakes)
+      paint(1, 7, "var(--water)", 1.08);        // ~7 drops — fresh groundwater, much of it deep
+      paint(8, 17, "var(--water-light)", 1.0);  // ~17 drops — locked in ice caps & glaciers
+    }, 420);                                     // the other ~975 stay grey — saltwater
+  }
+
+  countUp(el){
+    if(el.dataset.counted) return;
+    el.dataset.counted = "1";
+    const to = parseFloat(el.dataset.count), dur = +(el.dataset.dur||1400), pre = el.dataset.pre||"", suf = el.dataset.suf||"";
+    const start = performance.now();
+    const frame = (now)=>{
+      const t = Math.min(1,(now-start)/dur), e = 1-Math.pow(1-t,3), v = to*e;
+      el.textContent = pre + Math.round(v).toLocaleString("en-IN") + suf;
+      if(t<1) requestAnimationFrame(frame);
+      else el.textContent = pre + to.toLocaleString("en-IN") + suf;
+    };
+    requestAnimationFrame(frame);
+  }
+
+  initReveal(){
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(reduce || this.props.reveals === false){
+      document.querySelectorAll("[data-reveal]").forEach(e=>{ e.dataset.shown="1"; e.style.opacity=1; e.style.transform="none"; });
+      document.querySelectorAll("[data-count]").forEach(el=>this.countUp(el));
+      this.fillEarth();
+      this.setState({ barsFoot:true });
+      this._noReveal = true;
+      return;
+    }
+    this.revealInView();
+  }
+
+  revealInView(){
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    const trigger = vh * 0.92;
+    document.querySelectorAll("[data-reveal]").forEach(el=>{
+      if(el.dataset.shown) return;
+      const r = el.getBoundingClientRect();
+      if(r.top < trigger && r.bottom > -40){
+        el.dataset.shown = "1";
+        el.style.opacity = 1; el.style.transform = "none";
+        el.querySelectorAll("[data-count]").forEach(c=>this.countUp(c));
+      }
+    });
+    const earth = document.getElementById("wop_earth");
+    if(earth && !earth.dataset.filled){ const r=earth.getBoundingClientRect(); if(r.top < trigger && r.bottom > -40) this.fillEarth(); }
+    const fb = document.getElementById("wop_footbars");
+    if(fb && !this.state.barsFoot){ const r=fb.getBoundingClientRect(); if(r.top < trigger && r.bottom > -40) this.setState({ barsFoot:true }); }
+  }
+
+  checkScroll(){
+    const doc = document.documentElement, body = document.body;
+    const scrollTop = window.pageYOffset || doc.scrollTop || body.scrollTop || 0;
+    const max = Math.max(doc.scrollHeight, body.scrollHeight) - (window.innerHeight || doc.clientHeight);
+    const p = max>0 ? scrollTop/max : 0;
+    const prog = document.getElementById("wop_prog"); if(prog) prog.style.width = (Math.max(0,Math.min(1,p))*100).toFixed(2)+"%";
+    let dark = false;
+    Array.prototype.slice.call(document.querySelectorAll("[data-wopdark]")).forEach(s=>{ const r=s.getBoundingClientRect(); if(r.top<=60 && r.bottom>=60) dark=true; });
+    const brand = document.getElementById("wop_brand"), menu = document.getElementById("wop_menu");
+    if(brand) brand.style.color = dark ? "var(--paper)" : "var(--ink)";
+    if(menu){ menu.style.color = dark ? "var(--paper)" : "var(--ink)"; menu.style.borderColor = dark ? "oklch(1 0 0 / 0.3)" : "var(--rule)"; }
+    if(!this._noReveal) this.revealInView();
+  }
+
+  barsEl(data, scaleMax, shown, dark){
+    const R = React;
+    const rows = data.map((d,i)=>{
+      const pct = Math.max(1.5,(d.val!=null? d.val : d.pct)/scaleMax*100);
+      const tone = d.tone==="clay" ? "var(--clay)" : d.tone==="deep" ? "var(--water-deep)" : "var(--water)";
+      const trackBg = dark ? "oklch(1 0 0 /0.1)" : "var(--paper-edge)";
+      const lblCol = dark ? "var(--paper)" : "var(--ink)";
+      const subCol = dark ? "oklch(0.72 0.02 240)" : "var(--ink-faint)";
+      const valCol = dark ? "var(--water-light)" : "var(--ink-soft)";
+      return R.createElement("div",{ key:i, style:{ display:"grid", gridTemplateColumns:"minmax(140px,230px) 1fr auto", gap:"clamp(12px,2vw,22px)", alignItems:"center", padding:"11px 0", borderTop:"1px solid "+(dark?"oklch(1 0 0 /0.12)":"var(--rule)") } },
+        R.createElement("div",{ key:"l" },
+          R.createElement("div",{ style:{ fontSize:"0.94rem", lineHeight:1.25, color:lblCol } }, d.label),
+          d.sub? R.createElement("div",{ style:{ fontFamily:"var(--mono)", fontSize:"0.68rem", color:subCol, marginTop:"2px" } }, d.sub) : null
+        ),
+        R.createElement("div",{ key:"t", style:{ height:"22px", background:trackBg, borderRadius:"3px", overflow:"hidden" } },
+          R.createElement("div",{ style:{ height:"100%", width:(shown? pct:0)+"%", background:tone, borderRadius:"3px", transition:"width 1.2s cubic-bezier(.2,.7,.2,1)" } })
+        ),
+        R.createElement("div",{ key:"v", style:{ fontFamily:"var(--mono)", fontSize:"0.82rem", color:valCol, whiteSpace:"nowrap", minWidth:"6ch", textAlign:"right" } }, d.disp)
+      );
+    });
+    return R.createElement("div",{ style:{ display:"flex", flexDirection:"column" } }, rows);
+  }
+
+  countriesEl(){
+    const R = React, sel = this.state.selCountry;
+    const rows = this.COUNTRIES.map((c,i)=>{
+      const active = c.key===sel;
+      return R.createElement("button",{ key:c.key, onClick:()=>this.selectCountry(c.key),
+        style:{ display:"grid", gridTemplateColumns:"auto 1fr auto", gap:"16px", alignItems:"center", width:"100%", textAlign:"left", font:"inherit", cursor:"pointer",
+          background: active? "oklch(1 0 0 /0.06)":"transparent", border:0, borderTop:"1px solid oklch(1 0 0 /0.12)",
+          borderLeft:"2px solid "+(active? "var(--water-light)":"transparent"), padding:"15px 14px", transition:"background .2s" } },
+        R.createElement("span",{ key:"r", style:{ fontFamily:"var(--mono)", fontSize:"0.74rem", color:"oklch(0.66 0.02 240)" } }, String(i+1).padStart(2,"0")),
+        R.createElement("span",{ key:"m", style:{ minWidth:0 } },
+          R.createElement("span",{ style:{ display:"block", fontFamily:"var(--serif)", fontSize:"1.3rem", lineHeight:1.05, color: c.deepdive? "var(--water-light)":"var(--paper)" } }, c.name + (c.deepdive? " · deep dive ↓":"")),
+          R.createElement("span",{ style:{ display:"block", fontFamily:"var(--mono)", fontSize:"0.66rem", letterSpacing:"0.08em", textTransform:"uppercase", color:"oklch(0.68 0.02 240)", marginTop:"2px" } }, c.region)
+        ),
+        R.createElement("span",{ key:"e", style:{ display:"flex", alignItems:"center", gap:"10px" } },
+          R.createElement("span",{ style:{ fontFamily:"var(--mono)", fontSize:"0.8rem", color:"oklch(0.84 0.02 240)" } }, c.stat),
+          R.createElement("span",{ style:{ width:"10px", height:"10px", borderRadius:"50%", background:"var(--s"+c.stress+")" } })
+        )
+      );
+    });
+    return R.createElement("div",{ style:{ display:"flex", flexDirection:"column", borderBottom:"1px solid oklch(1 0 0 /0.12)" } }, rows);
+  }
+
+  cartoEl(){
+    const R = React, sel = this.state.selState;
+    const tiles = this.STATES.map(s=>{
+      const isSel = s.ab===sel;
+      const dots = [];
+      const n = Math.min(4, s.cont.length);
+      for(let k=0;k<n;k++) dots.push(R.createElement("i",{ key:k, style:{ width:"3px", height:"3px", borderRadius:"50%", background:"oklch(0.20 0.03 255 / 0.5)" } }));
+      return R.createElement("button",{ key:s.ab, title:s.name+" — "+this.stressLabel(s.stress), onClick:()=>this.selectState(s.ab),
+        style:{ gridColumn:s.c, gridRow:s.r, aspectRatio:"1", border:0, borderRadius:"4px", cursor:"pointer", background:"var(--s"+s.stress+")", color:"oklch(0.20 0.03 255)",
+          display:"flex", flexDirection:"column", justifyContent:"space-between", padding:"clamp(3px,0.5vw,6px)", position:"relative", overflow:"hidden",
+          transform:isSel? "scale(1.14)":"none", zIndex:isSel?3:1, outline:isSel? "2px solid var(--ink)":"2px solid transparent",
+          boxShadow:isSel? "0 10px 26px oklch(0 0 0 /0.28), inset 0 0 0 1px oklch(1 0 0 /0.25)":"inset 0 0 0 1px oklch(1 0 0 /0.18), inset 0 -3px 6px oklch(0 0 0 /0.07)",
+          transition:"transform .18s ease, box-shadow .18s ease, outline-color .18s" } },
+        R.createElement("span",{ key:"num", style:{ fontFamily:"var(--mono)", fontSize:"clamp(0.42rem,0.72vw,0.6rem)", fontWeight:500, lineHeight:1, opacity:0.62, alignSelf:"flex-start" } }, String(s.stress)),
+        R.createElement("span",{ key:"sym", style:{ fontFamily:"var(--serif)", fontSize:"clamp(0.95rem,1.7vw,1.45rem)", lineHeight:0.9, textAlign:"center", marginTop:"-2px" } }, s.ab),
+        R.createElement("span",{ key:"dots", style:{ display:"flex", gap:"2px", justifyContent:"center", height:"4px" } }, dots)
+      );
+    });
+    return R.createElement("div",{ style:{ display:"grid", gridTemplateColumns:"repeat(9,1fr)", gridAutoRows:"1fr", gap:"clamp(5px,0.7vw,9px)", maxWidth:"540px", margin:"0 auto" } }, tiles);
+  }
+
+  neerMiniEl(){
+    const R = React, sel = this.state.selNeer;
+    const tiles = this.STATES.map(s=>{
+      const isSel = s.ab===sel;
+      return R.createElement("button",{ key:s.ab, title:s.name, onClick:()=>this.selectNeer(s.ab),
+        style:{ gridColumn:s.c, gridRow:s.r, aspectRatio:"1", border:0, borderRadius:"3px", cursor:"pointer", background:"var(--s"+s.stress+")", color:"oklch(0.20 0.03 255)",
+          display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"var(--serif)", fontSize:"clamp(0.7rem,1.3vw,1rem)", lineHeight:1,
+          transform:isSel? "scale(1.16)":"none", zIndex:isSel?3:1, outline:isSel? "2px solid var(--ink)":"2px solid transparent",
+          boxShadow:isSel? "0 8px 20px oklch(0 0 0 /0.25), inset 0 0 0 1px oklch(1 0 0 /0.25)":"inset 0 0 0 1px oklch(1 0 0 /0.16)", transition:"transform .18s ease, outline-color .18s" } }, s.ab);
+    });
+    return R.createElement("div",{ style:{ display:"grid", gridTemplateColumns:"repeat(9,1fr)", gridAutoRows:"1fr", gap:"clamp(4px,0.6vw,7px)", maxWidth:"440px" } }, tiles);
+  }
+
+  renderVals(){
+    const c = this.ct(this.state.selCountry);
+    const s = this.st(this.state.selState);
+    const n = this.st(this.state.selNeer);
+    return {
+      toggleDrawer:this.toggleDrawer, closeDrawer:this.closeDrawer, onNeer:this.onNeer,
+      drawerX:this.state.drawer? "0":"100%",
+      drawerOpacity:this.state.drawer? "1":"0",
+      drawerEvents:this.state.drawer? "auto":"none",
+
+      footBars:this.barsEl(this.FOOTPRINTS, 2700, this.state.barsFoot, true),
+      solutions:this.SOLUTIONS, awareLearn:this.AWARE.learn, awareGive:this.AWARE.give,
+      countryList:this.countriesEl(),
+      cartogram:this.cartoEl(),
+      neerMini:this.neerMiniEl(),
+      freshwater:this.freshwaterEl(),
+      constitution:this.constitutionEl(),
+      reach:this.REACH,
+      constitutionNote:this.CONSTITUTION_NOTE, abstain:this.abstainEl(), abstainNote:this.ABSTAIN_NOTE,
+      citeTip:this.citeTipEl(), showCite:this.showCite, hideCite:this.hideCite,
+
+      bottled:this.BOTTLED,
+      polluters:this.POLLUTERS,
+      heading:this.HEADING,
+      sources:this.SOURCES.map((t,i)=>({ n:String(i+1).padStart(2,"0"), t })),
+      stateOptions:this.STATES.slice().sort((a,b)=>a.name.localeCompare(b.name)).map(x=>({ ab:x.ab, name:x.name })),
+      selNeer:this.state.selNeer,
+
+      selCName:c.name, selCRegion:c.region, selCStat:c.stat, selCStatColor:"var(--s"+c.stress+")",
+      selCStatLbl:c.statLbl, selCChallenge:c.challenge, selCSource:c.source, selCOrgs:c.orgs, selCDeep:!!c.deepdive,
+
+      selSName:s.name, selSRegion:s.region+" · "+this.stressLabel(s.stress), selSSource:s.source,
+      selSCont:s.cont.join(", "), selSStressColor:"var(--s"+s.stress+")", selSStressLbl:this.stressLabel(s.stress), selSNote:s.note,
+
+      selNName:n.name, selNRegion:n.region+" · "+this.stressLabel(n.stress), selNSource:n.source,
+      selNContChips:n.cont.map(x=>({ label:x })), selNStressColor:"var(--s"+n.stress+")", selNStressLbl:this.stressLabel(n.stress), selNNote:n.note
+    };
+  }
+}
+</script>
+</body>
+</html>

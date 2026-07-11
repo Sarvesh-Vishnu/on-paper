@@ -119,9 +119,11 @@ body::before {
   color: var(--water-deep);
 }
 
-/* Spotlight featured title link (Water on Paper) */
+/* Spotlight featured title link (Water on Paper). display:block matches the
+   prototype's inline anchor wrapping a block <h2> (avoids an inline-block
+   descent gap / vertical shift) and gives the title a full-width click target. */
 .feat-title-link {
-  display: inline-block;
+  display: block;
   color: inherit;
 }
 .feat-title-link:hover {
@@ -170,4 +172,24 @@ body::before {
 }
 .footer-link:hover {
   color: var(--paper);
+}
+
+/* ---- Keyboard focus ----
+   Hover states above are mouse-only; give every interactive surface a visible
+   ring on keyboard focus. :focus-visible keeps it off mouse clicks. */
+a:focus-visible,
+.essays-link:focus-visible,
+.feat-title-link:focus-visible,
+.btn-read:focus-visible,
+.tool-link:focus-visible,
+.vol-row:focus-visible {
+  outline: 2px solid var(--water);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+/* On the dark colophon the lighter accent reads better as the ring. */
+.footer-link:focus-visible {
+  outline: 2px solid var(--water-light);
+  outline-offset: 3px;
+  border-radius: 3px;
 }

@@ -10,20 +10,25 @@
 export type Status = 'live' | 'in-progress' | 'coming';
 export type Accent = 'water' | 'clay' | 'ink';
 
-export interface Essay {
+interface EssayBase {
   /** Two-digit index, e.g. "01". */
   n: string;
   /** Resource name; the title renders as `{name} on Paper`. */
   name: string;
   /** One-line dek shown under the title. */
   dek: string;
-  status: Status;
   /** Drives the index-number colour and the italic " on " separator colour. */
   accent: Accent;
-  /** Relative filename of the essay (only for `live` rows). Prefixed with the
-   *  site base at render time. */
-  href?: string;
 }
+
+/**
+ * Discriminated on `status`: a `live` essay links out and therefore MUST carry
+ * an `href`; a `coming` / `in-progress` essay must NOT. The compiler enforces
+ * this, so the render guard can narrow on `status` alone.
+ */
+export type Essay =
+  | (EssayBase & { status: 'live'; href: string })
+  | (EssayBase & { status: 'in-progress' | 'coming'; href?: never });
 
 /** Per-accent colours for the index number and the " on " separator. */
 export const accentColors: Record<Accent, { index: string; sep: string }> = {

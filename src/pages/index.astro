@@ -6,6 +6,11 @@ const base = import.meta.env.BASE_URL;
 // Absolute-from-base href for a file served out of /public.
 const asset = (name: string) => `${base}${name}`;
 
+// The one live essay drives every "read the essay" link (spotlight, CTA,
+// footer) from a single source, so there's no hardcoded href to drift.
+const live = volumeOne.find((e) => e.status === 'live');
+const liveHref = asset(live?.href ?? 'water-on-paper.html');
+
 // Prototype props (kept as named flags so the toggles are documented).
 const ruledLines = true;
 const showSignature = true;
@@ -92,7 +97,7 @@ const pillProgress =
               <span style="font-family:var(--mono);font-size:.82rem;color:var(--water-deep)">01</span>
               <span style="font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);background:var(--water);padding:4px 11px;border-radius:30px">Live</span>
             </div>
-            <a href={asset('water-on-paper.html')} class="feat-title-link">
+            <a href={liveHref} class="feat-title-link">
               <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(3rem,7vw,6rem);line-height:.85;letter-spacing:-.02em;margin:0 0 .3em">
                 Water<span style="font-style:italic;color:var(--water-deep)"> on </span>Paper
               </h2>
@@ -106,7 +111,7 @@ const pillProgress =
               your own screen is quietly drinking. Eight chapters, one scroll.
             </p>
             <div style="display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center">
-              <a href={asset('water-on-paper.html')} class="btn-read">Read the essay →</a>
+              <a href={liveHref} class="btn-read">Read the essay →</a>
               <span style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint)"
                 >companion tool · <a href={asset('source-to-tap.html')} class="tool-link">Source to Tap →</a></span
               >
@@ -153,11 +158,11 @@ const pillProgress =
               const c = accentColors[e.accent];
               const Title = (
                 <div style="min-width:0">
-                  <h3 style={h3Style} set:html={`${e.name}<span style="font-style:italic;color:${c.sep}"> on </span>Paper`} />
+                  <h3 style={h3Style}>{e.name}<span style={`font-style:italic;color:${c.sep}`}> on </span>Paper</h3>
                   <p style={dekStyle}>{e.dek}</p>
                 </div>
               );
-              if (e.status === 'live' && e.href) {
+              if (e.status === 'live') {
                 return (
                   <a href={asset(e.href)} class="vol-row" style={`${rowStyle};color:inherit`}>
                     <span style={`font-family:var(--mono);font-size:.82rem;color:${c.index}`}>{e.n}</span>
@@ -190,8 +195,11 @@ const pillProgress =
       </div>
     </section>
 
-    {/* 4 — Colophon / footer */}
-    <footer
+  </main>
+
+  {/* 4 — Colophon / footer — a sibling of <main> so it maps to the
+       contentinfo (page footer) landmark, not a generic element. */}
+  <footer
       data-screen-label="Colophon"
       style="background:var(--water-ink);color:oklch(0.88 0.02 240);padding:clamp(72px,10vh,120px) var(--gut) clamp(40px,6vh,64px);position:relative;z-index:1"
     >
@@ -203,12 +211,12 @@ const pillProgress =
 
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(40px,6vh,64px);border-top:1px solid oklch(1 0 0 /0.14);padding-top:38px">
           <div>
-            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">Read now</h5>
-            <a href={asset('water-on-paper.html')} class="footer-link" style="margin:0 0 9px">Water on Paper — the essay →</a>
+            <h3 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">Read now</h3>
+            <a href={liveHref} class="footer-link" style="margin:0 0 9px">Water on Paper — the essay →</a>
             <a href={asset('source-to-tap.html')} class="footer-link">Source to Tap — the companion →</a>
           </div>
           <div>
-            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">The method</h5>
+            <h3 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">The method</h3>
             <p style="color:oklch(0.85 0.02 240);font-size:.9rem;line-height:1.6;margin:0">
               Every essay walks the same eight-chapter arc — scale, promise, the wrong side, India, the wound, a tool,
               the reckoning, the levers. Every figure is triangulated across sources; every problem exits with something
@@ -216,7 +224,7 @@ const pillProgress =
             </p>
           </div>
           <div>
-            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">What’s coming</h5>
+            <h3 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">What’s coming</h3>
             <p style="color:oklch(0.85 0.02 240);font-size:.9rem;line-height:1.6;margin:0">
               Volume I — Water · Air · Oil · Grain · Blood · Ink. One resource at a time, each a substance you could
               spill on a page, each promised on paper and unevenly kept.
@@ -230,6 +238,4 @@ const pillProgress =
         </p>
       </div>
     </footer>
-
-  </main>
 </Base>

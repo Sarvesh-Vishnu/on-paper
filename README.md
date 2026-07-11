@@ -20,14 +20,18 @@ to GitHub Pages.
 | `/` | **The hub** — masthead, current-essay spotlight, Volume I index, colophon. Rebuilt natively in Astro from the design handoff. | ✅ Native |
 | `/water-on-paper.html` | *Water on Paper* — the one live essay. | ⚠️ Prototype, served as-is |
 | `/source-to-tap.html` | *Source to Tap* — the interactive companion tool. | ⚠️ Prototype, served as-is |
-| `/series-playbook.html` | The series "bible" (five-gate topic filter, roadmap, chapter arc). Internal reference; not linked from the hub. | ⚠️ Prototype, served as-is |
+
+> The **series playbook** (the internal "bible" — five-gate topic filter,
+> roadmap, unreleased Volume II candidates) is intentionally **not published**.
+> It's a private strategy document; keep it out of `public/` unless you decide
+> otherwise.
 
 ### Native vs. prototype
 
 The **hub** is production code: an Astro page built pixel-faithfully from the
 design tokens, with Volume I modelled as data ([`src/data/volume.ts`](src/data/volume.ts)).
 
-The **essay, tool, and playbook** are the original design-handoff prototypes
+The **essay and tool** are the original design-handoff prototypes
 (`.dc.html` files that render client-side via a bundled `support.js` runtime).
 They're served verbatim out of [`public/`](public/) so the hub's links work and
 the live essay is actually readable **today**. They are *not* yet ported to

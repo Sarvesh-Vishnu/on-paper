@@ -11,6 +11,29 @@ const asset = (name: string) => `${base}${name}`;
 const live = volumeOne.find((e) => e.status === 'live');
 const liveHref = asset(live?.href ?? 'water-on-paper.html');
 
+// Structured data: the series, with each LIVE essay as a part. Built from
+// volumeOne, so flipping an essay to `live` adds it here automatically.
+const absolute = (path: string) => (Astro.site ? new URL(path, Astro.site).href : path);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CreativeWorkSeries',
+  name: 'On Paper',
+  url: absolute(base),
+  description:
+    'An essay series about the distance between what is promised on paper and what actually reaches you, with India as the centrepiece.',
+  inLanguage: 'en',
+  image: absolute(`${base}og/hub.png`),
+  hasPart: volumeOne
+    .filter((e) => e.status === 'live')
+    .map((e) => ({
+      '@type': 'Article',
+      name: `${e.name} on Paper`,
+      url: absolute(`${base}${e.href}`),
+      description: e.dek,
+      inLanguage: 'en',
+    })),
+};
+
 // Prototype props (kept as named flags so the toggles are documented).
 const ruledLines = true;
 const showSignature = true;
@@ -35,6 +58,7 @@ const pillProgress =
 ---
 
 <Base>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   <main style="position:relative;z-index:1">
 
     {/* 1 — Masthead */}
@@ -95,7 +119,8 @@ const pillProgress =
           <div style="flex:1 1 440px;min-width:0">
             <div style="display:inline-flex;align-items:center;gap:11px;margin-bottom:18px">
               <span style="font-family:var(--mono);font-size:.82rem;color:var(--water-deep)">01</span>
-              <span style="font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);background:var(--water);padding:4px 11px;border-radius:30px">Live</span>
+              {/* bg is --water-deep (handoff said --water) so the .64rem text passes AA: 9.9:1 vs 4.36:1 */}
+              <span style="font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);background:var(--water-deep);padding:4px 11px;border-radius:30px">Live</span>
             </div>
             <a href={liveHref} class="feat-title-link">
               <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(3rem,7vw,6rem);line-height:.85;letter-spacing:-.02em;margin:0 0 .3em">
@@ -126,8 +151,9 @@ const pillProgress =
                   ))}
                 </div>
                 <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin:18px 0 0;max-width:34ch;line-height:1.6">
-                  The world’s water as 100 drops — <span style="color:var(--water)">3</span> are fresh,{' '}
-                  <span style="color:var(--clay)">1</span> is within reach. The essay begins here.
+                  {/* numerals use the deep accents (handoff used --water/--clay) for AA contrast at .72rem */}
+                  The world’s water as 100 drops — <span style="color:var(--water-deep)">3</span> are fresh,{' '}
+                  <span style="color:var(--clay-deep)">1</span> is within reach. The essay begins here.
                 </p>
               </div>
             )

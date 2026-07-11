@@ -1,0 +1,235 @@
+---
+import Base from '../layouts/Base.astro';
+import { volumeOne, accentColors } from '../data/volume';
+
+const base = import.meta.env.BASE_URL;
+// Absolute-from-base href for a file served out of /public.
+const asset = (name: string) => `${base}${name}`;
+
+// Prototype props (kept as named flags so the toggles are documented).
+const ruledLines = true;
+const showSignature = true;
+
+// The signature graphic: 100 drops. index 0 = clay ("within reach"),
+// indices 1–3 = fresh water, the rest faint paper-edge.
+const drops = Array.from({ length: 100 }, (_, i) => ({
+  i,
+  bg: i === 0 ? 'var(--clay)' : i < 4 ? 'var(--water)' : 'var(--paper-edge)',
+}));
+
+// Shared grid layout for a Volume I row.
+const rowStyle =
+  'display:grid;grid-template-columns:2.5ch 1fr auto;gap:clamp(16px,3vw,40px);align-items:center;padding:clamp(22px,3vh,34px) 0;border-bottom:1px solid var(--rule)';
+const h3Style =
+  'font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1;margin:0 0 .2em;color:var(--ink)';
+const dekStyle = 'font-size:.98rem;line-height:1.45;color:var(--ink-soft);margin:0;max-width:54ch';
+const pillComing =
+  'justify-self:end;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);border:1px solid var(--rule);padding:5px 11px;border-radius:30px;white-space:nowrap';
+const pillProgress =
+  'justify-self:end;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--clay-deep);border:1px solid var(--clay);padding:5px 11px;border-radius:30px;white-space:nowrap';
+---
+
+<Base>
+  <main style="position:relative;z-index:1">
+
+    {/* 1 — Masthead */}
+    <section
+      data-screen-label="Masthead"
+      style="min-height:100svh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 62%,var(--paper-2) 100%);padding:clamp(22px,4vh,40px) var(--gut) clamp(70px,10vh,120px)"
+    >
+      {
+        ruledLines && (
+          <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;opacity:.5">
+            <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:19%" />
+            <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:37%" />
+            <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:54%" />
+            <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:71%" />
+            <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:88%" />
+          </div>
+        )
+      }
+
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;max-width:var(--maxw);margin:0 auto;width:100%;position:relative">
+        <span style="display:flex;align-items:baseline;gap:.55em;font-family:var(--serif);font-size:1.5rem;letter-spacing:-.01em;color:var(--ink);line-height:1"
+          ><span><span style="font-style:italic">On</span> Paper</span><span style="font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)"
+            >the series</span
+          ></span
+        >
+        <a href="#volume" class="essays-link">The essays ↓</a>
+      </div>
+
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;max-width:var(--maxw);margin:0 auto;width:100%;position:relative;padding-top:clamp(36px,7vh,88px)">
+        <p style="animation:wopUp .9s cubic-bezier(.2,.6,.2,1) both;font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--water-deep);margin:0 0 12px">
+          An essay series · India as the centrepiece
+        </p>
+        <h1 style="animation:wopUp .9s cubic-bezier(.2,.6,.2,1) .08s both;font-family:var(--serif);font-weight:400;font-size:clamp(4.5rem,17vw,16rem);line-height:.8;letter-spacing:-.02em;margin:0">
+          <span style="font-style:italic;color:var(--water-deep)">On</span> Paper
+        </h1>
+        <div style="display:flex;flex-wrap:wrap;gap:1.6em 2.6em;align-items:baseline;margin-top:clamp(28px,4.5vh,56px)">
+          <p style="animation:wopUp .9s cubic-bezier(.2,.6,.2,1) .16s both;max-width:56ch;font-size:clamp(1.1rem,1.6vw,1.4rem);color:var(--ink-soft);margin:0">
+            Every essential thing is promised on paper — as a right, a law, a mission, a master plan. This is a series
+            about the <em style="font-family:var(--serif);font-style:italic;font-size:1.1em;color:var(--ink)">distance</em> between
+            what the paper says and what actually reaches you. Each essay takes one resource — from the whole planet, to
+            India, to the screen you’re reading on.
+          </p>
+          <p style="animation:wopUp .9s cubic-bezier(.2,.6,.2,1) .24s both;align-self:flex-end;font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);line-height:1.7">
+            Volume I<br />six essays<br />↓ begin with water
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* 2 — Current essay spotlight */}
+    <section data-screen-label="Current essay" style="padding:clamp(70px,11vh,140px) var(--gut)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div style="display:flex;align-items:center;gap:.9em;margin-bottom:clamp(30px,4.5vh,52px)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint)">The current essay</span>
+          <span style="flex:1;height:1px;background:var(--rule)"></span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:clamp(32px,5vw,76px);align-items:center">
+          <div style="flex:1 1 440px;min-width:0">
+            <div style="display:inline-flex;align-items:center;gap:11px;margin-bottom:18px">
+              <span style="font-family:var(--mono);font-size:.82rem;color:var(--water-deep)">01</span>
+              <span style="font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--paper);background:var(--water);padding:4px 11px;border-radius:30px">Live</span>
+            </div>
+            <a href={asset('water-on-paper.html')} class="feat-title-link">
+              <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(3rem,7vw,6rem);line-height:.85;letter-spacing:-.02em;margin:0 0 .3em">
+                Water<span style="font-style:italic;color:var(--water-deep)"> on </span>Paper
+              </h2>
+            </a>
+            <p style="font-size:clamp(1.15rem,1.7vw,1.5rem);line-height:1.4;color:var(--ink);margin:0 0 .9em;max-width:32ch">
+              On paper, water is a human right. In reality, where you’re born decides how much reaches you — and whether
+              it’s safe when it arrives.
+            </p>
+            <p style="font-size:1rem;line-height:1.6;color:var(--ink-soft);margin:0 0 30px;max-width:52ch">
+              From the planet’s single reachable drop, to the 600&nbsp;million Indians under water stress, to the water
+              your own screen is quietly drinking. Eight chapters, one scroll.
+            </p>
+            <div style="display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center">
+              <a href={asset('water-on-paper.html')} class="btn-read">Read the essay →</a>
+              <span style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint)"
+                >companion tool · <a href={asset('source-to-tap.html')} class="tool-link">Source to Tap →</a></span
+              >
+            </div>
+          </div>
+          {
+            showSignature && (
+              <div style="flex:0 1 300px">
+                <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:clamp(5px,0.8vw,9px);width:min(340px,74vw)">
+                  {drops.map((d) => (
+                    <i style={`display:block;aspect-ratio:1;border-radius:50%;background:${d.bg}`} />
+                  ))}
+                </div>
+                <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin:18px 0 0;max-width:34ch;line-height:1.6">
+                  The world’s water as 100 drops — <span style="color:var(--water)">3</span> are fresh,{' '}
+                  <span style="color:var(--clay)">1</span> is within reach. The essay begins here.
+                </p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </section>
+
+    {/* 3 — Volume I index */}
+    <section id="volume" data-screen-label="Volume I" style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--paper-2)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div style="max-width:var(--col);margin-bottom:clamp(40px,6vh,72px)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"
+            ><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>Volume I · earth → body → mind</span
+          >
+          <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:16ch">
+            Six resources, one question each.
+          </h2>
+          <p style="font-size:clamp(1.2rem,1.9vw,1.55rem);line-height:1.45;color:var(--ink)">
+            Every essay names a thing India has promised on paper, then measures the distance to what actually arrives —
+            with India as the centrepiece each time.
+          </p>
+        </div>
+
+        <div style="border-top:1px solid var(--rule)">
+          {
+            volumeOne.map((e) => {
+              const c = accentColors[e.accent];
+              const Title = (
+                <div style="min-width:0">
+                  <h3 style={h3Style} set:html={`${e.name}<span style="font-style:italic;color:${c.sep}"> on </span>Paper`} />
+                  <p style={dekStyle}>{e.dek}</p>
+                </div>
+              );
+              if (e.status === 'live' && e.href) {
+                return (
+                  <a href={asset(e.href)} class="vol-row" style={`${rowStyle};color:inherit`}>
+                    <span style={`font-family:var(--mono);font-size:.82rem;color:${c.index}`}>{e.n}</span>
+                    {Title}
+                    <span
+                      class="vol-read"
+                      style="justify-self:end;display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-weight:600;font-size:.94rem;color:var(--water-deep);white-space:nowrap"
+                    >
+                      Read →
+                    </span>
+                  </a>
+                );
+              }
+              return (
+                <div style={rowStyle}>
+                  <span style={`font-family:var(--mono);font-size:.82rem;color:${c.index}`}>{e.n}</span>
+                  {Title}
+                  <span style={e.status === 'in-progress' ? pillProgress : pillComing}>
+                    {e.status === 'in-progress' ? 'In progress' : 'Coming'}
+                  </span>
+                </div>
+              );
+            })
+          }
+        </div>
+
+        <p style="font-family:var(--mono);font-size:.74rem;line-height:1.6;color:var(--ink-faint);margin:22px 0 0;max-width:64ch">
+          Reading order runs earth → body → mind. Water is live; Oil is in progress; the recommended next build is Air.
+        </p>
+      </div>
+    </section>
+
+    {/* 4 — Colophon / footer */}
+    <footer
+      data-screen-label="Colophon"
+      style="background:var(--water-ink);color:oklch(0.88 0.02 240);padding:clamp(72px,10vh,120px) var(--gut) clamp(40px,6vh,64px);position:relative;z-index:1"
+    >
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--water-light)">On Paper · the series</span>
+        <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,5.5vw,4.2rem);line-height:1.0;margin:14px 0 0;max-width:20ch;color:var(--paper)">
+          On paper, a promise.<br /><span style="font-style:italic;color:var(--water-light)">This is where it’s kept — or broken.</span>
+        </h2>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(24px,4vw,56px);margin-top:clamp(40px,6vh,64px);border-top:1px solid oklch(1 0 0 /0.14);padding-top:38px">
+          <div>
+            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">Read now</h5>
+            <a href={asset('water-on-paper.html')} class="footer-link" style="margin:0 0 9px">Water on Paper — the essay →</a>
+            <a href={asset('source-to-tap.html')} class="footer-link">Source to Tap — the companion →</a>
+          </div>
+          <div>
+            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">The method</h5>
+            <p style="color:oklch(0.85 0.02 240);font-size:.9rem;line-height:1.6;margin:0">
+              Every essay walks the same eight-chapter arc — scale, promise, the wrong side, India, the wound, a tool,
+              the reckoning, the levers. Every figure is triangulated across sources; every problem exits with something
+              a reader can do.
+            </p>
+          </div>
+          <div>
+            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">What’s coming</h5>
+            <p style="color:oklch(0.85 0.02 240);font-size:.9rem;line-height:1.6;margin:0">
+              Volume I — Water · Air · Oil · Grain · Blood · Ink. One resource at a time, each a substance you could
+              spill on a page, each promised on paper and unevenly kept.
+            </p>
+          </div>
+        </div>
+
+        <p style="font-family:var(--mono);font-size:.7rem;line-height:1.7;color:oklch(0.62 0.02 240);margin:40px 0 0;max-width:92ch">
+          On Paper — an essay series with India as its centrepiece. Figures are drawn from public data and reporting;
+          each essay carries its own sources and notes. Routes and visuals are schematic. Built, candidly, with AI.
+        </p>
+      </div>
+    </footer>
+
+  </main>
+</Base>

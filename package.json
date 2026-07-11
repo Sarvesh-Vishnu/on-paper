@@ -1,0 +1,20 @@
+{
+  "name": "on-paper",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "description": "On Paper — an essay series about the distance between what is promised on paper and what actually reaches you, with India as the centrepiece. This is the series hub (landing page).",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^7.0.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^5.6.0"
+  }
+}

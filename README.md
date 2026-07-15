@@ -17,27 +17,32 @@ to GitHub Pages.
 
 | Route | What it is | Status |
 |---|---|---|
-| `/` | **The hub** — masthead, current-essay spotlight, Volume I index, colophon. Rebuilt natively in Astro from the design handoff. | ✅ Native |
-| `/water-on-paper.html` | *Water on Paper* — the one live essay. | ⚠️ Prototype, served as-is |
-| `/source-to-tap.html` | *Source to Tap* — the interactive companion tool. | ⚠️ Prototype, served as-is |
+| `/` | **The hub** — masthead, current-essay spotlight, Volume I index, colophon. | ✅ Native |
+| `/water/` | *Water on Paper* — the live essay, 8 chapters. | ✅ Native |
+| `/tools/source-to-tap/` | *Source to Tap* — the interactive companion tool. | ✅ Native |
+
+The old `/water-on-paper.html` and `/source-to-tap.html` URLs are kept as
+redirect stubs (canonical + OG preserved) so previously shared links still land.
 
 > The **series playbook** (the internal "bible" — five-gate topic filter,
 > roadmap, unreleased Volume II candidates) is intentionally **not published**.
 > It's a private strategy document; keep it out of `public/` unless you decide
 > otherwise.
 
-### Native vs. prototype
+### All native
 
-The **hub** is production code: an Astro page built pixel-faithfully from the
-design tokens, with Volume I modelled as data ([`src/data/volume.ts`](src/data/volume.ts)).
-
-The **essay and tool** are the original design-handoff prototypes
-(`.dc.html` files that render client-side via a bundled `support.js` runtime).
-They're served verbatim out of [`public/`](public/) so the hub's links work and
-the live essay is actually readable **today**. They are *not* yet ported to
-native Astro — that's the recommended next step (see below). Per the handoff, the
-`.dc.html` runtime (`support.js`, `doc-page.js`) is **not** ported into the app;
-it's shipped only to render those prototype pages.
+Everything is production Astro now. The essay and tool were ported from the
+design-handoff `.dc.html` prototypes: every data table is typed data
+([`src/data/water.ts`](src/data/water.ts),
+[`src/data/source-to-tap.ts`](src/data/source-to-tap.ts)), each essay chapter is
+a component in [`src/components/water/`](src/components/water/), and the widgets
+(earth grid, bar charts, country/cartogram/Neer selectors, the tool's journey
+scroller + compare chart) render as **static SSR HTML** hydrated by small
+vanilla-TS `<script>`s — so all the evidence and citations ship crawlable, no
+client framework. Shared behavior (scroll reveals, count-ups, the accessible
+citation popover, the dark-header swap) lives in
+[`src/scripts/essay-engine.ts`](src/scripts/essay-engine.ts); the prototype
+runtime is gone.
 
 ---
 
@@ -62,6 +67,16 @@ npm run check      # astro type/diagnostics check
   `prefers-reduced-motion` guard, and the ported hover states.
 - **`src/data/volume.ts`** — Volume I as data. Add an essay or flip a status
   here; the index re-renders from it.
+- **`src/pages/water.astro`** + **`src/components/water/`** — the essay: a page
+  shell (chrome, chapters drawer, JSON-LD) plus one component per chapter.
+- **`src/pages/tools/source-to-tap.astro`** — the companion tool.
+- **`src/scripts/essay-engine.ts`** + **`src/styles/essay.css`** — shared
+  scroll/reveal/count-up engine, accessible citation popover, and the
+  essay/tool-only tokens (stress ramp, drawer, focus rings).
+- **`src/data/water.ts`**, **`src/data/source-to-tap.ts`** — every figure,
+  citation, and route as typed data.
+- **`scripts/generate-og.mjs`** — `npm run og`, the share-card generator.
+- **`src/styles/fonts.css`** + **`public/fonts/`** — self-hosted font faces.
 
 ### Design tokens
 
@@ -83,9 +98,8 @@ the design tokens ([scripts/generate-og.mjs](scripts/generate-og.mjs); uses the
 `sharp` that ships with Astro, Georgia standing in for Instrument Serif). The
 PNGs are committed, so CI never runs this. The hub carries JSON-LD
 (`CreativeWorkSeries`, built from `src/data/volume.ts` — live essays join it
-automatically), and `public/sitemap.xml` + `robots.txt` cover the three URLs.
-The two prototype pages carry static `<title>`/OG tags in their raw heads since
-their content renders client-side.
+automatically), the essay carries `Article` and the tool `WebApplication`
+JSON-LD, and `public/sitemap.xml` + `robots.txt` cover the three routes.
 
 ## Deploy
 
@@ -99,9 +113,11 @@ stripping Astro's `_astro/` asset directory.
 
 ## Next steps
 
-1. **Port the Water essay and Source to Tap** to native Astro routes
-   (`/water`, `/tools/source-to-tap`) so they drop the client-side prototype
-   runtime, render their evidence as static crawlable HTML, and share the tokens.
-2. Self-host the three font families (drops the Google Fonts round-trip).
-3. Model essays as an Astro **content collection** as the series grows; switch
+1. Write essays 2–6 (Air is the recommended next build). Each is a new page
+   under `src/pages/` + components + a `src/data/<resource>.ts`, reusing the
+   shared engine; flip its `status` to `live` in `src/data/volume.ts`.
+2. Model essays as an Astro **content collection** as the series grows; switch
    the hand-written sitemap to `@astrojs/sitemap` at the same time.
+3. Resolve the tool naming (the essay's embedded widget is "Neer", the
+   standalone companion is "Source to Tap") before the next essay ships its own
+   tool, so the convention scales.

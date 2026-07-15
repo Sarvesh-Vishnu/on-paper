@@ -61,7 +61,8 @@ button.cite:focus-visible {
   outline-color: var(--water-light);
 }
 #wop_cite_tip {
-  position: absolute;
+  position: fixed;
+  display: block;
   z-index: 90;
   background: var(--ink);
   color: var(--paper);
@@ -70,6 +71,7 @@ button.cite:focus-visible {
   box-shadow: 0 20px 50px oklch(0.2 0.02 250 / 0.45);
 }
 #wop_cite_tip .cite-tip-text {
+  display: block;
   font-family: var(--mono);
   font-size: 0.72rem;
   line-height: 1.55;

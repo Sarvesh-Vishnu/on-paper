@@ -32,6 +32,10 @@ function countUp(el: HTMLElement): void {
     el.textContent = final;
     return;
   }
+  // The span is server-rendered with its true value (so no-JS/crawlers see the
+  // real figure); set the "0" start synchronously here so the count animates
+  // from 0 without a one-frame flash of the SSR value once revealed.
+  el.textContent = pre + (0).toLocaleString('en-IN') + suf;
   const start = performance.now();
   const frame = (now: number) => {
     const t = Math.min(1, (now - start) / dur);
@@ -144,27 +148,43 @@ function initDrawer(): void {
 function initCites(): void {
   const cites = document.querySelectorAll<HTMLElement>('.cite[data-src]');
   if (!cites.length) return;
-  const tip = document.createElement('div');
+  // A single reused popover, but positioned (fixed) and — critically —
+  // inserted right AFTER the active button in the DOM, so its "View source"
+  // link is the next thing a keyboard user Tabs to and leaving it continues
+  // naturally into the following content. A <span> (display:block via CSS) so
+  // it stays valid inside the <p>/<div> the citation lives in.
+  const tip = document.createElement('span');
   tip.id = 'wop_cite_tip';
   tip.setAttribute('role', 'tooltip');
   tip.hidden = true;
-  document.body.appendChild(tip);
   let current: HTMLElement | null = null;
   let hideT: number | undefined;
 
   const hide = () => {
+    window.clearTimeout(hideT);
     tip.hidden = true;
+    tip.remove();
     current?.setAttribute('aria-expanded', 'false');
     current = null;
   };
+  // Hide unless focus/hover is still on the button or inside the popover.
+  const hideIfLeft = () => {
+    window.clearTimeout(hideT);
+    hideT = window.setTimeout(() => {
+      const a = document.activeElement;
+      if (current && (current === a || tip.contains(a) || tip.matches(':hover') || current.matches(':hover'))) return;
+      hide();
+    }, 160);
+  };
+
   const showFor = (btn: HTMLElement) => {
     window.clearTimeout(hideT);
-    current?.setAttribute('aria-expanded', 'false');
+    if (current && current !== btn) current.setAttribute('aria-expanded', 'false');
     current = btn;
     btn.setAttribute('aria-expanded', 'true');
     const url = btn.dataset.url;
     tip.innerHTML = '';
-    const txt = document.createElement('div');
+    const txt = document.createElement('span');
     txt.className = 'cite-tip-text';
     txt.textContent = btn.dataset.src || '';
     tip.appendChild(txt);
@@ -177,13 +197,15 @@ function initCites(): void {
       a.textContent = 'View source ↗';
       tip.appendChild(a);
     }
+    btn.insertAdjacentElement('afterend', tip);
     tip.hidden = false;
     const r = btn.getBoundingClientRect();
     const w = Math.min(300, window.innerWidth * 0.82);
     tip.style.width = w + 'px';
     tip.style.left = Math.max(8, Math.min(window.innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + 'px';
     const above = r.top > tip.offsetHeight + 18;
-    tip.style.top = above ? r.top - tip.offsetHeight - 10 + window.scrollY + 'px' : r.bottom + 10 + window.scrollY + 'px';
+    // position:fixed → viewport coordinates (no scrollY); tip hides on scroll.
+    tip.style.top = (above ? r.top - tip.offsetHeight - 10 : r.bottom + 10) + 'px';
   };
 
   cites.forEach((btn) => {
@@ -194,18 +216,19 @@ function initCites(): void {
       current === btn && !tip.hidden ? hide() : showFor(btn);
     });
     btn.addEventListener('mouseenter', () => showFor(btn));
-    btn.addEventListener('mouseleave', () => {
-      hideT = window.setTimeout(hide, 350);
-    });
+    btn.addEventListener('mouseleave', hideIfLeft);
     btn.addEventListener('focus', () => showFor(btn));
-    btn.addEventListener('blur', () => {
-      hideT = window.setTimeout(hide, 150);
-    });
+    btn.addEventListener('blur', hideIfLeft);
   });
   tip.addEventListener('mouseenter', () => window.clearTimeout(hideT));
-  tip.addEventListener('mouseleave', hide);
+  tip.addEventListener('mouseleave', hideIfLeft);
+  tip.addEventListener('focusout', hideIfLeft);
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') hide();
+    if (e.key === 'Escape' && current) {
+      const btn = current;
+      hide();
+      btn.focus();
+    }
   });
   window.addEventListener('scroll', () => {
     if (!tip.hidden) hide();

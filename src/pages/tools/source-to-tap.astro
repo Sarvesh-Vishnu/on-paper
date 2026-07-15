@@ -72,6 +72,10 @@ const jsonLd = {
 
   <main id="stap-top" style="position:relative;z-index:1">
 
+    {/* Screen-reader announcement of the selected state's detail (the panels
+        update silently otherwise). Written by render() on user selection. */}
+    <div id="stap_status" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0"></div>
+
     <section data-screen-label="Hero" style="min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 58%,var(--paper-2) 100%);padding:clamp(80px,12vh,150px) var(--gut)">
       <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;opacity:.5">
         <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:18%"></i>
@@ -654,6 +658,17 @@ const jsonLd = {
       if (j) url.searchParams.set('state', ab);
       else url.searchParams.delete('state');
       history.replaceState(null, '', url);
+
+      // Announce the new selection to screen readers (the detail/journey/km
+      // panels update silently). Only on user selection — not the initial
+      // URL seed (updateUrl=false) — and one settled sentence, never the
+      // per-frame odometer.
+      const status = $('stap_status');
+      if (status) {
+        status.textContent = j
+          ? `Now showing ${st.name} — ${st.source}, ${stress[st.stress]}. Farthest drop about ${j.km.toLocaleString('en-IN')} kilometres.`
+          : `Now showing ${st.name} — ${st.source}, ${stress[st.stress]}. Full route not yet charted.`;
+      }
     }
   }
 

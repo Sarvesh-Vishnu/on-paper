@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/essay.css';
+import Hero from '../components/water/Hero.astro';
+import Ch01Scale from '../components/water/Ch01Scale.astro';
+import Ch02Promise from '../components/water/Ch02Promise.astro';
+import Ch03WrongSide from '../components/water/Ch03WrongSide.astro';
+import Ch04India from '../components/water/Ch04India.astro';
+import Ch05Wound from '../components/water/Ch05Wound.astro';
+import Ch06Neer from '../components/water/Ch06Neer.astro';
+import Ch07Reckoning from '../components/water/Ch07Reckoning.astro';
+import Ch08Levers from '../components/water/Ch08Levers.astro';
+import EssayFooter from '../components/water/EssayFooter.astro';
+
+const base = import.meta.env.BASE_URL;
+const canonical = Astro.site ? new URL(`${base}water/`, Astro.site).href : `${base}water/`;
+
+const chapters = [
+  { id: 'ch01', n: '01', title: 'The scale' },
+  { id: 'ch02', n: '02', title: 'On paper' },
+  { id: 'ch03', n: '03', title: 'The wrong side' },
+  { id: 'ch04', n: '04', title: 'India' },
+  { id: 'ch05', n: '05', title: 'The wound' },
+  { id: 'ch06', n: '06', title: 'Neer — the tool' },
+  { id: 'ch07', n: '07', title: 'The reckoning' },
+  { id: 'ch08', n: '08', title: 'The levers' },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Water on Paper',
+  url: canonical,
+  description:
+    'On paper, water is a human right. In reality, where you’re born decides how much reaches you — and whether it’s safe when it arrives.',
+  inLanguage: 'en',
+  image: Astro.site ? new URL(`${base}og/water.png`, Astro.site).href : `${base}og/water.png`,
+  isPartOf: {
+    '@type': 'CreativeWorkSeries',
+    name: 'On Paper',
+    url: Astro.site ? new URL(base, Astro.site).href : base,
+  },
+};
+---
+
+<Base
+  title="Water on Paper — essay one of the On Paper series"
+  description="On paper, water is a human right. In reality, where you’re born decides how much reaches you — and whether it’s safe when it arrives."
+  ogImage="og/water.png"
+  ogImageAlt="Water on Paper — essay one. On paper a human right; in reality a queue, a tanker, a boil-water notice."
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <div id="wop_prog" style="position:fixed;top:0;left:0;height:2px;background:var(--water);z-index:60;width:0"></div>
+
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px var(--gut);pointer-events:none">
+    <a
+      id="wop_brand"
+      href="#wop-top"
+      style="pointer-events:auto;display:flex;align-items:baseline;gap:.55em;font-family:var(--serif);font-size:1.5rem;letter-spacing:-.01em;color:var(--ink);line-height:1"
+    >
+      <span>Water<span style="font-style:italic"> on </span>Paper</span>
+      <span style="font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);align-self:center">the essay</span>
+    </a>
+    <button
+      id="wop_menu"
+      aria-expanded="false"
+      aria-controls="wop_drawer"
+      style="pointer-events:auto;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px 14px;border-radius:2px;cursor:pointer"
+    >Chapters</button>
+  </header>
+
+  <div id="wop_drawer">
+    <div id="wop_scrim" style="position:absolute;inset:0;background:oklch(0.2 0.02 250 / 0.4)"></div>
+    <nav
+      id="wop_drawer_nav"
+      aria-label="Chapters"
+      style="position:absolute;top:0;right:0;bottom:0;width:min(360px,86vw);background:var(--paper);box-shadow:-30px 0 80px oklch(0.2 0.02 250 /0.18);padding:clamp(28px,4vw,44px);display:flex;flex-direction:column;gap:2px;overflow-y:auto"
+    >
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+        <span style="font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)">Contents</span>
+        <button id="wop_drawer_close" aria-label="Close chapters" style="border:0;background:transparent;font-size:1.6rem;line-height:1;color:var(--ink-faint);cursor:pointer">&times;</button>
+      </div>
+      {
+        chapters.map((c, i) => (
+          <a
+            href={`#${c.id}`}
+            style={`display:flex;gap:14px;align-items:baseline;padding:11px 0;border-top:1px solid var(--rule);${i === chapters.length - 1 ? 'border-bottom:1px solid var(--rule);' : ''}color:var(--ink)`}
+          >
+            <span style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep)">{c.n}</span>
+            <span style="font-family:var(--serif);font-size:1.25rem">{c.title}</span>
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+
+  <main id="wop-top" style="position:relative;z-index:1">
+    <Hero />
+    <Ch01Scale />
+    <Ch02Promise />
+    <Ch03WrongSide />
+    <Ch04India />
+    <Ch05Wound />
+    <Ch06Neer />
+    <Ch07Reckoning />
+    <Ch08Levers />
+    <EssayFooter />
+  </main>
+</Base>
+
+<script>
+  import { initEssayEngine } from '../scripts/essay-engine';
+  initEssayEngine();
+</script>

@@ -1,0 +1,55 @@
+---
+// 05 · The wound — Indore (dark clay section).
+// Ported from "Water on Paper.dc.html" lines 322–368; markup byte-faithful
+// apart from the conventions' mechanical transforms (sc-for → map, citation
+// spans → <button class="cite">, straight apostrophes → typographic in prose).
+// Count-ups and cite popovers are handled by the shared essay engine.
+import { heading } from '../../data/water';
+---
+<section id="ch05" data-screen-label="05 The wound" data-wopdark style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--clay-deep);color:oklch(0.94 0.03 60)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,60px)">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:oklch(0.88 0.06 60);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>05 — When the pipe betrays you</span>
+      <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch;color:var(--paper)">Indore is India’s cleanest city. In December, its water killed.</h2>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+      <p style="font-size:clamp(1.2rem,1.9vw,1.5rem);line-height:1.45">For eight years running, Indore won the title of cleanest city in India.<button class="cite" data-src="Swachh Survekshan (Ministry of Housing & Urban Affairs) — Indore ranked India’s cleanest city for eight consecutive years." aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:8px;color:oklch(0.88 0.06 60);vertical-align:super;margin-left:3px;line-height:1">i</button> In late December 2025, residents of Bhagirathpura noticed their tap water had turned bitter and foul. With no real alternative, many kept drinking it.</p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:clamp(20px,3vw,44px);margin:clamp(36px,5vh,56px) 0">
+      <div><span data-count="15" data-pre="≥" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6rem);line-height:.82;color:var(--paper)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:oklch(0.9 0.03 60);max-width:24ch">people dead — including a six-month-old infant.</p></div>
+      <div><span data-count="2000" data-pre="~" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6rem);line-height:.82;color:var(--paper)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:oklch(0.9 0.03 60);max-width:24ch">fell ill across one locality.</p></div>
+      <div><span data-count="40000" data-pre="~" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6rem);line-height:.82;color:var(--paper)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:oklch(0.9 0.03 60);max-width:26ch">residents screened, door to door, after the fact.</p></div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+      <p style="font-size:1.08rem;line-height:1.55;color:oklch(0.93 0.03 60)">The cause was almost banal: a public toilet had been built directly over a drinking-water pipeline, with no septic tank. Sewage seeped into the supply, which tested positive for bacteria found in human waste.<button class="cite" data-src="Indore (Bhagirathpura) drinking-water contamination, Dec 2025 — sewage ingress into a supply line; ≥15 deaths, ~2,000 ill, ~40,000 residents screened (district administration; contemporaneous reporting)." aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:8px;color:oklch(0.88 0.06 60);vertical-align:super;margin-left:3px;line-height:1">i</button></p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(40px,6vh,68px)">
+      <p style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4vw,3rem);line-height:1.1;margin:0;color:var(--paper)">A city can win every award for cleanliness <span style="font-style:italic;opacity:.8">and still lay a pipe beside a sewer.</span></p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(44px,6vh,72px)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.06;margin:0 0 .4em;color:var(--paper);max-width:22ch">Indore made the news because it was fast. The larger wound is slow.</h3>
+      <p style="font-size:1.08rem;line-height:1.55;color:oklch(0.93 0.03 60)">Fifteen deaths on one street is the version that reaches television. Across the Ganga–Brahmaputra delta — West Bengal, Bihar, Assam and neighbouring Bangladesh — tens of millions draw water from shallow wells laced with naturally occurring <strong style="color:var(--paper)">arsenic</strong>. It is colourless and tasteless, and it poisons over years, not days — what the WHO called the largest mass poisoning of a population in history.<button class="cite" data-src="Smith, Lingas &amp; Rahman (2000), 'Contamination of drinking-water by arsenic in Bangladesh: a public health emergency,' Bulletin of the World Health Organization 78(9):1093–1103 — an estimated 35–77 million people at risk; described as the largest mass poisoning of a population in history." data-url="https://pmc.ncbi.nlm.nih.gov/articles/PMC2560840/" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:9px;color:oklch(0.88 0.06 60);vertical-align:super;margin-left:4px;line-height:1">i</button></p>
+      <p style="font-size:1.08rem;line-height:1.55;color:oklch(0.93 0.03 60);margin-top:1em">No award, no headline, no single funeral — just a map drawn decades ago that safe piped water still hasn’t caught up to. Indore is the wound you can see. This is the one you can’t.</p>
+    </div>
+
+    <!-- where are we heading -->
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(64px,9vh,104px)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.4vw,2.7rem);line-height:1.05;margin:0 0 .3em;color:var(--paper);max-width:20ch">Indore isn’t the outlier. It’s the preview. Where are we heading?</h3>
+      <p style="font-size:1.02rem;color:oklch(0.9 0.03 60);max-width:60ch;margin:0 0 clamp(28px,4vh,40px)">The same forces — over-drawn aquifers, unmaintained pipes, cities growing past their supply — are queuing up elsewhere.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(16px,2.4vw,26px)">
+        {heading.map((h) => (
+          <div style="border-top:2px solid oklch(1 0 0 /0.5);padding-top:14px">
+            <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:oklch(0.86 0.06 60);margin-bottom:8px">{h.tag}</div>
+            <div style="font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,1.7rem);line-height:1.05;color:var(--paper);margin-bottom:8px">{h.place}</div>
+            <p style="font-size:.92rem;line-height:1.5;color:oklch(0.9 0.03 60);margin:0">{h.detail}<button class="cite" data-src={h.src} aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid oklch(0.88 0.06 60);border-radius:50%;font-family:var(--mono);font-size:8px;color:oklch(0.88 0.06 60);vertical-align:super;margin-left:4px;line-height:1">i</button></p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

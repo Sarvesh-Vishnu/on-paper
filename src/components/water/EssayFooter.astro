@@ -1,0 +1,79 @@
+---
+// Footer — "Water on Paper.dc.html" lines 555–597, ported verbatim (dark,
+// data-wopdark; the prototype's <footer> carries no id). Fully static: no
+// reveals, no counts, no cites, no widgets — so no <script>. The
+// {{ sources }} loop renders `sourcesNumbered` (renderVals().sources) as the
+// numbered list, one id per entry (#wop_src_01 … #wop_src_15) so individual
+// notes can be deep-linked; role="list" restores list semantics that
+// `list-style:none` strips in some screen readers.
+//
+// Approved internal-link wiring (per the porting brief): the
+// "On Paper · the series" kicker links to the hub (import.meta.env.BASE_URL)
+// and "Neer · नीर" links to the companion tool page
+// (`${base}tools/source-to-tap/`) — inline styles and copy unchanged, so the
+// rendering is identical to the prototype's static span/strong.
+// Lines 598–601 of the range (</main>, {{ citeTip }}) are page-shell owned
+// (water.astro renders <main>; the shared engine builds #wop_cite_tip).
+import { sourcesNumbered } from '../../data/water';
+
+const base = import.meta.env.BASE_URL;
+const toolHref = `${base}tools/source-to-tap/`;
+---
+
+<footer data-screen-label="Footer" data-wopdark style="background:var(--water-ink);color:oklch(0.88 0.02 240);padding:clamp(72px,10vh,120px) var(--gut) clamp(40px,6vh,64px)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <a href={base} class="wop-flink" style="font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--water-light)">On Paper · the series</a>
+    <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.02;margin:14px 0 34px;max-width:18ch;color:var(--paper)">Water was the first. Oil is next.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(24px,4vw,56px);border-top:1px solid oklch(1 0 0 /0.14);padding-top:36px">
+      <div>
+        <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 12px">About this essay</h5>
+        <p style="font-size:.94rem;line-height:1.6;color:oklch(0.84 0.02 240);margin:0">A data-driven essay on the distance between the right to water and the reach of it — from the whole planet to India, and an honest reckoning with the water cost of the tools that built it, AI included.</p>
+        <p style="font-size:.94rem;line-height:1.6;color:oklch(0.84 0.02 240);margin:12px 0 0">Tool: <a href={toolHref} class="wop-flink"><strong style="color:var(--paper)">Neer · नीर</strong></a>.</p>
+      </div>
+      <div>
+        <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 12px">Jump to</h5>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="#ch01" class="wop-flink" style="color:oklch(0.86 0.02 240);font-size:.95rem">The scale</a>
+          <a href="#ch03" class="wop-flink" style="color:oklch(0.86 0.02 240);font-size:.95rem">The wrong side</a>
+          <a href="#ch04" class="wop-flink" style="color:oklch(0.86 0.02 240);font-size:.95rem">India, drawn by water</a>
+          <a href="#ch06" class="wop-flink" style="color:oklch(0.86 0.02 240);font-size:.95rem">Neer — know your water</a>
+          <a href="#ch07" class="wop-flink" style="color:oklch(0.86 0.02 240);font-size:.95rem">The reckoning</a>
+        </div>
+      </div>
+      <div>
+        <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 12px">Get water tested / report</h5>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:.92rem">
+          <a href="https://ejalshakti.gov.in/jjm/citizen_corner/villageinformation.aspx" target="_blank" rel="noopener" class="wop-flink" style="color:oklch(0.86 0.02 240)">Jal Jeevan Mission — Citizen Corner &amp; testing ↗</a>
+          <a href="https://pgportal.gov.in" target="_blank" rel="noopener" class="wop-flink" style="color:oklch(0.86 0.02 240)">CPGRAMS — public grievance redressal ↗</a>
+          <a href="https://cgwb.gov.in" target="_blank" rel="noopener" class="wop-flink" style="color:oklch(0.86 0.02 240)">Central Ground Water Board — atlases ↗</a>
+          <a href="https://www.wri.org/aqueduct" target="_blank" rel="noopener" class="wop-flink" style="color:oklch(0.86 0.02 240)">WRI Aqueduct — global water-risk atlas ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:44px;border-top:1px solid oklch(1 0 0 /0.14);padding-top:28px">
+      <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:oklch(0.7 0.02 240);margin:0 0 16px">Sources &amp; notes</h5>
+      <ol role="list" style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px 28px">
+        {sourcesNumbered.map((s) => (
+          <li id={`wop_src_${s.n}`} style="display:grid;grid-template-columns:2em 1fr;gap:.4em;font-family:var(--mono);font-size:.72rem;line-height:1.5;color:oklch(0.72 0.02 240)"><span style="color:var(--water-light)">{s.n}</span><span>{s.t}</span></li>
+        ))}
+      </ol>
+    </div>
+
+    <p style="font-family:var(--mono);font-size:.7rem;line-height:1.6;color:oklch(0.62 0.02 240);margin:36px 0 0;max-width:90ch">Water on Paper — essay one of the On Paper series. Figures are drawn from public reporting and research and are indicative; verify before citing. Schematic maps are illustrative, not survey-accurate. Built, candidly, with AI — see the reckoning, Chapter 07.</p>
+  </div>
+</footer>
+
+<style>
+  /* Keyboard ring (dark section) — global.css gives every <a> a
+     var(--water) :focus-visible ring, which is near-invisible on
+     var(--water-ink); the class (0-2-0 specificity) swaps in the light
+     accent per the dark-section convention. Hover behaviour is unchanged
+     from the prototype: inline colours win over the global a:hover rule,
+     exactly as they did in the .dc.html. */
+  .wop-flink:focus-visible {
+    outline: 2px solid var(--water-light);
+    outline-offset: 3px;
+    border-radius: 3px;
+  }
+</style>

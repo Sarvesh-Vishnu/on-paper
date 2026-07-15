@@ -1,0 +1,27 @@
+---
+// Water on Paper — Hero ("Water on Paper.dc.html" lines 69–88, ported verbatim).
+// Fully static: uses no tables from ../../data/water; entrances are the shared
+// engine's [data-reveal] (staggered via inline transition-delay), and the
+// scroll-hint dot uses the wopSink keyframe already defined in src/styles/essay.css.
+---
+
+<section data-screen-label="Hero" style="min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 60%,var(--paper-2) 100%);padding:clamp(90px,12vh,150px) var(--gut)">
+  <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;opacity:.5">
+    <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:19%"></i>
+    <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:37%"></i>
+    <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:54%"></i>
+    <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:71%"></i>
+    <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:88%"></i>
+  </div>
+  <div style="max-width:var(--maxw);margin:0 auto;width:100%;position:relative">
+    <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--water-deep);margin:0 0 10px">On Paper · essay one of the series</p>
+    <h1 data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;font-family:var(--serif);font-weight:400;font-size:clamp(4rem,15vw,14rem);line-height:.82;letter-spacing:-.02em;margin:0">Water<span style="font-style:italic;color:var(--water-deep)"> on </span>Paper</h1>
+    <div style="display:flex;flex-wrap:wrap;gap:1.6em;align-items:baseline;margin-top:clamp(26px,4vh,52px)">
+      <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .16s,transform .9s cubic-bezier(.2,.6,.2,1) .16s;max-width:52ch;font-size:clamp(1.05rem,1.5vw,1.32rem);color:var(--ink-soft);margin:0">Every country has promised its people water. The promise is written down — in constitutions, missions, and master plans. This essay is about the <em style="font-family:var(--serif);font-style:italic;font-size:1.1em;color:var(--ink)">distance</em> between what the paper says and what comes out of the tap: from the whole planet, to India, to the screen you’re reading this on.</p>
+      <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .24s,transform .9s cubic-bezier(.2,.6,.2,1) .24s;align-self:flex-end;font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);line-height:1.5">Global → India<br>↓ scroll to begin</p>
+    </div>
+  </div>
+  <div style="position:absolute;left:var(--gut);bottom:34px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:10px">
+    <span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:var(--water);animation:wopSink 2.4s ease-in-out infinite"></span> begin
+  </div>
+</section>

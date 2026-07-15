@@ -1,0 +1,711 @@
+---
+import Base from '../../layouts/Base.astro';
+import '../../styles/essay.css';
+import {
+  stations,
+  stress,
+  states,
+  journeys,
+  featured,
+  defaultState,
+  hasRoute,
+  compareMax,
+  compareOrder,
+  compareStarred,
+  compareStarSuffix,
+} from '../../data/source-to-tap';
+
+const base = import.meta.env.BASE_URL;
+const canonical = Astro.site
+  ? new URL(`${base}tools/source-to-tap/`, Astro.site).href
+  : 'https://sarvesh-vishnu.github.io/on-paper/tools/source-to-tap/';
+const description =
+  'The water in your glass didn’t come from nowhere. Pick your state and trace the route it takes from source to tap — a companion to the essay Water on Paper.';
+
+const byAb = (ab: string) => states.find((s) => s.ab === ab)!;
+const dst = byAb(defaultState);
+const dj = journeys[defaultState];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Source to Tap',
+  url: canonical,
+  description,
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Any',
+  browserRequirements: 'Requires JavaScript',
+  inLanguage: 'en',
+  isPartOf: {
+    '@type': 'CreativeWorkSeries',
+    name: 'On Paper',
+    url: Astro.site ? new URL(base, Astro.site).href : base,
+  },
+};
+---
+
+<Base
+  title="Source to Tap — the Water on Paper companion"
+  description={description}
+  ogImage="og/source-to-tap.png"
+  ogImageAlt="Source to Tap — pick your state and trace the water’s route from source to your tap. A companion to Water on Paper."
+>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
+
+  <div id="wop_prog" style="position:fixed;top:0;left:0;height:2px;background:var(--water);z-index:60;width:0"></div>
+
+  <header style="position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px var(--gut);pointer-events:none">
+    <a
+      id="wop_brand"
+      href="#stap-top"
+      style="pointer-events:auto;display:flex;align-items:baseline;gap:.55em;font-family:var(--serif);font-size:1.4rem;letter-spacing:-.01em;color:var(--ink);line-height:1"
+    >
+      <span>Water<span style="font-style:italic"> on </span>Paper</span>
+      <span style="font-family:var(--mono);font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);align-self:center">companion · the route</span>
+    </a>
+    <a
+      id="wop_menu"
+      href="#stap-pick"
+      style="pointer-events:auto;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--rule);color:var(--ink);padding:8px 14px;border-radius:2px"
+    >Pick your state ↓</a>
+  </header>
+
+  <main id="stap-top" style="position:relative;z-index:1">
+
+    <section data-screen-label="Hero" style="min-height:100svh;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--paper) 0%,var(--paper) 58%,var(--paper-2) 100%);padding:clamp(80px,12vh,150px) var(--gut)">
+      <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;opacity:.5">
+        <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:18%"></i>
+        <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:35%"></i>
+        <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:52%"></i>
+        <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:70%"></i>
+        <i style="position:absolute;left:0;right:0;height:1px;background:var(--rule);top:87%"></i>
+      </div>
+      <div style="max-width:var(--maxw);margin:0 auto;width:100%">
+        <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--water-deep);margin:0 0 6px">A companion to Water on Paper</p>
+        <h1 data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;font-family:var(--serif);font-weight:400;font-size:clamp(4rem,16vw,15rem);line-height:.82;letter-spacing:-.02em;margin:0">Source<span style="font-style:italic;color:var(--water-deep)"> to </span>Tap</h1>
+        <div style="display:flex;flex-wrap:wrap;gap:1.6em;align-items:baseline;margin-top:clamp(24px,4vh,48px)">
+          <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .16s,transform .9s cubic-bezier(.2,.6,.2,1) .16s;max-width:50ch;font-size:clamp(1.05rem,1.5vw,1.3rem);color:var(--ink-soft);margin:0">The water in your glass didn’t come from nowhere. It was lifted from a river, a reservoir, or the rock underfoot, cleaned, and pushed — sometimes hundreds of kilometres — to reach you. This is that journey, traced state by state. <em style="font-family:var(--serif);font-style:italic;font-size:1.12em;color:var(--ink)">Where do you live?</em></p>
+          <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .24s,transform .9s cubic-bezier(.2,.6,.2,1) .24s;align-self:flex-end;font-family:var(--mono);font-size:.78rem;color:var(--ink-faint);line-height:1.5">Source → Tap<br />↓ pick your state</p>
+        </div>
+      </div>
+      <div style="position:absolute;left:var(--gut);bottom:34px;font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);display:flex;align-items:center;gap:10px">
+        <span aria-hidden="true" style="width:7px;height:7px;border-radius:50%;background:var(--water);animation:wopSink 2.4s ease-in-out infinite"></span> begin
+      </div>
+    </section>
+
+    <section data-screen-label="Premise" style="padding:clamp(80px,12vh,150px) var(--gut)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,72px)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>The same six steps, everywhere</span>
+          <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch">Every tap is the end of a supply chain.</h2>
+          <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">On paper the route is always the same six moves. In reality, each one is done differently — and fails differently — depending on where you stand.</p>
+        </div>
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:5px;overflow:hidden">
+          <div style="background:var(--paper);padding:22px 20px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:12px">01</div><h4 style="font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0 0 .3em;line-height:1.05">Source</h4><p style="font-size:.86rem;margin:0;color:var(--ink-soft)">A river, dam, aquifer or the rain.</p></div>
+          <div style="background:var(--paper);padding:22px 20px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:12px">02</div><h4 style="font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0 0 .3em;line-height:1.05">Storage</h4><p style="font-size:.86rem;margin:0;color:var(--ink-soft)">Held in a reservoir or a tank.</p></div>
+          <div style="background:var(--paper);padding:22px 20px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:12px">03</div><h4 style="font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0 0 .3em;line-height:1.05">Treatment</h4><p style="font-size:.86rem;margin:0;color:var(--ink-soft)">Filtered, cleaned, made potable.</p></div>
+          <div style="background:var(--paper);padding:22px 20px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:12px">04</div><h4 style="font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0 0 .3em;line-height:1.05">Distribution</h4><p style="font-size:.86rem;margin:0;color:var(--ink-soft)">Pumped through trunk mains and pipes.</p></div>
+          <div style="background:var(--paper);padding:22px 20px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:12px">05</div><h4 style="font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0 0 .3em;line-height:1.05">Local tank</h4><p style="font-size:.86rem;margin:0;color:var(--ink-soft)">A sump, well or overhead tank.</p></div>
+          <div style="background:var(--paper);padding:22px 20px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-deep);margin-bottom:12px">06</div><h4 style="font-family:var(--serif);font-weight:400;font-size:1.35rem;margin:0 0 .3em;line-height:1.05">Your tap</h4><p style="font-size:.86rem;margin:0;color:var(--ink-soft)">The glass at the end of the line.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stap-pick" data-screen-label="Pick your state" style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--paper-2)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,64px)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>Choose your state</span>
+          <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:20ch">Pick where you live. We’ll trace the water to your tap.</h2>
+          <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">Eight states, eight completely different journeys — from a desert canal 640&nbsp;km long to a city that drinks the sea. Tap a <strong style="color:var(--water-deep)">lit tile</strong> to follow its route; tap any other for a quick snapshot.</p>
+        </div>
+        <div class="stap-pick-grid" style="gap:clamp(28px,4vw,56px);align-items:start">
+          <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)">
+            <div style="min-height:300px">
+              <div id="stap_carto" role="group" aria-label="Pick your state — a tile cartogram of India, coloured by water-security stress" style="display:grid;grid-template-columns:repeat(9,1fr);grid-auto-rows:1fr;gap:clamp(5px,0.7vw,9px);max-width:520px;margin:0 auto">
+                {states.map((s) => {
+                  const isFeat = hasRoute(s.ab);
+                  const isSel = s.ab === defaultState;
+                  return (
+                    <button
+                      class={`stap-tile${isSel ? ' is-sel' : ''}`}
+                      data-ab={s.ab}
+                      title={`${s.name} — ${stress[s.stress]}`}
+                      aria-label={`${s.name} — ${stress[s.stress]}${isFeat ? '. Full route charted' : '. Snapshot only'}`}
+                      aria-pressed={isSel ? 'true' : 'false'}
+                      style={`grid-column:${s.c};grid-row:${s.r};aspect-ratio:1;border-radius:4px;cursor:pointer;background:var(--s${s.stress});opacity:${isFeat ? 1 : 0.34};color:oklch(0.20 0.03 255);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(3px,0.5vw,6px);position:relative;overflow:hidden`}
+                    >
+                      <span style="font-family:var(--mono);font-size:clamp(0.42rem,0.72vw,0.6rem);font-weight:500;line-height:1;opacity:.62;align-self:flex-start">{s.stress}</span>
+                      <span style="font-family:var(--serif);font-size:clamp(0.95rem,1.7vw,1.45rem);line-height:.9;text-align:center;margin-top:-2px">{s.ab}</span>
+                      <span style="display:flex;gap:2px;justify-content:center;height:4px">
+                        {s.cont.slice(0, 4).map(() => (
+                          <i style="width:3px;height:3px;border-radius:50%;background:oklch(0.20 0.03 255 / 0.5)"></i>
+                        ))}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div aria-hidden="true" style="display:flex;gap:0;margin:26px 0 6px;border-radius:2px;overflow:hidden;height:12px;max-width:520px">
+              <i style="flex:1;background:var(--s0)"></i><i style="flex:1;background:var(--s1)"></i><i style="flex:1;background:var(--s2)"></i><i style="flex:1;background:var(--s3)"></i><i style="flex:1;background:var(--s4)"></i>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.66rem;color:var(--ink-faint);max-width:520px"><span>safe</span><span>severe stress</span></div>
+            <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin-top:16px;max-width:44ch">Colour = water-security stress. Fully-lit tiles have a full source-to-tap route; dimmed tiles show a snapshot.</p>
+          </div>
+          <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;border:1px solid var(--rule);border-radius:6px;background:var(--paper);padding:clamp(24px,2.6vw,34px);box-shadow:0 30px 80px oklch(0.2 0.02 250 /0.08)">
+            <h3 id="stap_sel_name" style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3vw,2.3rem);line-height:1;margin:0 0 4px">{dst.name}</h3>
+            <p id="stap_sel_region" style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);letter-spacing:.04em;margin:0 0 18px">{dst.region} · {stress[dst.stress]}</p>
+            <div style="padding:14px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Main source</div><div id="stap_sel_source" style="font-size:1.02rem">{dst.source}</div></div>
+            <div style="padding:14px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Known contaminants</div><div id="stap_sel_cont" style="font-size:1.02rem">{dst.cont.join(', ')}</div></div>
+            <div style="padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">Stress level</div><span id="stap_sel_stress" style={`display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.82rem;padding:6px 13px;border-radius:30px;color:var(--paper);background:var(--s${dst.stress})`}><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:var(--paper);opacity:.85"></span><span id="stap_sel_stress_label">{stress[dst.stress]}</span></span></div>
+            <a id="stap_follow" href="#journey" style="display:inline-flex;align-items:center;gap:9px;margin-top:20px;font-family:var(--sans);font-weight:600;font-size:.95rem;color:var(--paper);background:var(--water-deep);padding:12px 20px;border-radius:4px">Follow {dst.name}’s route ↓</a>
+            <p id="stap_noroutemsg" hidden style="font-family:var(--mono);font-size:.76rem;color:var(--ink-faint);margin:18px 0 0;line-height:1.55">A full source-to-tap route is charted for the eight lit states. Tap one of those to follow the water the whole way.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="journey" data-screen-label="The journey" style="position:relative;padding:0 var(--gut)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div style="padding:clamp(60px,9vh,120px) 0 10px;max-width:var(--col)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>Your route</span>
+          <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.4rem,5.4vw,4.4rem);margin:.2em 0 .3em;max-width:16ch">How the water reaches you in <span id="stap_state_name">{dst.name}</span>.</h2>
+          <p id="stap_tagline" style="font-family:var(--serif);font-style:italic;font-size:clamp(1.3rem,2.4vw,1.9rem);color:var(--water-deep);line-height:1.2;margin:0">{dj.tagline}</p>
+        </div>
+
+        <div id="stap_journey_grid" class="stap-journey-grid" style="gap:clamp(24px,4vw,60px);align-items:start;padding-bottom:clamp(40px,6vh,80px)">
+          <div class="stap-sticky" style="display:flex;flex-direction:column;gap:14px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);padding:clamp(18px,2vw,26px);box-shadow:0 30px 80px oklch(0.2 0.02 250 /0.07)">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+              <div style="min-width:0">
+                <div style="font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Following the route</div>
+                <div id="stap_context" style="font-family:var(--serif);font-size:clamp(1.2rem,1.8vw,1.55rem);line-height:1.1">{dj.context}</div>
+              </div>
+              <select id="stap_select" aria-label="Change state" style="font-family:var(--sans);font-size:.9rem;padding:8px 12px;border:1px solid var(--paper-edge);border-radius:4px;background:var(--paper-2);color:var(--ink);cursor:pointer">
+                {featured.map((ab) => (
+                  <option value={ab} selected={ab === defaultState}>{byAb(ab).name}</option>
+                ))}
+              </select>
+            </div>
+            <div class="stap-spine-wrap">
+              <div id="stap_spine" aria-hidden="true" style="position:relative;height:100%;min-height:340px">
+                <div style="position:absolute;left:23px;top:8%;height:84%;width:2px;background:var(--rule)"></div>
+                <div id="stap_spine_fill" style="position:absolute;left:23px;top:8%;height:0%;width:2px;background:var(--water);transition:height .5s cubic-bezier(.2,.7,.2,1),background .4s"></div>
+                {stations.map((stn, i) => (
+                  <div class="stap-node" data-i={i} style={`position:absolute;left:0;right:0;top:${(8 + (i / 5) * 84).toFixed(1)}%;transform:translateY(-50%);display:flex;align-items:center;gap:14px;padding-right:6px`}>
+                    <span class={`stap-node-c${i === 0 ? ' is-active' : ''}`}>{i + 1}</span>
+                    <span style="display:flex;flex-direction:column;gap:2px;min-width:0">
+                      <span class="stap-node-k" style={`font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:${i === 0 ? 'var(--ink)' : 'var(--ink-faint)'}`}>{stn.label}</span>
+                      <span class="stap-node-f" hidden={i !== 0} style="font-family:var(--serif);font-size:1.08rem;line-height:1.05;color:var(--ink)">{dj.stages[i].facility}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div class="stap-narrowprog" aria-hidden="true">
+              <div id="stap_counter_sm" style="font-family:var(--mono);font-size:.72rem;color:var(--water-deep);letter-spacing:.06em;margin-bottom:8px">Stage 1 of 6 · {stations[0].label}</div>
+              <div style="height:4px;background:var(--paper-edge);border-radius:3px;overflow:hidden"><div id="stap_progfill" style="height:100%;width:0%;background:var(--water);transition:width .4s ease"></div></div>
+            </div>
+            <div style="font-family:var(--mono);font-size:.66rem;color:var(--water-deep);border-top:1px solid var(--rule);padding-top:10px"><span id="stap_counter">Stage 1 of 6 · {stations[0].label}</span>&nbsp;↓</div>
+          </div>
+
+          <div>
+            {dj.stages.map((s, i) => (
+              <div id={`st_step_${i}`} data-step={i} style={`min-height:74vh;display:flex;flex-direction:column;justify-content:center;padding-left:clamp(18px,2vw,30px);border-left:3px solid ${i === 0 ? 'var(--water)' : 'var(--rule)'};opacity:${i === 0 ? 1 : i === 1 ? 0.5 : 0.28};transition:opacity .45s ease,border-color .45s ease`}>
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+                  <span class="stap-step-num" style={`font-family:var(--mono);font-size:1rem;color:${i === 0 ? 'var(--water-deep)' : 'var(--ink-faint)'}`}>{String(i + 1).padStart(2, '0')}</span>
+                  <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)">{stations[i].label}</span>
+                </div>
+                <h3 class="stap-step-title" style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.05;margin:0 0 .5em;max-width:15ch">{s.facility}</h3>
+                <p class="stap-step-detail" style="color:var(--ink-soft);font-size:clamp(1.02rem,1.4vw,1.18rem);max-width:44ch;margin:0">{s.detail}</p>
+              </div>
+            ))}
+            <div id="st_step_6" data-step="6" style="min-height:74vh;display:flex;flex-direction:column;justify-content:center;padding-left:clamp(18px,2vw,30px);border-left:3px solid var(--rule);opacity:0.28;transition:opacity .45s ease,border-color .45s ease">
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+                <span class="stap-step-num" style="font-family:var(--mono);font-size:1rem;color:var(--ink-faint)">!</span>
+                <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint)">Where it leaks</span>
+              </div>
+              <h3 class="stap-step-title" style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.05;margin:0 0 .5em;max-width:15ch">{dj.loss.title}</h3>
+              <ul style="list-style:none;padding:0;margin:0;max-width:44ch">
+                {dj.loss.points.map((pt) => (
+                  <li style="display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--rule);color:var(--ink-soft);font-size:1rem"><span aria-hidden="true" style="font-family:var(--mono);color:var(--clay);font-size:.85rem">→</span><span class="stap-loss-pt">{pt}</span></li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div id="stap_nojourney" hidden style="padding:20px 0 clamp(60px,9vh,110px);max-width:var(--col)">
+          <p style="color:var(--ink-soft);font-size:1.15rem">We’ve charted eight routes in full depth. Pick one to follow the water the whole way — or start from what we already know about <strong id="stap_noroute_name">{dst.name}</strong>’s supply above.</p>
+          <div id="stap_chips" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px">
+            {featured.map((ab) => (
+              <button class="stap-chip" data-ab={ab} style="font-family:var(--sans);font-weight:500;font-size:.9rem;padding:9px 16px;border:1px solid var(--rule);border-radius:30px;background:var(--paper);color:var(--ink);cursor:pointer">{byAb(ab).name} →</button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-stapdark data-screen-label="Distance" style="background:var(--water-ink);color:var(--paper);padding:clamp(80px,12vh,150px) var(--gut)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--water-light);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>The payoff</span>
+          <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.4rem,5.4vw,4.4rem);margin:.2em 0 .3em;max-width:18ch;color:var(--paper)">For your route, the farthest drop travels about…</h2>
+        </div>
+        <div id="stap_km_wrap">
+          <div style="display:flex;align-items:baseline;gap:.15em;margin:10px 0 6px">
+            <span id="stap_km" style="font-family:var(--serif);font-size:clamp(4.5rem,17vw,13rem);line-height:.82;letter-spacing:-.02em;color:var(--water-light)">{dj.km.toLocaleString('en-IN')}</span>
+            <span style="font-family:var(--serif);font-size:clamp(2rem,5vw,4rem);color:var(--water-light)">km</span>
+          </div>
+          <p id="stap_kmnote" style="font-family:var(--mono);font-size:.82rem;color:var(--water-light);max-width:60ch;line-height:1.6;margin:0 0 40px">{dj.kmNote}</p>
+          <p style="font-family:var(--serif);font-size:clamp(1.9rem,4.4vw,3.2rem);line-height:1.1;letter-spacing:-.01em;max-width:20ch;margin:0;color:var(--paper)">“<span id="stap_sig">{dj.signature}</span>”</p>
+        </div>
+        <p id="stap_km_none" hidden style="font-family:var(--mono);font-size:.85rem;color:var(--water-light);max-width:60ch;line-height:1.65;margin:14px 0 0">…we can’t say yet. <strong id="stap_km_none_name" style="color:var(--paper);font-weight:500">{dst.name}</strong>’s full route isn’t charted — only the eight lit states have one. Pick one of those to see how far its water travels.</p>
+      </div>
+    </section>
+
+    <section id="stap-compare" data-screen-label="Compare" style="padding:clamp(80px,12vh,150px) var(--gut)">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,60px)">
+          <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>All eight, side by side</span>
+          <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch">The farthest a drop travels, by state.</h2>
+          <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">Distance is only one way a journey gets hard. For Kerala and West Bengal the enemy isn’t kilometres — it’s time and chemistry.</p>
+        </div>
+        <div id="stap_bars" data-reveal-hook style="display:flex;flex-direction:column">
+          {compareOrder.map((ab) => {
+            const j = journeys[ab];
+            const s = byAb(ab);
+            const pct = Math.min(100, Math.max(3, (j.km / compareMax) * 100));
+            const isSel = ab === defaultState;
+            const star = compareStarred.includes(ab) ? compareStarSuffix : '';
+            return (
+              <button
+                class={`stap-bar${isSel ? ' is-sel' : ''}`}
+                data-ab={ab}
+                aria-pressed={isSel ? 'true' : 'false'}
+                aria-label={`${s.name} — about ${j.km} km${star ? ' (see footnote)' : ''}. Switch to this route`}
+                style="display:grid;grid-template-columns:minmax(110px,150px) 1fr auto;gap:16px;align-items:center;width:100%;border:0;border-top:1px solid var(--rule);padding:13px 8px;cursor:pointer;text-align:left;font:inherit"
+              >
+                <span style="font-family:var(--serif);font-size:1.2rem;color:var(--ink);line-height:1.05">{s.name}</span>
+                <span aria-hidden="true" style="display:block;height:24px;background:var(--paper-edge);border-radius:2px;overflow:hidden">
+                  <span class="stap-barfill" data-pct={pct.toFixed(2)} style="display:block;height:100%;width:0%;border-radius:2px;transition:width 1.1s cubic-bezier(.2,.7,.2,1),background .3s"></span>
+                </span>
+                <span style="font-family:var(--mono);font-size:.82rem;color:var(--ink-soft);white-space:nowrap;min-width:6ch">{j.km} km{star}</span>
+              </button>
+            );
+          })}
+        </div>
+        <p style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:22px;max-width:64ch;line-height:1.6">* Kerala’s rivers reach the sea within ~48 hours — the fight is storage, not distance. West Bengal’s danger is arsenic in shallow groundwater directly underfoot. Tap any bar to switch routes.</p>
+        <p style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:10px;max-width:64ch;line-height:1.6">Bars measure different things — canal length, bulk-transfer distance, or network reach — as noted per state.</p>
+      </div>
+    </section>
+
+    <section data-screen-label="Close" style="padding:clamp(80px,12vh,150px) var(--gut)">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin:0 auto;text-align:center">
+        <p style="font-family:var(--serif);font-size:clamp(1.9rem,4.4vw,3.4rem);line-height:1.1;letter-spacing:-.01em;margin:0 auto;max-width:22ch">Water on paper is a promise.<br /><span style="font-style:italic;color:var(--water-deep)">The route is where it’s kept — or broken.</span></p>
+      </div>
+    </section>
+
+    <footer data-stapdark data-screen-label="Footer" style="background:var(--ink);color:var(--paper);padding:clamp(70px,10vh,120px) var(--gut) 60px">
+      <div style="max-width:var(--maxw);margin:0 auto">
+        <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light)">The companion continues</span>
+        <h2 style="font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,5vw,4rem);margin:14px 0 28px;max-width:18ch;line-height:1.0;color:var(--paper)">You’ve walked one route. There are a billion more.</h2>
+        <a href="#stap-pick" style="display:inline-flex;align-items:center;gap:12px;font-family:var(--sans);font-weight:600;font-size:1.05rem;color:var(--ink);background:var(--paper);padding:15px 26px;border-radius:4px">Trace another state ↑</a>
+        <div class="stap-foot-grid" style="gap:40px;margin-top:60px;padding-top:40px;border-top:1px solid oklch(0.97 0 0 /0.15)">
+          <div>
+            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">About this route</h5>
+            <p style="color:oklch(0.85 0.02 240);font-size:.9rem;line-height:1.6;margin:0;max-width:none">A companion to <a href={`${base}water/`} style="color:var(--water-light)"><em>Water on Paper</em></a> — where the first piece asked <em>what’s in your water</em> through the Neer tool, this one traces <em>how it gets to you</em>. Same paper, same ink, one step further down the pipe.</p>
+            <p style="margin:16px 0 0"><a href={`${base}water/`} style="color:var(--water-light);font-size:.88rem;display:block;margin:0 0 8px">Read the essay: Water on Paper →</a><a href={base} style="color:var(--water-light);font-size:.88rem;display:block">The On Paper series →</a></p>
+          </div>
+          <div>
+            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">The eight routes</h5>
+            <a href="#journey" style="color:oklch(0.85 0.02 240);font-size:.88rem;display:block;margin:0 0 8px">Chennai · reservoirs & the sea</a>
+            <a href="#journey" style="color:oklch(0.85 0.02 240);font-size:.88rem;display:block;margin:0 0 8px">Rajasthan · a 640-km desert canal</a>
+            <a href="#journey" style="color:oklch(0.85 0.02 240);font-size:.88rem;display:block;margin:0 0 8px">Delhi · borrowed rivers, leaking grid</a>
+            <a href="#journey" style="color:oklch(0.85 0.02 240);font-size:.88rem;display:block;margin:0 0 8px">Gujarat · one dam, a whole state</a>
+          </div>
+          <div>
+            <h5 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">Test / report / harvest</h5>
+            <p style="color:oklch(0.85 0.02 240);font-size:.88rem;margin:0 0 8px">State PHED & Jal Jeevan helplines</p>
+            <p style="color:oklch(0.85 0.02 240);font-size:.88rem;margin:0 0 8px">NABL-accredited testing labs</p>
+            <p style="color:oklch(0.85 0.02 240);font-size:.88rem;margin:0 0 8px">Central Ground Water Board atlases</p>
+          </div>
+        </div>
+        <p style="font-family:var(--mono);font-size:.72rem;color:oklch(0.62 0.03 235);margin-top:50px;line-height:1.7;max-width:none">Source to Tap — a companion to Water on Paper. Routes are schematic and figures are indicative, drawn from public reporting and research; distances are approximate and mix bulk-transfer, canal and network lengths. Verify before citing. Built, candidly, with AI.</p>
+      </div>
+    </footer>
+
+  </main>
+</Base>
+
+<style>
+  /* [hidden] must beat inline display:flex/inline-flex on toggled blocks. */
+  [hidden] {
+    display: none !important;
+  }
+
+  /* ---- responsive grids (prototype `narrow` = width < 900px) ---- */
+  .stap-pick-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr;
+  }
+  .stap-journey-grid {
+    display: grid;
+    grid-template-columns: 0.82fr 1.18fr;
+  }
+  .stap-foot-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+  }
+  .stap-sticky {
+    position: sticky;
+    top: 88px;
+    height: calc(100svh - 128px);
+  }
+  .stap-spine-wrap {
+    flex: 1;
+    min-height: 360px;
+    margin-top: 4px;
+  }
+  .stap-narrowprog {
+    display: none;
+  }
+  @media (max-width: 899.98px) {
+    .stap-pick-grid,
+    .stap-journey-grid,
+    .stap-foot-grid {
+      grid-template-columns: 1fr;
+    }
+    .stap-sticky {
+      position: static;
+      height: auto;
+    }
+    .stap-spine-wrap {
+      display: none;
+    }
+    .stap-narrowprog {
+      display: block;
+      margin-top: 4px;
+    }
+  }
+
+  /* ---- cartogram tiles: selection + focus states are class-driven so the
+         JS toggle and :focus-visible aren't fighting inline styles ---- */
+  .stap-tile {
+    border: 0;
+    outline: 2px solid transparent;
+    transform: none;
+    z-index: 1;
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.18), inset 0 -3px 6px oklch(0 0 0 / 0.07);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, outline-color 0.18s, opacity 0.3s;
+  }
+  .stap-tile.is-sel {
+    transform: scale(1.14);
+    z-index: 3;
+    outline: 2px solid var(--ink);
+    box-shadow: 0 10px 26px oklch(0 0 0 / 0.28), inset 0 0 0 1px oklch(1 0 0 / 0.25);
+  }
+  .stap-tile:focus-visible {
+    outline: 2px solid var(--water);
+    outline-offset: 2px;
+  }
+
+  /* ---- spine station circles (prototype spineEl sizing/colour states) ---- */
+  .stap-node-c {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper-edge);
+    color: oklch(0.45 0.02 250);
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    margin-left: 10px; /* 23 - size/2 */
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.2);
+    transition: all 0.35s ease;
+  }
+  .stap-node-c.is-passed {
+    background: var(--water-deep);
+    color: var(--paper);
+  }
+  .stap-node-c.is-passed.is-leak {
+    background: var(--clay-deep);
+  }
+  .stap-node-c.is-active {
+    width: 38px;
+    height: 38px;
+    margin-left: 4px;
+    background: var(--water);
+    color: var(--paper);
+    box-shadow: 0 0 0 6px var(--water-mist);
+  }
+
+  /* ---- compare bars: selected background/fill are class-driven ---- */
+  .stap-bar {
+    background: transparent;
+  }
+  .stap-bar.is-sel {
+    background: var(--paper-2);
+  }
+  .stap-bar:focus-visible {
+    outline: 2px solid var(--water);
+    outline-offset: 2px;
+  }
+  .stap-barfill {
+    background: var(--water);
+  }
+  .stap-bar.is-sel .stap-barfill {
+    background: var(--water-deep);
+  }
+
+  /* ---- featured-route chips (snapshot fallback) ---- */
+  .stap-chip:hover {
+    border-color: var(--water-deep);
+    color: var(--water-deep);
+  }
+  .stap-chip:focus-visible {
+    outline: 2px solid var(--water);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import { initReveals, initChrome, initCites } from '../../scripts/essay-engine';
+  import {
+    stations,
+    stress,
+    states,
+    journeys,
+    defaultState,
+    hasRoute,
+    copy,
+  } from '../../data/source-to-tap';
+
+  const reduce = () =>
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (id: string) => document.getElementById(id);
+  const setText = (id: string, txt: string) => {
+    const el = $(id);
+    if (el) el.textContent = txt;
+  };
+
+  let selected: string = defaultState;
+  let active = 0;
+  let dispKm = 0;
+  let kmRaf = 0;
+  let kmTimer = 0;
+
+  /* ---- km odometer (prototype animKm; jumps under reduced motion).
+         The setTimeout guard guarantees convergence even when rAF is
+         throttled (backgrounded tab), so the figure can never go stale. ---- */
+  function animKm(target: number): void {
+    cancelAnimationFrame(kmRaf);
+    window.clearTimeout(kmTimer);
+    const el = $('stap_km');
+    if (!el) return;
+    const settle = () => {
+      dispKm = target;
+      el.textContent = Math.round(target).toLocaleString('en-IN');
+    };
+    if (reduce()) {
+      settle();
+      return;
+    }
+    const start = performance.now();
+    const from = dispKm;
+    const dur = 1100;
+    const step = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - t, 3);
+      dispKm = from + (target - from) * e;
+      el.textContent = Math.round(dispKm).toLocaleString('en-IN');
+      if (t < 1) kmRaf = requestAnimationFrame(step);
+    };
+    kmRaf = requestAnimationFrame(step);
+    kmTimer = window.setTimeout(() => {
+      cancelAnimationFrame(kmRaf);
+      settle();
+    }, dur + 200);
+  }
+
+  /* ---- active journey step (prototype checkScroll active/spine state) ---- */
+  function setActive(i: number): void {
+    active = i;
+    document.querySelectorAll<HTMLElement>('[data-step]').forEach((el) => {
+      const k = +(el.dataset.step || 0);
+      const isLoss = k === 6;
+      el.style.opacity = k === i ? '1' : Math.abs(k - i) === 1 ? '0.5' : '0.28';
+      el.style.borderLeftColor = k === i ? (isLoss ? 'var(--clay)' : 'var(--water)') : 'var(--rule)';
+      const num = el.querySelector<HTMLElement>('.stap-step-num');
+      if (num) num.style.color = k <= i ? (isLoss ? 'var(--clay)' : 'var(--water-deep)') : 'var(--ink-faint)';
+    });
+    const clamped = Math.min(i, 5);
+    const leaks = i >= 6;
+    const fill = $('stap_spine_fill');
+    if (fill) {
+      fill.style.height = (84 * (leaks ? 1 : clamped / 5)).toFixed(2) + '%';
+      fill.style.background = leaks ? 'var(--clay)' : 'var(--water)';
+    }
+    document.querySelectorAll<HTMLElement>('.stap-node').forEach((node) => {
+      const k = +(node.dataset.i || 0);
+      const isAct = !leaks && k === clamped;
+      const passed = leaks || k < clamped;
+      const c = node.querySelector<HTMLElement>('.stap-node-c');
+      if (c) {
+        c.classList.toggle('is-active', isAct);
+        c.classList.toggle('is-passed', passed);
+        c.classList.toggle('is-leak', leaks);
+      }
+      const kick = node.querySelector<HTMLElement>('.stap-node-k');
+      if (kick) kick.style.color = isAct ? 'var(--ink)' : 'var(--ink-faint)';
+      const fac = node.querySelector<HTMLElement>('.stap-node-f');
+      if (fac) fac.hidden = !isAct;
+    });
+    const counter = i < 6 ? `Stage ${i + 1} of 6 · ${stations[i].label}` : copy.stageCounterEnd;
+    setText('stap_counter', counter);
+    setText('stap_counter_sm', counter);
+    const pf = $('stap_progfill');
+    if (pf) pf.style.width = ((Math.min(i, 6) / 6) * 100).toFixed(1) + '%';
+  }
+
+  /* ---- full re-render on state selection (prototype select + renderVals) ---- */
+  function render(ab: string, updateUrl: boolean): void {
+    const st = states.find((s) => s.ab === ab);
+    if (!st) return;
+    selected = ab;
+    const j = hasRoute(ab) ? journeys[ab] : null;
+
+    document.querySelectorAll<HTMLElement>('.stap-tile').forEach((t) => {
+      const sel = t.dataset.ab === ab;
+      t.classList.toggle('is-sel', sel);
+      t.setAttribute('aria-pressed', String(sel));
+    });
+
+    setText('stap_sel_name', st.name);
+    setText('stap_sel_region', `${st.region} · ${stress[st.stress]}`);
+    setText('stap_sel_source', st.source);
+    setText('stap_sel_cont', st.cont.join(', '));
+    const pill = $('stap_sel_stress');
+    if (pill) pill.style.background = `var(--s${st.stress})`;
+    setText('stap_sel_stress_label', stress[st.stress]);
+    const follow = $('stap_follow');
+    if (follow) {
+      follow.hidden = !j;
+      follow.textContent = `Follow ${st.name}’s route ↓`;
+    }
+    const noMsg = $('stap_noroutemsg');
+    if (noMsg) noMsg.hidden = !!j;
+
+    setText('stap_state_name', st.name);
+    setText('stap_tagline', j ? j.tagline : copy.snapshotTagline);
+    setText('stap_context', j ? j.context : st.region);
+    const grid = $('stap_journey_grid');
+    if (grid) grid.hidden = !j;
+    const noJ = $('stap_nojourney');
+    if (noJ) noJ.hidden = !!j;
+    setText('stap_noroute_name', st.name);
+
+    if (j) {
+      j.stages.forEach((s, i) => {
+        const el = document.querySelector<HTMLElement>(`[data-step="${i}"]`);
+        if (!el) return;
+        const t = el.querySelector<HTMLElement>('.stap-step-title');
+        if (t) t.textContent = s.facility;
+        const d = el.querySelector<HTMLElement>('.stap-step-detail');
+        if (d) d.textContent = s.detail;
+      });
+      const lossEl = document.querySelector<HTMLElement>('[data-step="6"]');
+      if (lossEl) {
+        const t = lossEl.querySelector<HTMLElement>('.stap-step-title');
+        if (t) t.textContent = j.loss.title;
+        lossEl.querySelectorAll<HTMLElement>('.stap-loss-pt').forEach((li, i) => {
+          li.textContent = j.loss.points[i] || '';
+        });
+      }
+      document.querySelectorAll<HTMLElement>('.stap-node-f').forEach((f, i) => {
+        const stg = j.stages[i];
+        if (stg) f.textContent = stg.facility;
+      });
+      const sel = $('stap_select') as HTMLSelectElement | null;
+      if (sel && sel.value !== ab) sel.value = ab;
+      animKm(j.km);
+      setText('stap_kmnote', j.kmNote);
+      setText('stap_sig', j.signature);
+    }
+    /* APPROVED HARDENING: snapshot-only states never animate "0 km" or show
+       empty quotes — the payoff is swapped for an honest fallback line. */
+    const kmWrap = $('stap_km_wrap');
+    if (kmWrap) kmWrap.hidden = !j;
+    const kmNone = $('stap_km_none');
+    if (kmNone) kmNone.hidden = !!j;
+    setText('stap_km_none_name', st.name);
+
+    document.querySelectorAll<HTMLElement>('.stap-bar').forEach((b) => {
+      const sel = b.dataset.ab === ab;
+      b.classList.toggle('is-sel', sel);
+      b.setAttribute('aria-pressed', String(sel));
+    });
+
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      if (j) url.searchParams.set('state', ab);
+      else url.searchParams.delete('state');
+      history.replaceState(null, '', url);
+    }
+  }
+
+  /* ---- events (delegated) ---- */
+  const pick = (ab?: string) => {
+    if (ab && ab !== selected) render(ab, true);
+  };
+  const abOf = (e: Event, sel: string) =>
+    ((e.target as HTMLElement).closest(sel) as HTMLElement | null)?.dataset.ab;
+  $('stap_carto')?.addEventListener('click', (e) => pick(abOf(e, '.stap-tile')));
+  $('stap_bars')?.addEventListener('click', (e) => pick(abOf(e, '.stap-bar')));
+  $('stap_chips')?.addEventListener('click', (e) => pick(abOf(e, '.stap-chip')));
+  ($('stap_select') as HTMLSelectElement | null)?.addEventListener('change', (e) =>
+    pick((e.target as HTMLSelectElement).value),
+  );
+
+  /* ---- compare bars grow when the engine reveals the hook element;
+         widths come from data-pct (already capped at 100 server-side) ---- */
+  $('stap_bars')?.addEventListener(
+    'essay:reveal',
+    () => {
+      document.querySelectorAll<HTMLElement>('.stap-barfill').forEach((f) => {
+        if (reduce()) f.style.transition = 'none';
+        f.style.width = (f.dataset.pct || '0') + '%';
+      });
+    },
+    { once: true },
+  );
+
+  /* ---- active-step tracking: IntersectionObserver band at ~52% of the
+         viewport (replaces the prototype's per-rAF getBoundingClientRect) ---- */
+  const stepEls = Array.from(document.querySelectorAll<HTMLElement>('[data-step]'));
+  if ('IntersectionObserver' in window && stepEls.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        let next = -1;
+        for (const en of entries) {
+          if (en.isIntersecting) next = Math.max(next, +((en.target as HTMLElement).dataset.step || 0));
+        }
+        if (next >= 0 && next !== active) setActive(next);
+      },
+      { rootMargin: '-52% 0px -47% 0px', threshold: 0 },
+    );
+    stepEls.forEach((el) => io.observe(el));
+  }
+
+  /* ---- URL state: ?state=XX seeds the selection (hasRoute-validated) ---- */
+  const param = (new URLSearchParams(window.location.search).get('state') || '').toUpperCase();
+  render(hasRoute(param) ? param : defaultState, false);
+  setActive(0);
+
+  initReveals();
+  initChrome();
+  initCites();
+</script>

@@ -9,7 +9,7 @@ const asset = (name: string) => `${base}${name}`;
 // The one live essay drives every "read the essay" link (spotlight, CTA,
 // footer) from a single source, so there's no hardcoded href to drift.
 const live = volumeOne.find((e) => e.status === 'live');
-const liveHref = asset(live?.href ?? 'water-on-paper.html');
+const liveHref = asset(live?.href ?? 'water/');
 
 // Structured data: the series, with each LIVE essay as a part. Built from
 // volumeOne, so flipping an essay to `live` adds it here automatically.
@@ -138,7 +138,7 @@ const pillProgress =
             <div style="display:flex;flex-wrap:wrap;gap:14px 20px;align-items:center">
               <a href={liveHref} class="btn-read">Read the essay →</a>
               <span style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint)"
-                >companion tool · <a href={asset('source-to-tap.html')} class="tool-link">Source to Tap →</a></span
+                >companion tool · <a href={asset('tools/source-to-tap/')} class="tool-link">Source to Tap →</a></span
               >
             </div>
           </div>
@@ -240,7 +240,7 @@ const pillProgress =
           <div>
             <h3 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">Read now</h3>
             <a href={liveHref} class="footer-link" style="margin:0 0 9px">Water on Paper — the essay →</a>
-            <a href={asset('source-to-tap.html')} class="footer-link">Source to Tap — the companion →</a>
+            <a href={asset('tools/source-to-tap/')} class="footer-link">Source to Tap — the companion →</a>
           </div>
           <div>
             <h3 style="font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light);margin:0 0 14px">The method</h3>

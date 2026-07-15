@@ -1,0 +1,148 @@
+---
+// 04 — India, drawn by its water. Ported from "Water on Paper.dc.html"
+// lines 278–319; the {{ cartogram }} widget reconstructs cartoEl()
+// (logic class) as static markup over `states`, and the sticky detail
+// panel is server-rendered for the default selection (selState:"PB"),
+// then updated client-side by the script below.
+import {
+  states,
+  defaultState,
+  stateByAb,
+  stressLabel,
+  stressColor,
+  regionStressLine,
+  contLine,
+} from '../../data/water';
+
+const sel = stateByAb(defaultState);
+---
+
+<section id="ch04" data-screen-label="04 India" style="padding:clamp(80px,12vh,150px) var(--gut)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,64px)">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>04 — India, drawn by its water</span>
+      <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:16ch">18% of the world’s people. 4% of its fresh water.</h2>
+      <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">India promises a tap in every rural home, and is the planet’s largest user of groundwater — spending the savings faster than the rain replaces them.<button class="cite" data-src="FAO AQUASTAT / World Bank — India has ~18% of the world’s people and ~4% of global freshwater resources, and is the world’s largest extractor of groundwater." data-url="https://www.fao.org/aquastat/en/" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(20px,3vw,44px);margin-bottom:clamp(24px,4vh,44px)">
+      <div><span data-count="600" data-suf="M" data-dur="1800" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6.5rem);line-height:.82;color:var(--water-deep)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:var(--ink-soft);max-width:24ch">people under high-to-extreme water stress.<button class="cite" data-src="NITI Aayog, Composite Water Management Index (2018) — nearly 600 million Indians face high-to-extreme water stress." data-url="https://www.niti.gov.in/sites/default/files/2023-03/CompositeWaterManagementIndex-CWMI.pdf" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></p></div>
+      <div><span data-count="30" data-suf="M" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6.5rem);line-height:.82;color:var(--clay)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:var(--ink-soft);max-width:24ch">waterborne-disease cases a year.<button class="cite" data-src="Widely cited estimate — waterborne diseases affect tens of millions of Indians a year (MoHFW / NCDC-IDSP; WaterAid). Treat as indicative, not a precise count." aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></p></div>
+      <div><span data-count="200000" data-dur="2000" style="font-family:var(--serif);font-size:clamp(3.4rem,8vw,6.5rem);line-height:.82;color:var(--clay)">0</span><p style="margin:.4em 0 0;font-size:.98rem;color:var(--ink-soft);max-width:26ch">deaths a year linked to unsafe water &amp; sanitation.<button class="cite" data-src="NITI Aayog, Composite Water Management Index (2018) — about 200,000 people die each year from inadequate access to safe water." data-url="https://www.niti.gov.in/sites/default/files/2023-03/CompositeWaterManagementIndex-CWMI.pdf" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--clay);vertical-align:super;margin-left:3px;line-height:1">i</button></p></div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin:clamp(40px,6vh,72px) 0 26px;max-width:var(--col)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.05;margin:0 0 .3em">Hover a state. The colour is how hard its water is being pushed.</h3>
+      <p style="font-family:var(--mono);font-size:.76rem;color:var(--ink-faint);margin:0">A schematic cartogram in the silhouette of India — tile positions are stylised, not survey-accurate. Stress levels and contaminants are drawn from CGWB data.<button class="cite" data-src="Stress from CGWB Dynamic Groundwater Resources of India (stage of extraction); contaminants from CGWB Annual Groundwater Quality Report 2024 (15,259 samples) — nitrate, fluoride, arsenic (Ganga–Brahmaputra plains), uranium (Rajasthan, Punjab, Haryana, Delhi), iron, salinity. Tile layout is illustrative." data-url="https://cgwb.gov.in" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button> Each tile is a "periodic element": stress number, state symbol, a dot per known contaminant.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,60px);align-items:start">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)">
+        <div style="min-height:340px">
+          <div id="wop_carto" role="group" aria-label="Indian states by groundwater stress" style="display:grid;grid-template-columns:repeat(9,1fr);grid-auto-rows:1fr;gap:clamp(5px,0.7vw,9px);max-width:540px;margin:0 auto">
+            {states.map((s) => (
+              <button
+                type="button"
+                class:list={['wop-tile', s.ab === defaultState && 'is-sel']}
+                data-ab={s.ab}
+                title={`${s.name} — ${stressLabel(s.stress)}`}
+                aria-label={`${s.name} — ${stressLabel(s.stress)}`}
+                aria-pressed={s.ab === defaultState ? 'true' : 'false'}
+                style={`grid-column:${s.c};grid-row:${s.r};aspect-ratio:1;border:0;border-radius:4px;cursor:pointer;background:${stressColor(s.stress)};color:oklch(0.20 0.03 255);display:flex;flex-direction:column;justify-content:space-between;padding:clamp(3px,0.5vw,6px);position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease, outline-color .18s`}
+              >
+                <span aria-hidden="true" style="font-family:var(--mono);font-size:clamp(0.42rem,0.72vw,0.6rem);font-weight:500;line-height:1;opacity:.62;align-self:flex-start">{s.stress}</span>
+                <span aria-hidden="true" style="font-family:var(--serif);font-size:clamp(0.95rem,1.7vw,1.45rem);line-height:.9;text-align:center;margin-top:-2px">{s.ab}</span>
+                <span aria-hidden="true" style="display:flex;gap:2px;justify-content:center;height:4px">
+                  {s.cont.slice(0, 4).map(() => (
+                    <i style="width:3px;height:3px;border-radius:50%;background:oklch(0.20 0.03 255 / 0.5)"></i>
+                  ))}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div aria-hidden="true" style="display:flex;gap:0;margin:24px 0 6px;border-radius:2px;overflow:hidden;height:12px;max-width:520px">
+          <i style="flex:1;background:var(--s0)"></i><i style="flex:1;background:var(--s1)"></i><i style="flex:1;background:var(--s2)"></i><i style="flex:1;background:var(--s3)"></i><i style="flex:1;background:var(--s4)"></i>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.66rem;color:var(--ink-faint);max-width:520px"><span>safe / surplus</span><span>severe stress</span></div>
+      </div>
+      <div data-reveal aria-live="polite" style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .08s,transform .9s cubic-bezier(.2,.6,.2,1) .08s;position:sticky;top:88px;border:1px solid var(--rule);border-radius:8px;background:var(--paper);padding:clamp(24px,2.8vw,36px);box-shadow:0 30px 80px oklch(0.2 0.02 250 /0.08)">
+        <h3 id="wop_carto_name" style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.4vw,2.5rem);line-height:1;margin:0 0 3px">{sel.name}</h3>
+        <p id="wop_carto_region" style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);letter-spacing:.04em;margin:0 0 20px">{regionStressLine(sel)}</p>
+        <div style="padding:14px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Main source</div><div id="wop_carto_source" style="font-size:1.02rem">{sel.source}</div></div>
+        <div style="padding:14px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:5px">Known contaminants</div><div id="wop_carto_cont" style="font-size:1.02rem">{contLine(sel)}</div></div>
+        <div style="padding:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">Stress level</div><span id="wop_carto_pill" style={`display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:.82rem;padding:6px 13px;border-radius:30px;color:var(--paper);background:${stressColor(sel.stress)}`}><span aria-hidden="true" style="width:9px;height:9px;border-radius:50%;background:var(--paper);opacity:.85"></span><span id="wop_carto_lbl">{stressLabel(sel.stress)}</span></span></div>
+        <p id="wop_carto_note" style="font-size:.95rem;line-height:1.55;color:var(--ink-soft);margin:16px 0 0">{sel.note}</p>
+      </div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(48px,7vh,80px)">
+      <p style="font-size:1.12rem;line-height:1.55">Read the north-west: Punjab, Haryana, Rajasthan, Delhi — the breadbasket, drawn in the deepest red. The Green Revolution that fed the country was paid for in groundwater, and the bill is now overdue. Read the east: Bengal, Bihar, Assam sit on plenty of water quietly poisoned by arsenic. <em style="font-family:var(--serif);font-style:italic">Too little</em> and <em style="font-family:var(--serif);font-style:italic">unsafe</em> are different failures wearing the same colour.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Selection-dependent tile properties (prototype cartoEl() inline styles,
+     moved to classes so the script can toggle them). */
+  .wop-tile {
+    transform: none;
+    z-index: 1;
+    outline: 2px solid transparent;
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 /0.18), inset 0 -3px 6px oklch(0 0 0 /0.07);
+  }
+  .wop-tile.is-sel {
+    transform: scale(1.14);
+    z-index: 3;
+    outline: 2px solid var(--ink);
+    box-shadow: 0 10px 26px oklch(0 0 0 /0.28), inset 0 0 0 1px oklch(1 0 0 /0.25);
+  }
+  /* Keyboard ring must win over the selection outline (light section). */
+  .wop-tile:focus-visible {
+    outline: 2px solid var(--water);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import {
+    stateByAb,
+    stressLabel,
+    stressColor,
+    regionStressLine,
+    contLine,
+  } from '../../data/water';
+
+  const grid = document.getElementById('wop_carto');
+  if (grid) {
+    const el = (id: string) => document.getElementById(id);
+    const name = el('wop_carto_name');
+    const region = el('wop_carto_region');
+    const source = el('wop_carto_source');
+    const cont = el('wop_carto_cont');
+    const pill = el('wop_carto_pill');
+    const lbl = el('wop_carto_lbl');
+    const note = el('wop_carto_note');
+
+    const select = (ab: string): void => {
+      const s = stateByAb(ab);
+      grid.querySelectorAll<HTMLButtonElement>('.wop-tile').forEach((b) => {
+        const isSel = b.dataset.ab === s.ab;
+        b.classList.toggle('is-sel', isSel);
+        b.setAttribute('aria-pressed', String(isSel));
+      });
+      if (name) name.textContent = s.name;
+      if (region) region.textContent = regionStressLine(s);
+      if (source) source.textContent = s.source;
+      if (cont) cont.textContent = contLine(s);
+      if (pill) pill.style.background = stressColor(s.stress);
+      if (lbl) lbl.textContent = stressLabel(s.stress);
+      if (note) note.textContent = s.note;
+    };
+
+    grid.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.wop-tile[data-ab]');
+      if (btn && btn.dataset.ab) select(btn.dataset.ab);
+    });
+  }
+</script>

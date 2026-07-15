@@ -1,0 +1,173 @@
+---
+// 06 — Neer, know your water. Ported from "Water on Paper.dc.html"
+// lines 370–433; the {{ neerMini }} widget reconstructs neerMiniEl()
+// (logic class) as static markup over `states`, the <select> maps
+// {{ stateOptions }}, and the detail panel is server-rendered for the
+// default selection (selNeer:"MP"), then updated client-side by the
+// script below. No citation badges in this section.
+import {
+  states,
+  stateOptions,
+  defaultNeer,
+  stateByAb,
+  stressLabel,
+  stressColor,
+  regionStressLine,
+} from '../../data/water';
+
+const sel = stateByAb(defaultNeer);
+---
+
+<section id="ch06" data-screen-label="06 Neer" style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--paper-2)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(36px,5vh,60px)">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>06 — From reading to knowing</span>
+      <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em">Neer — know your water.</h2>
+      <p style="font-size:clamp(1.2rem,2vw,1.55rem);line-height:1.45;color:var(--ink)">Awareness has to land somewhere local. <em style="font-family:var(--serif);font-style:italic;color:var(--water-deep)">Neer</em> — नीर, the word for water that carries across the languages where it’s scarcest — lets you pick a state and see what’s actually in the water, how stressed the source is, and what to do about it. <strong>That’s the point:</strong> it turns a national statistic into your street.</p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);border:1px solid var(--rule);border-radius:12px;background:var(--paper);overflow:hidden;box-shadow:0 40px 90px oklch(0.2 0.02 250 /0.10)">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px clamp(18px,2.4vw,28px);border-bottom:1px solid var(--rule);background:var(--paper-2);flex-wrap:wrap">
+        <span style="width:9px;height:9px;border-radius:50%;background:var(--s1)"></span>
+        <span style="font-family:var(--serif);font-size:1.3rem">Neer<span style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint)"> · नीर</span></span>
+        <span style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint);letter-spacing:.04em">know your water · India</span>
+        <span style="flex:1"></span>
+        <label for="wop_neer" style="font-family:var(--mono);font-size:.7rem;color:var(--ink-faint)">State</label>
+        <select id="wop_neer" aria-label="Choose a state" style="font-family:var(--sans);font-size:.9rem;padding:8px 12px;border:1px solid var(--paper-edge);border-radius:5px;background:var(--paper);color:var(--ink);cursor:pointer">
+          {stateOptions.map((opt) => (
+            <option value={opt.ab} selected={opt.ab === defaultNeer}>{opt.name}</option>
+          ))}
+        </select>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(20px,3vw,40px);padding:clamp(22px,3vw,40px)">
+        <div>
+          <div style="min-height:300px">
+            <div id="wop_neer_map" role="group" aria-label="Indian states by water-security stress" style="display:grid;grid-template-columns:repeat(9,1fr);grid-auto-rows:1fr;gap:clamp(4px,0.6vw,7px);max-width:440px">
+              {states.map((s) => (
+                <button
+                  type="button"
+                  class:list={['wop-neer-tile', s.ab === defaultNeer && 'is-sel']}
+                  data-ab={s.ab}
+                  title={s.name}
+                  aria-label={`${s.name} — ${stressLabel(s.stress)}`}
+                  aria-pressed={s.ab === defaultNeer ? 'true' : 'false'}
+                  style={`grid-column:${s.c};grid-row:${s.r};aspect-ratio:1;border:0;border-radius:3px;cursor:pointer;background:${stressColor(s.stress)};color:oklch(0.20 0.03 255);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:clamp(0.7rem,1.3vw,1rem);line-height:1;transition:transform .18s ease, outline-color .18s`}
+                >{s.ab}</button>
+              ))}
+            </div>
+          </div>
+          <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin:16px 0 0">Tap a state on the map or use the dropdown. Colour = water-security stress.</p>
+        </div>
+        <div aria-live="polite">
+          <h3 id="wop_neer_name" style="font-family:var(--serif);font-weight:400;font-size:clamp(1.8rem,3.2vw,2.4rem);line-height:1;margin:0 0 3px">{sel.name}</h3>
+          <p id="wop_neer_region" style="font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin:0 0 18px">{regionStressLine(sel)}</p>
+          <div style="padding:13px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:6px">Main water source</div><div id="wop_neer_source" style="font-size:1.02rem">{sel.source}</div></div>
+          <div style="padding:13px 0;border-top:1px solid var(--rule)"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:8px">Known contaminants</div><div id="wop_neer_chips" style="display:flex;flex-wrap:wrap;gap:7px">
+            {sel.cont.map((c) => (
+              <span style="font-family:var(--mono);font-size:.74rem;background:var(--paper-2);border:1px solid var(--paper-edge);color:var(--ink-soft);padding:4px 10px;border-radius:20px">{c}</span>
+            ))}
+          </div></div>
+          <div style="padding:13px 0;border-top:1px solid var(--rule);display:flex;align-items:center;gap:12px"><div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint)">Stress</div><span id="wop_neer_pill" style={`display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.8rem;padding:5px 12px;border-radius:30px;color:var(--paper);background:${stressColor(sel.stress)}`}><span aria-hidden="true" style="width:8px;height:8px;border-radius:50%;background:var(--paper);opacity:.85"></span><span id="wop_neer_lbl">{stressLabel(sel.stress)}</span></span></div>
+          <div style="margin-top:16px;background:var(--paper-2);border-radius:8px;padding:16px 18px"><span style="font-family:var(--sans);font-weight:600;color:var(--water-deep)">On the ground → </span><span id="wop_neer_note" style="font-size:.96rem;line-height:1.5;color:var(--ink-soft)">{sel.note}</span></div>
+        </div>
+      </div>
+    </div>
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(28px,4vh,44px)">
+      <div style="font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-deep);margin-bottom:14px">You now know what’s likely in your water. Here’s how to act on it — in about 15 minutes.</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden">
+        <div style="background:var(--paper);padding:22px 22px;display:flex;flex-direction:column;gap:9px">
+          <span style="font-family:var(--serif);font-size:1.9rem;color:var(--water-deep);line-height:1">1</span>
+          <div style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink)">Test your water</div>
+          <p style="margin:0;font-size:.94rem;line-height:1.5;color:var(--ink-soft)">Government labs test drinking-water samples for a nominal fee — a network of ~2,000 across India. Start at the Jal Jeevan Mission <a href="https://ejalshakti.gov.in/jjm/citizen_corner/villageinformation.aspx" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">Citizen Corner</a>, or ask your Gram Panchayat for a free field-test kit.</p>
+        </div>
+        <div style="background:var(--paper);padding:22px 22px;display:flex;flex-direction:column;gap:9px">
+          <span style="font-family:var(--serif);font-size:1.9rem;color:var(--water-deep);line-height:1">2</span>
+          <div style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink)">Check what’s already known</div>
+          <p style="margin:0;font-size:.94rem;line-height:1.5;color:var(--ink-soft)">See tested results for your area on the JJM <a href="https://ejalshakti.gov.in/WQMIS" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">water-quality dashboard</a>, and your block’s groundwater map at <a href="https://cgwb.gov.in" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">CGWB</a>.</p>
+        </div>
+        <div style="background:var(--paper);padding:22px 22px;display:flex;flex-direction:column;gap:9px">
+          <span style="font-family:var(--serif);font-size:1.9rem;color:var(--water-deep);line-height:1">3</span>
+          <div style="font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--ink)">Report a problem</div>
+          <p style="margin:0;font-size:.94rem;line-height:1.5;color:var(--ink-soft)">Flag foul or unsafe supply to your Gram Panchayat / Village Water &amp; Sanitation Committee first; escalate anything unresolved on <a href="https://pgportal.gov.in" target="_blank" rel="noopener" style="border-bottom:1px solid var(--rule)">CPGRAMS</a>, the national grievance portal.</p>
+        </div>
+      </div>
+    </div>
+    <p data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);font-family:var(--mono);font-size:.74rem;color:var(--ink-faint);margin-top:18px;max-width:80ch">An indicative public-data summary for orientation — not a substitute for a local NABL-accredited water test.</p>
+  </div>
+</section>
+
+<style>
+  /* Selection-dependent tile properties (prototype neerMiniEl() inline
+     styles, moved to classes so the script can toggle them). */
+  .wop-neer-tile {
+    transform: none;
+    z-index: 1;
+    outline: 2px solid transparent;
+    box-shadow: inset 0 0 0 1px oklch(1 0 0 /0.16);
+  }
+  .wop-neer-tile.is-sel {
+    transform: scale(1.16);
+    z-index: 3;
+    outline: 2px solid var(--ink);
+    box-shadow: 0 8px 20px oklch(0 0 0 /0.25), inset 0 0 0 1px oklch(1 0 0 /0.25);
+  }
+  /* Keyboard ring must win over the selection outline (light section). */
+  .wop-neer-tile:focus-visible {
+    outline: 2px solid var(--water);
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  import {
+    stateByAb,
+    stressLabel,
+    stressColor,
+    regionStressLine,
+  } from '../../data/water';
+
+  const map = document.getElementById('wop_neer_map');
+  const dropdown = document.getElementById('wop_neer') as HTMLSelectElement | null;
+  if (map && dropdown) {
+    const el = (id: string) => document.getElementById(id);
+    const name = el('wop_neer_name');
+    const region = el('wop_neer_region');
+    const source = el('wop_neer_source');
+    const chips = el('wop_neer_chips');
+    const pill = el('wop_neer_pill');
+    const lbl = el('wop_neer_lbl');
+    const note = el('wop_neer_note');
+
+    const select = (ab: string): void => {
+      const n = stateByAb(ab);
+      map.querySelectorAll<HTMLButtonElement>('.wop-neer-tile').forEach((b) => {
+        const isSel = b.dataset.ab === n.ab;
+        b.classList.toggle('is-sel', isSel);
+        b.setAttribute('aria-pressed', String(isSel));
+      });
+      dropdown.value = n.ab;
+      if (name) name.textContent = n.name;
+      if (region) region.textContent = regionStressLine(n);
+      if (source) source.textContent = n.source;
+      if (chips) {
+        chips.textContent = '';
+        n.cont.forEach((c) => {
+          const chip = document.createElement('span');
+          chip.style.cssText =
+            'font-family:var(--mono);font-size:.74rem;background:var(--paper-2);border:1px solid var(--paper-edge);color:var(--ink-soft);padding:4px 10px;border-radius:20px';
+          chip.textContent = c;
+          chips.appendChild(chip);
+        });
+      }
+      if (pill) pill.style.background = stressColor(n.stress);
+      if (lbl) lbl.textContent = stressLabel(n.stress);
+      if (note) note.textContent = n.note;
+    };
+
+    map.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.wop-neer-tile[data-ab]');
+      if (btn && btn.dataset.ab) select(btn.dataset.ab);
+    });
+    dropdown.addEventListener('change', () => select(dropdown.value));
+  }
+</script>

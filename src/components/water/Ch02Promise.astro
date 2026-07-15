@@ -1,0 +1,111 @@
+---
+// 02 · On paper — ported from "Water on Paper.dc.html" lines 130–192.
+// Static section: the constitution/abstain chip lists reproduce the prototype's
+// constitutionEl()/abstainEl() DOM exactly; reveals + cite popovers are handled
+// by the shared essay engine (src/scripts/essay-engine.ts). No widget script.
+import {
+  reach,
+  constitution31,
+  abstain41,
+  constitutionNote,
+  abstainNote,
+  constitutionYearShort,
+} from '../../data/water';
+---
+
+<!-- ================= 02 · ON PAPER ================= -->
+<section id="ch02" data-screen-label="02 On paper" style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--paper-2)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,72px)">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>02 — On paper</span>
+      <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch">On paper, everyone already has water.</h2>
+      <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">In 2010 the UN General Assembly recognised water as a <em style="font-family:var(--serif);font-style:italic;color:var(--water-deep)">human right</em> — 122 countries voted yes. The plans are real, ambitious, and beautifully written. The gap between them and a glass you’d let a child drink is the subject of everything that follows.</p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:6px;overflow:hidden;margin-bottom:clamp(28px,4vh,44px)">
+      <div style="background:var(--paper);padding:26px 24px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:.85;color:var(--water-deep)">122</div><p style="margin:.5em 0 0;font-size:.95rem;color:var(--ink-soft)">countries voted to recognise the human right to water in 2010.<button class="cite" data-src="UN General Assembly Resolution 64/292, 28 July 2010 — adopted 122 in favour, 0 against, 41 abstentions." data-url="https://digitallibrary.un.org/record/687002" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></p></div>
+      <div style="background:var(--paper);padding:26px 24px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:.85;color:var(--ink)">31</div><p style="margin:.5em 0 0;font-size:.95rem;color:var(--ink-soft)">actually name water as a right in their own <strong>constitution</strong> — under 16% of nations.<button class="cite" data-src="Human Right 2 Water, 'Constitutional Review of the Human Right to Water' (16 Dec 2024) — 31 countries (15.65% of 198 reviewed) explicitly recognise the right to water in their constitutions." data-url="https://humanright2water.org/wp-content/uploads/2025/02/241216-Constitutional-Review.pdf" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></p></div>
+      <div style="background:var(--paper);padding:26px 24px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.6rem);line-height:.85;color:var(--clay)">41</div><p style="margin:.5em 0 0;font-size:.95rem;color:var(--ink-soft)">abstained from the 2010 vote — none voted against.<button class="cite" data-src={abstainNote} data-url="https://press.un.org/en/2010/ga10967.doc.htm" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--clay);vertical-align:super;margin-left:3px;line-height:1">i</button></p></div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(44px,6vh,76px)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.05;margin:0 0 .3em;max-width:28ch">A vote is not a constitution. Here is who wrote it down — and who wouldn’t.</h3>
+      <p style="font-size:1.02rem;line-height:1.55;color:var(--ink-soft);max-width:68ch;margin:0 0 clamp(24px,3.5vh,36px)">Two lists, both checked against the record. On one side, every country whose constitution explicitly names a right to water, with the year it did so. On the other, the 41 who abstained in 2010 — overwhelmingly the wealthy, and not one of them opposed.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(18px,2.6vw,32px);align-items:start">
+        <div style="border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:clamp(22px,2.6vw,32px)">
+          <div style="display:flex;align-items:baseline;gap:11px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+            <span style="font-family:var(--serif);font-size:clamp(2.2rem,4vw,2.9rem);line-height:.9;color:var(--water-deep)">31</span>
+            <span style="font-size:.96rem;color:var(--ink-soft);line-height:1.35">name a right to water in their <strong style="color:var(--ink)">constitution</strong><button class="cite" data-src={constitutionNote} data-url="https://humanright2water.org/wp-content/uploads/2025/02/241216-Constitutional-Review.pdf" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></span>
+          </div>
+          <div>
+            {constitution31.map((g) => (
+              <div style="margin-bottom:15px">
+                <div style="font-family:var(--mono);font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:9px">{g.region + " · " + g.n}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:7px">
+                  {g.list.map(([name, yr]) => (
+                    <span style="display:inline-flex;align-items:baseline;gap:5px;font-family:var(--sans);font-size:0.88rem;color:var(--ink);background:var(--paper);border:1px solid var(--water-deep);border-radius:20px;padding:5px 11px">{name}<span style="font-family:var(--mono);font-size:0.62rem;color:var(--water-deep);opacity:0.85">{constitutionYearShort(yr)}</span></span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div style="border:1px solid var(--rule);border-radius:10px;background:var(--paper);padding:clamp(22px,2.6vw,32px)">
+          <div style="display:flex;align-items:baseline;gap:11px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--rule)">
+            <span style="font-family:var(--serif);font-size:clamp(2.2rem,4vw,2.9rem);line-height:.9;color:var(--clay)">41</span>
+            <span style="font-size:.96rem;color:var(--ink-soft);line-height:1.35"><strong style="color:var(--ink)">abstained</strong> from the 2010 UN vote — none against<button class="cite" data-src={abstainNote} data-url="https://press.un.org/en/2010/ga10967.doc.htm" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--clay);vertical-align:super;margin-left:3px;line-height:1">i</button></span>
+          </div>
+          <div>
+            {abstain41.map((g) => (
+              <div style="margin-bottom:15px">
+                <div style="font-family:var(--mono);font-size:0.66rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--clay-deep);margin-bottom:9px">{g.group + " · " + g.list.length}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:7px">
+                  {g.list.map((c) => (
+                    <span style="font-family:var(--sans);font-size:0.88rem;color:var(--ink-soft);background:var(--paper);border:1px solid var(--rule);border-radius:20px;padding:5px 11px">{c}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p style="font-size:1rem;line-height:1.6;color:var(--ink-soft);max-width:74ch;border-left:3px solid var(--clay);padding-left:16px;margin:clamp(26px,3.5vh,40px) 0 0">The pattern is hard to miss: the states that abstained were, on the whole, the ones least likely to run dry. Water was easiest to call “premature” for those who never had to walk for it.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(20px,3vw,40px)">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:clamp(26px,3vw,40px)">
+        <span style="font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-deep)">What the page says</span>
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,2.6vw,2.2rem);margin:.3em 0 .8em;line-height:1">The right to water</h3>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+          <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>A safe, sufficient, accessible supply for every household.</span></li>
+          <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>50–100 litres per person per day, piped to the home.<button class="cite" data-src="WHO / OHCHR — The Right to Water (Fact Sheet 35): ~50–100 litres per person per day meets full domestic needs; a minimum of ~20 L/day is needed for basic survival." data-url="https://www.ohchr.org/en/water-and-sanitation" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></span></li>
+          <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>Tested water, published quality, a number to call.</span></li>
+          <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:13px 0;border-top:1px solid var(--rule);font-size:1rem"><span style="font-family:var(--mono);color:var(--ink-faint)">§</span><span>Plans, budgets, dashboards, deadlines — all filed.</span></li>
+        </ul>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .1s,transform .9s cubic-bezier(.2,.6,.2,1) .1s;background:var(--ink);color:var(--paper);border-radius:8px;padding:clamp(26px,3vw,40px)">
+        <span style="font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--water-light)">What the tap does</span>
+        <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,2.6vw,2.2rem);margin:.3em 0 .8em;line-height:1;color:var(--paper)">The reach of it</h3>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+          {reach.map((r) => (
+            <li style="display:grid;grid-template-columns:1.4em 1fr;gap:.4em;padding:15px 0;border-top:1px solid oklch(1 0 0 /0.14);font-size:.96rem;line-height:1.5;color:oklch(0.88 0.015 250)"><span style="font-family:var(--mono);color:var(--water-light)">→</span><span><strong style="color:var(--paper);font-weight:600">{r.place}</strong> — {r.what}<button class="cite cite-ondark" data-src={r.src} aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-light);vertical-align:super;margin-left:3px;line-height:1">i</button></span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(48px,7vh,80px)">
+      <p style="font-family:var(--serif);font-weight:400;font-size:clamp(2rem,4.4vw,3.4rem);line-height:1.08;letter-spacing:-.01em;margin:0">The work isn’t to mock the paper. It’s to <span style="font-style:italic;color:var(--water-deep)">close the distance</span> between the paper and the pipe.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* The "What the tap does" card is dark (var(--ink) background) inside a
+     light section, so the shared button.cite:focus-visible ring (var(--water))
+     would sit low-contrast on it — override to --water-light, matching the
+     [data-wopdark] convention. Specificity 0-3-1 beats essay.css's 0-2-1. */
+  button.cite.cite-ondark:focus-visible {
+    outline-color: var(--water-light);
+  }
+</style>

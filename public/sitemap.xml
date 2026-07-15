@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Hand-maintained while the essays are served from public/. When they become
-     native Astro routes, switch to @astrojs/sitemap and delete this file. -->
+<!-- Hand-maintained. Lists canonical URLs only (the old .html locations are
+     redirect stubs). Switch to @astrojs/sitemap when essays become a content
+     collection. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://sarvesh-vishnu.github.io/on-paper/</loc>
-    <lastmod>2026-07-11</lastmod>
+    <lastmod>2026-07-14</lastmod>
   </url>
   <url>
-    <loc>https://sarvesh-vishnu.github.io/on-paper/water-on-paper.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <loc>https://sarvesh-vishnu.github.io/on-paper/water/</loc>
+    <lastmod>2026-07-14</lastmod>
   </url>
   <url>
-    <loc>https://sarvesh-vishnu.github.io/on-paper/source-to-tap.html</loc>
-    <lastmod>2026-07-11</lastmod>
+    <loc>https://sarvesh-vishnu.github.io/on-paper/tools/source-to-tap/</loc>
+    <lastmod>2026-07-14</lastmod>
   </url>
 </urlset>

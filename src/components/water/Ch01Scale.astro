@@ -1,0 +1,129 @@
+---
+// 01 · THE SCALE — ported from "Water on Paper.dc.html" lines 91–127.
+// Markup + inline styles are byte-faithful to the prototype apart from the
+// conventions' mechanical transforms (cite spans → <button class="cite">,
+// {{ freshwater }} → static map over data, apostrophes → typographic).
+// The earth grid (#wop_earth) is built/filled by the script below, fired by
+// the shared engine's `essay:reveal` event (data-reveal-hook on the host).
+import { freshwater, freshwaterPct, freshwaterDisp } from '../../data/water';
+---
+
+<section id="ch01" data-screen-label="01 The scale" style="padding:clamp(80px,12vh,150px) var(--gut)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,72px)">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--ink-faint);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>01 — The scale</span>
+      <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:18ch">Almost none of Earth’s water is ours to drink.</h2>
+      <p style="font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.45;color:var(--ink)">Picture all the water on Earth as <em style="font-family:var(--serif);font-style:italic;color:var(--water-deep)">a thousand drops</em>. Here is where every one of them sits.</p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1)">
+      <div id="wop_earth" data-reveal-hook aria-hidden="true" style="display:grid;grid-template-columns:repeat(40,1fr);gap:clamp(2px,0.5vw,5px);max-width:720px"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:14px 26px;margin-top:26px;font-family:var(--mono);font-size:.74rem;color:var(--ink-soft)">
+        <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--paper-edge)"></i> Saltwater — 975 drops</span>
+        <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--water-light)"></i> Ice &amp; glaciers — ~17</span>
+        <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--water)"></i> Fresh groundwater — ~7</span>
+        <span style="display:inline-flex;align-items:center;gap:8px"><i style="width:11px;height:11px;border-radius:50%;background:var(--clay)"></i> Surface water we can reach — under&nbsp;1</span>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,64px);margin-top:clamp(48px,7vh,88px);align-items:start">
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col)">
+        <p style="font-size:1.12rem;margin:0 0 1.1em">Of every thousand drops, about <strong>975</strong> are salt. Another <strong>17</strong> are frozen into ice caps and glaciers; roughly <strong>7</strong> more sit underground, much of it too deep or too old to lift. That leaves <strong style="color:var(--clay)">less than a single drop</strong> — the rivers and lakes we can actually reach — to carry almost all of human life.<button class="cite" data-src="U.S. Geological Survey — Earth’s water: ~97.5% is saline. Of the 2.5% that is fresh, ~68.7% is ice &amp; glaciers, ~30% is groundwater, and under 1% is liquid surface water." data-url="https://www.usgs.gov/water-science-school/science/where-earths-water" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);vertical-align:super;margin-left:3px;line-height:1">i</button></p>
+        <p style="font-size:1.12rem;margin:0">Scarcity isn’t the surprising part. The surprising part is how good we’ve gotten at <em style="font-family:var(--serif);font-style:italic;font-size:1.08em">writing</em> as if that one drop were poured out evenly — one promise per person, signed and filed. It is not. Where you are born decides how much reaches you, and whether it’s safe when it arrives.</p>
+      </div>
+      <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1) .1s,transform .9s cubic-bezier(.2,.6,.2,1) .1s;border-left:1px solid var(--rule);padding-left:clamp(20px,2.4vw,34px)">
+        <div style="margin-bottom:30px"><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.4rem);line-height:.85;color:var(--water-deep)">1 in 4<button class="cite" data-src="WHO / UNICEF Joint Monitoring Programme (JMP), 2023 — 2.2 billion people lack safely managed drinking water." data-url="https://washdata.org" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);vertical-align:super;margin-left:5px;line-height:1">i</button></div><p style="margin:.4em 0 0;font-size:.95rem;color:var(--ink-soft);max-width:26ch">people alive today have no safely managed drinking water at home.</p></div>
+        <div><div style="font-family:var(--serif);font-size:clamp(3rem,6vw,4.4rem);line-height:.85;color:var(--clay)">1 in 2<button class="cite" data-src="UN-Water; Mekonnen &amp; Hoekstra (2016), Science Advances — around half the world’s population faces severe water scarcity at least one month a year." data-url="https://www.unwater.org/water-facts/water-scarcity" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border:1px solid var(--clay);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--clay);vertical-align:super;margin-left:5px;line-height:1">i</button></div><p style="margin:.4em 0 0;font-size:.95rem;color:var(--ink-soft);max-width:28ch">of humanity faces severe water scarcity at least one month every year.</p></div>
+      </div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(48px,7vh,88px);max-width:920px">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.05;margin:0 0 .3em;max-width:22ch">And the little that’s usable isn’t evenly shared.</h3>
+      <p style="font-size:1.05rem;line-height:1.55;color:var(--ink-soft);max-width:62ch;margin:0 0 24px">Ten countries hold more than half of the world’s renewable freshwater. Every other nation — some 190 of them — splits the rest. Each bar is a country and the volume it holds, per year.</p>
+      <div>
+        <!-- {{ freshwater }} — static port of freshwaterEl(): bar % = max(3, v/max·100); first bar --water-deep, rest --water. -->
+        <div style="display:flex;flex-direction:column">
+          {freshwater.map((d, i) => (
+            <div style="display:grid;grid-template-columns:minmax(92px,140px) 1fr auto;gap:clamp(10px,2vw,20px);align-items:center;padding:9px 0;border-top:1px solid var(--rule)">
+              <div style="font-family:var(--serif);font-size:1.08rem;color:var(--ink)">{d.name}</div>
+              <div style="height:14px;background:var(--paper-edge);border-radius:3px;overflow:hidden">
+                <div style={`height:100%;width:${freshwaterPct(d.v)}%;background:${i === 0 ? 'var(--water-deep)' : 'var(--water)'};border-radius:3px`}></div>
+              </div>
+              <div style="font-family:var(--mono);font-size:0.78rem;color:var(--ink-soft);white-space:nowrap;min-width:8ch;text-align:right">{freshwaterDisp(d.v)}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p style="font-family:var(--mono);font-size:.72rem;color:var(--ink-faint);margin-top:14px">Total renewable freshwater, cubic kilometres per year.<button class="cite" data-src="FAO AQUASTAT — total renewable water resources by country (2020). (The World Bank’s ER.H2O.INTR.K3 series covers internal renewable resources only — a smaller measure.)" data-url="https://data.apps.fao.org/aquastat/" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-deep);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-deep);vertical-align:super;margin-left:4px;line-height:1">i</button></p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Earth grid — port of the prototype's buildEarth()/fillEarth()
+  // ("Water on Paper.dc.html" logic class, lines ~849–873).
+  import { earthGrid } from '../../data/water';
+
+  const host = document.getElementById('wop_earth');
+  const reduce =
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* buildEarth() — 1000 dots, each with a random 0–0.6 s transition delay
+   * so the fill shimmers in; reduced motion drops the transitions entirely. */
+  function buildEarth(): void {
+    if (!host || host.dataset.built) return;
+    host.dataset.built = '1';
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < earthGrid.total; i++) {
+      const d = document.createElement('span');
+      d.style.cssText =
+        'aspect-ratio:1;border-radius:50%;background:var(--paper-edge);' +
+        (reduce
+          ? ''
+          : 'transition:background .6s ease,transform .6s ease;transition-delay:' +
+            (Math.random() * 0.6).toFixed(2) +
+            's');
+      frag.appendChild(d);
+    }
+    host.appendChild(frag);
+  }
+
+  /* fillEarth() — paint the LAST 25 dots from the end backwards:
+   *   1 drop   — accessible surface freshwater (rivers, lakes) → var(--clay), scale 1.35
+   *   ~7 drops — fresh groundwater, much of it deep            → var(--water), scale 1.08
+   *   ~17 drops — locked in ice caps & glaciers                → var(--water-light)
+   * The other ~975 stay grey — saltwater.
+   * Normally waits the prototype's 420 ms beat; reduced motion fills instantly. */
+  function fillEarth(): void {
+    if (!host || host.dataset.filled) return;
+    host.dataset.filled = '1';
+    const dots = host.children;
+    const total = dots.length;
+    const paint = (from: number, count: number, bg: string, scale: number) => {
+      for (let i = 0; i < count; i++) {
+        const d = dots[total - 1 - from - i] as HTMLElement | undefined;
+        if (d) {
+          d.style.background = bg;
+          if (scale) d.style.transform = 'scale(' + scale + ')';
+        }
+      }
+    };
+    const run = () => {
+      let from = 0;
+      for (const f of earthGrid.fills) {
+        paint(from, f.count, f.bg, f.scale);
+        from += f.count;
+      }
+    };
+    if (reduce) run();
+    else setTimeout(run, earthGrid.delayMs);
+  }
+
+  if (host) {
+    buildEarth();
+    host.addEventListener('essay:reveal', fillEarth, { once: true });
+    // If the engine revealed the host before this listener attached
+    // (reduced-motion immediate show / bundle order), fill now.
+    if (host.dataset.shown) fillEarth();
+  }
+</script>

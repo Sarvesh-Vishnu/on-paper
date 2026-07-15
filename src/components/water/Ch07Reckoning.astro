@@ -1,0 +1,121 @@
+---
+// 07 · THE RECKONING — ported from "Water on Paper.dc.html" lines 436–502.
+// DARK section (data-wopdark). Markup + inline styles are byte-faithful to
+// the prototype apart from the conventions' mechanical transforms (cite
+// spans → <button class="cite">, straight apostrophes → typographic in prose,
+// {{ footBars }} → static port of barsEl(FOOTPRINTS, 2700, shown, dark=true)).
+// The footprint bars render at width 0 and grow to their percentage when the
+// shared engine fires `essay:reveal` on #wop_footbars (data-reveal-hook).
+import { footprints, footprintPct, footprintTone } from '../../data/water';
+---
+
+<section id="ch07" data-screen-label="07 The reckoning" data-wopdark style="padding:clamp(80px,12vh,150px) var(--gut);background:var(--water-ink);color:oklch(0.92 0.015 240)">
+  <div style="max-width:var(--maxw);margin:0 auto">
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-bottom:clamp(40px,6vh,68px)">
+      <span style="font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;color:var(--water-light);display:inline-flex;gap:.7em;align-items:center"><span style="width:26px;height:1px;background:currentColor;opacity:.6"></span>07 — The reckoning</span>
+      <h2 style="font-family:var(--serif);font-weight:400;letter-spacing:-.015em;line-height:1.0;font-size:clamp(2.6rem,6vw,5rem);margin:.2em 0 .4em;max-width:20ch;color:var(--paper)">Everything drinks water. This essay did too.</h2>
+      <p style="font-size:clamp(1.2rem,1.9vw,1.5rem);line-height:1.45;color:oklch(0.86 0.02 240)">A web search. An AI prompt. A beer. A can of Diet Coke. Even the reverse-osmosis unit purifying your drinking water pours several litres down the drain for each clean one. So does every burger on the grill. The guilt is real — but guilt is a bad accountant, and <em style="font-family:var(--serif);font-style:italic;color:var(--water-light)">not all water use is equal.</em></p>
+    </div>
+
+    <!-- The data centre is the unit -->
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(48px,7vh,80px)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.04;margin:0 0 .3em;color:var(--paper);max-width:22ch">The real unit isn’t the prompt. It’s the building it runs in.</h3>
+      <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.86 0.02 240);max-width:66ch;margin:0 0 clamp(28px,3.5vh,42px)">A single question is a few drops. But questions don’t run alone — they run inside data centres that never switch off, and it’s the building that drinks. Here is what one of them pulls in a single day, for cooling alone.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2.4vw,26px)">
+        <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(24px,2.8vw,34px);background:oklch(1 0 0 /0.03)">
+          <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-light);margin-bottom:12px">A typical data centre</div>
+          <div style="font-family:var(--serif);font-size:clamp(2.8rem,6vw,4rem);line-height:.82;color:var(--paper)">~1.1M<span style="font-size:.36em;color:oklch(0.8 0.02 240)"> litres / day</span></div>
+          <p style="font-size:.98rem;line-height:1.5;color:oklch(0.84 0.02 240);margin:.7em 0 0">The everyday water of about <strong style="color:var(--paper)">1,000 households</strong> — drawn by one building, every single day.</p>
+        </div>
+        <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(24px,2.8vw,34px);background:oklch(1 0 0 /0.03)">
+          <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:oklch(0.82 0.08 60);margin-bottom:12px">A large one</div>
+          <div style="font-family:var(--serif);font-size:clamp(2.8rem,6vw,4rem);line-height:.82;color:var(--paper)">~19M<span style="font-size:.36em;color:oklch(0.8 0.02 240)"> litres / day</span></div>
+          <p style="font-size:.98rem;line-height:1.5;color:oklch(0.84 0.02 240);margin:.7em 0 0">A whole <strong style="color:var(--paper)">town of up to 50,000 people</strong> — the thirst of one hyperscale campus.<button class="cite" data-src="Brookings (2024), 'AI, data centers, and water' — a typical data centre uses ~300,000 US gal/day (~1.1 million L), about 1,000 households; large data centres up to ~5 million US gal/day (~19 million L), the needs of a town of up to 50,000. Consistent figures: EESI (2025); Lincoln Institute of Land Policy (2026)." data-url="https://www.brookings.edu/articles/ai-data-centers-and-water/" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-light);vertical-align:super;margin-left:4px;line-height:1">i</button></p>
+        </div>
+      </div>
+      <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.9 0.015 240);max-width:68ch;margin:clamp(24px,3vh,36px) 0 0">Now multiply one building across thousands of sites, running around the clock — often on drinking-quality water, increasingly built in already-stressed basins. Globally, data centres consumed an estimated <strong style="color:var(--paper)">560 billion litres in 2023</strong>, heading past <strong style="color:var(--paper)">1,200 billion by 2030</strong> — more than the entire city of London drinks in a year.<button class="cite" data-src="IEA, 'Energy and AI' (2025) — global data-centre water ≈ 560 bn L (2023), rising toward ~1,200 bn L by 2030. London’s ~9 million residents use roughly 949 bn L/yr (Thames Water / reporting)." data-url="https://www.iea.org/reports/energy-and-ai" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:9px;color:var(--water-light);vertical-align:super;margin-left:4px;line-height:1">i</button></p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-bottom:clamp(20px,3vh,32px)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.05;margin:0 0 .2em;color:var(--paper)">Your own share, though, is a rounding error.</h3>
+      <p style="font-size:1rem;color:oklch(0.82 0.02 240);margin:0 0 clamp(24px,3.5vh,36px);max-width:60ch">The building is the story — not you. Put a whole year of one person’s daily AI prompts next to an ordinary day, in litres, and it barely clears the axis.</p>
+      <div id="wop_footbars" data-reveal-hook style="min-height:280px">
+        <!-- {{ footBars }} — static port of barsEl(FOOTPRINTS, 2700, shown, dark=true): bar % = max(1.5, val/2700·100), bars grow from 0 on essay:reveal. -->
+        <div style="display:flex;flex-direction:column">
+          {footprints.map((d) => (
+            <div style="display:grid;grid-template-columns:minmax(140px,230px) 1fr auto;gap:clamp(12px,2vw,22px);align-items:center;padding:11px 0;border-top:1px solid oklch(1 0 0 /0.12)">
+              <div>
+                <div style="font-size:0.94rem;line-height:1.25;color:var(--paper)">{d.label}</div>
+                {d.sub && <div style="font-family:var(--mono);font-size:0.68rem;color:oklch(0.72 0.02 240);margin-top:2px">{d.sub}</div>}
+              </div>
+              <div style="height:22px;background:oklch(1 0 0 /0.1);border-radius:3px;overflow:hidden">
+                <div data-w={footprintPct(d.val)} style={`height:100%;width:0%;background:${footprintTone(d.tone)};border-radius:3px;transition:width 1.2s cubic-bezier(.2,.7,.2,1)`}></div>
+              </div>
+              <div style="font-family:var(--mono);font-size:0.82rem;color:var(--water-light);white-space:nowrap;min-width:6ch;text-align:right">{d.disp}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p style="font-family:var(--mono);font-size:.74rem;color:oklch(0.72 0.02 240);margin-top:20px;max-width:72ch">A whole year of one person’s daily AI prompts costs less water than a single ten-minute shower.<button class="cite" data-src="Google (Aug 2025), 'Measuring the environmental impact of AI inference' — median Gemini text prompt ≈ 0.26 mL (about five drops). ~50 prompts a day for a year ≈ 4.7 L." data-url="https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);vertical-align:super;margin-left:3px;line-height:1">i</button> Heavier models and full-lifecycle counts run 10–50× higher, so the honest range is wide — not all AI is equal. Either way, what’s on the plate dwarfs what’s in the chatbot.<button class="cite" data-src="Water Footprint Network / Mekonnen &amp; Hoekstra — per-serving footprints: hamburger ≈ 2,400 L, coffee ≈ 140 L, beer ≈ 75 L. UC Riverside (2023) put a session of 10–50 prompts near 500 mL including electricity." data-url="https://www.waterfootprint.org" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);vertical-align:super;margin-left:3px;line-height:1">i</button></p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2.4vw,26px);margin-top:clamp(48px,7vh,80px)">
+      <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(22px,2.6vw,32px);background:oklch(1 0 0 /0.03)">
+        <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--water-light);margin-bottom:12px">Withdrawn</div>
+        <div style="font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);line-height:.85;color:var(--paper)"><span data-count="29">0</span> bn L</div>
+        <p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:.6em 0 0">borrowed from a source, much of it returned. One tech firm’s own data centres, 2023.</p>
+      </div>
+      <div style="border:1px solid oklch(1 0 0 /0.12);border-radius:10px;padding:clamp(22px,2.6vw,32px);background:oklch(1 0 0 /0.03)">
+        <div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:oklch(0.82 0.08 60);margin-bottom:12px">Consumed / evaporated</div>
+        <div style="font-family:var(--serif);font-size:clamp(2.6rem,5vw,3.6rem);line-height:.85;color:var(--paper)"><span data-count="23">0</span> bn L</div>
+        <p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:.6em 0 0">gone to the sky as vapour — and ~80% of it was drinking-quality water.<button class="cite" data-src="Li, Yang, Islam &amp; Ren (2023), 'Making AI Less Thirsty' (UC Riverside) — one firm’s self-owned data centres withdrew ~29 bn L and evaporated ~23 bn L in 2023, roughly 80% of it potable." data-url="https://arxiv.org/abs/2304.03271" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);vertical-align:super;margin-left:3px;line-height:1">i</button></p>
+      </div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(28px,4vh,44px)">
+      <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.9 0.015 240)">A 100-megawatt AI facility can draw around <strong style="color:var(--paper)">2 million litres a day</strong> while pulling more electricity than <strong style="color:var(--paper)">75,000 homes</strong>, and its cooling towers evaporate roughly <strong style="color:var(--paper)">80% of what they take</strong> — gone from the local basin until it falls again as rain, somewhere else. Even cleaning water costs water: a traditional home reverse-osmosis unit sends <strong style="color:var(--paper)">3–4 litres to the drain</strong> for every clean litre it makes.<button class="cite" data-src="IEA, 'Energy and AI' (2025) — a 100-MW data centre ≈ 2 million L/day; global data-centre water ≈ 560 bn L, rising toward ~1,200 bn L by 2030. De Vries (2025), Patterns, estimates 2025 AI water at 312–764 bn L. Home RO waste ratios run ~3–4:1 (industry technical sources)." data-url="https://www.iea.org/reports/energy-and-ai" aria-label="Source" style="display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border:1px solid var(--water-light);border-radius:50%;font-family:var(--mono);font-size:8px;color:var(--water-light);vertical-align:super;margin-left:3px;line-height:1">i</button></p>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);margin-top:clamp(48px,7vh,80px)">
+      <h3 style="font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3vw,2.4rem);line-height:1.05;margin:0 0 .5em;color:var(--paper)">A litre is not a litre — four things decide if it matters.</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:oklch(1 0 0 /0.12);border:1px solid oklch(1 0 0 /0.12);border-radius:10px;overflow:hidden">
+        <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Quality</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Potable vs. recycled</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">Evaporating treated drinking water in a thirsty city is worlds apart from a closed loop on grey water.</p></div>
+        <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Place</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Where it’s drawn</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">A litre in rain-soaked Kerala isn’t a litre in arid Rajasthan. Stressed ground can’t spare it.</p></div>
+        <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Fate</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Returned vs. gone</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">Withdrawn-and-returned water re-enters the system. Evaporated water leaves the basin entirely.</p></div>
+        <div style="background:var(--water-ink);padding:clamp(22px,2.4vw,30px)"><div style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--water-light);margin-bottom:8px">Honesty</div><div style="font-family:var(--sans);font-weight:600;font-size:1.08rem;color:var(--paper);margin-bottom:6px">Measured vs. guessed</div><p style="font-size:.92rem;line-height:1.5;color:oklch(0.82 0.02 240);margin:0">"One prompt = a bottle" is a shortcut. Real intensity varies up to 10,000× by site.</p></div>
+      </div>
+    </div>
+
+    <div data-reveal style="opacity:0;transform:translateY(22px);transition:opacity .9s cubic-bezier(.2,.6,.2,1),transform .9s cubic-bezier(.2,.6,.2,1);max-width:var(--col);margin-top:clamp(48px,7vh,80px)">
+      <p style="font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4vw,3rem);line-height:1.1;margin:0 0 .7em;color:var(--paper)">AI isn’t the whole picture. But we need <span style="font-style:italic;color:var(--water-light)">water, policy and regulation</span> before we need more data centres.</p>
+      <p style="font-size:1.05rem;line-height:1.55;color:oklch(0.9 0.015 240)">The point isn’t to stop searching, or building, or drinking a beer. It’s the order of priorities. Before a stressed basin is opened up for one more thirsty industry — before more of a resource that already isn’t reaching people is spent — the paper has to become the pipe. Measure honestly, build where the rain is, and provide before you expand. The fix for AI’s thirst turns out to be the fix for everything in this story.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Footprint bars — port of the prototype's barsEl() reveal behaviour
+  // ("Water on Paper.dc.html" logic class, lines ~933–954 + revealInView's
+  // barsFoot flag): each bar is server-rendered at width 0 with its target
+  // percentage in data-w, and grows (width 1.2s cubic-bezier(.2,.7,.2,1))
+  // when the shared engine fires `essay:reveal` on #wop_footbars.
+  const host = document.getElementById('wop_footbars');
+  const reduce =
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function growBars(): void {
+    if (!host || host.dataset.grown) return;
+    host.dataset.grown = '1';
+    host.querySelectorAll<HTMLElement>('[data-w]').forEach((bar) => {
+      if (reduce) bar.style.transition = 'none';
+      bar.style.width = bar.dataset.w + '%';
+    });
+  }
+
+  if (host) {
+    host.addEventListener('essay:reveal', growBars, { once: true });
+    // If the engine revealed the host before this listener attached
+    // (reduced-motion immediate show / bundle order), grow now.
+    if (host.dataset.shown) growBars();
+  }
+</script>

@@ -43,7 +43,7 @@ export const volumeOne: Essay[] = [
     name: 'Water',
     status: 'live',
     accent: 'water',
-    href: 'water-on-paper.html',
+    href: 'water/',
     dek: 'On paper, a human right. In reality: a queue, a tanker, a boil-water notice.',
   },
   {

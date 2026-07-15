@@ -129,6 +129,10 @@ function initDrawer(): void {
   if (!root || !openBtn) return;
   const setOpen = (open: boolean) => {
     root.classList.toggle('is-open', open);
+    // inert removes the Close button + chapter links from the tab order while
+    // closed (opacity/pointer-events don't — the drawer ships with `inert` in
+    // markup so the pre-JS state is correct too).
+    root.toggleAttribute('inert', !open);
     openBtn.setAttribute('aria-expanded', String(open));
     if (open) (nav?.querySelector('a') as HTMLElement | null)?.focus();
     else openBtn.focus();
